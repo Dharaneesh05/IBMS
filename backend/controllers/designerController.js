@@ -37,15 +37,20 @@ exports.getDesignerById = async (req, res) => {
 // @access  Public
 exports.createDesigner = async (req, res) => {
     try {
-        const { name, email } = req.body;
+        const { companyName, displayName, name, email, phone, address, gstin } = req.body;
         
-        if (!name || !email) {
-            return res.status(400).json({ message: 'Please provide name and email' });
+        if (!companyName || !displayName || !name || !email) {
+            return res.status(400).json({ message: 'Please provide company name, display name, contact person name, and email' });
         }
         
         const designer = await Designer.create({
+            companyName,
+            displayName,
             name,
             email,
+            phone,
+            address,
+            gstin,
             status: 'active'
         });
         
@@ -63,15 +68,24 @@ exports.createDesigner = async (req, res) => {
 // @access  Public
 exports.updateDesigner = async (req, res) => {
     try {
-        const { name, email, status } = req.body;
+        const { companyName, displayName, name, email, phone, address, gstin, status } = req.body;
         
-        if (!name || !email) {
-            return res.status(400).json({ message: 'Please provide name and email' });
+        if (!companyName || !displayName || !name || !email) {
+            return res.status(400).json({ message: 'Please provide company name, display name, contact person name, and email' });
         }
         
         const designer = await Designer.findByIdAndUpdate(
             req.params.id,
-            { name, email, status: status || 'active' },
+            { 
+                companyName,
+                displayName,
+                name,
+                email,
+                phone,
+                address,
+                gstin,
+                status: status || 'active' 
+            },
             { new: true, runValidators: true }
         );
         

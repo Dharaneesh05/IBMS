@@ -138,9 +138,6 @@ const ProductListGrid = () => {
       <div className="container mx-auto px-4 py-8">
         {filteredProducts.length === 0 ? (
           <div className="card p-12 text-center">
-            <svg className="w-24 h-24 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
             <h3 className="text-2xl font-bold text-gray-700 mb-2">No Products Found</h3>
             <p className="text-gray-500 mb-6">
               {selectedType === 'all' 
@@ -148,7 +145,10 @@ const ProductListGrid = () => {
                 : `No products found in "${selectedType}" category`
               }
             </p>
-            <Link to="/products/new" className="btn-primary inline-block">
+            <Link to="/products/new" className="inline-flex items-center px-6 py-3 bg-[#1a1d2e] text-white font-medium rounded-lg hover:bg-[#2a2e42] transition-colors">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+              </svg>
               Add Your First Product
             </Link>
           </div>

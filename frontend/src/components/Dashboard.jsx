@@ -1,11 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/api';
+import Dropdown from './Dropdown';
 
 const Dashboard = () => {
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Period filters for each section
+  const [topSellingPeriod, setTopSellingPeriod] = useState('This Month');
+  const [topStockedPeriod, setTopStockedPeriod] = useState('As of This Month');
+  const [salesChannelPeriod, setSalesChannelPeriod] = useState('This Month');
+  const [salesOrderPeriod, setSalesOrderPeriod] = useState('This Month');
+  const [topVendorsPeriod, setTopVendorsPeriod] = useState('This Month');
+  const [receiveHistoryPeriod, setReceiveHistoryPeriod] = useState('This Month');
+  
+  // View modes for toggleable sections
+  const [topStockedView, setTopStockedView] = useState('quantity');
+  const [salesOrderView, setSalesOrderView] = useState('quantity');
+  const [topVendorsView, setTopVendorsView] = useState('quantity');
+  
+  const [activeSection, setActiveSection] = useState('pending');
+
+  // Recent activities data
+  const recentActivities = [
+    {
+      id: 1,
+      type: 'update',
+      title: 'General Preferences Updated.',
+      user: 'Dharaneesh C',
+      timestamp: '04/02/2026 12:02 PM',
+      icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
+    },
+    {
+      id: 2,
+      type: 'security',
+      title: "Organization's Personally identifiable information (PII) has been updated",
+      user: 'Dharaneesh C',
+      timestamp: '04/02/2026 12:01 PM',
+      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+    }
+  ];
+
+  // Period options
+  const periodOptions = [
+    'Today',
+    'Yesterday',
+    'This Week',
+    'This Month',
+    'This Year',
+    'Previous Week',
+    'Previous Month',
+    'Previous Year',
+    'Custom'
+  ];
+
+  const stockedPeriodOptions = [
+    'As of Today',
+    'As of This Week',
+    'As of This Month',
+    'As of This Year'
+  ];
 
   useEffect(() => {
     fetchDashboardMetrics();
@@ -26,8 +82,8 @@ const Dashboard = () => {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gold-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-500 text-sm">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -35,12 +91,9 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <p className="text-red-700 font-semibold">{error}</p>
+      <div className="p-6">
+        <div className="bg-red-50 border border-red-200 rounded p-4 text-center">
+          <p className="text-red-700 text-sm">{error}</p>
         </div>
       </div>
     );
@@ -48,292 +101,368 @@ const Dashboard = () => {
 
   if (!metrics) return null;
 
-  const getRiskBadge = (level) => {
-    const classes = {
-      high: 'bg-red-100 text-red-700',
-      medium: 'bg-yellow-100 text-yellow-700',
-      low: 'bg-green-100 text-green-700',
-    };
-    return classes[level] || 'bg-gray-100 text-gray-700';
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <div className="bg-gradient-navy text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">Inventory Dashboard</h1>
-              <p className="text-gray-300">Welcome back! Here's your store overview</p>
+    <div className="bg-gray-50 dark:bg-gray-900 min-h-full">
+      <div className="px-6 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content - 2 columns */}
+          <div className="lg:col-span-2 space-y-6">
+            
+            {/* Top Selling Items */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-white">Top Selling Items</h2>
+                <Dropdown 
+                  value={topSellingPeriod}
+                  onChange={setTopSellingPeriod}
+                  options={periodOptions}
+                  size="sm"
+                />
+              </div>
+              <div className="p-8 text-center">
+                <p className="text-sm text-gray-600">You do not have any top selling items yet.</p>
+              </div>
             </div>
-            <div className="hidden md:flex items-center space-x-4">
-              <Link to="/products/new" className="btn-primary">
-                <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                </svg>
-                Add Product
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Main Metrics Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {/* Total Items */}
-          <div className="card animate-fade-in">
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm font-medium uppercase">Total Items</p>
-                  <p className="text-4xl font-bold text-gray-900 mt-2">{metrics.totalItems}</p>
+            {/* Top Stocked Items and Sales by Channel */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Top Stocked Items */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                  <h2 className="text-base font-semibold text-gray-900">Top Stocked Items</h2>
+                  <Dropdown 
+                    value={topStockedPeriod}
+                    onChange={setTopStockedPeriod}
+                    options={stockedPeriodOptions}
+                    size="xs"
+                  />
                 </div>
-                <div className="bg-gradient-gold p-4 rounded-xl">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                <span className="text-green-600 font-semibold flex items-center">
-                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                  Active
-                </span>
-                <span className="text-gray-500 ml-2">Unique products</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Total Stock */}
-          <div className="card animate-fade-in" style={{animationDelay: '0.1s'}}>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm font-medium uppercase">Total Stock</p>
-                  <p className="text-4xl font-bold text-gray-900 mt-2">{metrics.totalStock}</p>
-                </div>
-                <div className="bg-blue-500 p-4 rounded-xl">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                <span className="text-blue-600 font-semibold">In Inventory</span>
-                <span className="text-gray-500 ml-2">Total units</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Low Stock Items */}
-          <div className="card animate-fade-in" style={{animationDelay: '0.2s'}}>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm font-medium uppercase">Low Stock</p>
-                  <p className="text-4xl font-bold text-orange-600 mt-2">{metrics.lowStockCount}</p>
-                </div>
-                <div className="bg-orange-500 p-4 rounded-xl">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-4">
-                <Link to="/products" className="text-orange-600 font-semibold text-sm hover:text-orange-700 flex items-center">
-                  View items
-                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Out of Stock */}
-          <div className="card animate-fade-in" style={{animationDelay: '0.3s'}}>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm font-medium uppercase">Out of Stock</p>
-                  <p className="text-4xl font-bold text-red-600 mt-2">{metrics.outOfStockCount}</p>
-                </div>
-                <div className="bg-red-500 p-4 rounded-xl">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-4">
-                <span className="text-red-600 font-semibold text-sm">Needs restocking</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Item Groups */}
-          <div className="card animate-fade-in" style={{animationDelay: '0.4s'}}>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm font-medium uppercase">Categories</p>
-                  <p className="text-4xl font-bold text-gray-900 mt-2">{metrics.itemGroups}</p>
-                </div>
-                <div className="bg-purple-500 p-4 rounded-xl">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                  </svg>
-                </div>
-              </div>
-              <div className="mt-4 flex items-center text-sm">
-                <span className="text-purple-600 font-semibold">Product types</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Stock Risk Level */}
-          <div className="card animate-fade-in" style={{animationDelay: '0.5s'}}>
-            <div className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <p className="text-gray-500 text-sm font-medium uppercase">Risk Level</p>
-                  <div className="mt-3">
-                    <span className={`px-4 py-2 rounded-full text-sm font-bold uppercase ${getRiskBadge(metrics.stockRiskLevel)}`}>
-                      {metrics.stockRiskLevel}
-                    </span>
+                <div className="p-4">
+                  <div className="flex space-x-2 mb-4">
+                    <button
+                      onClick={() => setTopStockedView('quantity')}
+                      className={`px-4 py-1.5 text-sm font-medium rounded ${
+                        topStockedView === 'quantity'
+                          ? 'bg-[#1a1d2e] text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      By Quantity
+                    </button>
+                    <button
+                      onClick={() => setTopStockedView('value')}
+                      className={`px-4 py-1.5 text-sm font-medium rounded ${
+                        topStockedView === 'value'
+                          ? 'bg-[#1a1d2e] text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      By Value
+                    </button>
+                  </div>
+                  <div className="py-6 text-center">
+                    <p className="text-sm text-gray-600">
+                      {topStockedView === 'quantity' 
+                        ? 'No items stocked during this period (by quantity).'
+                        : 'No items stocked during this period (by value).'}
+                    </p>
                   </div>
                 </div>
-                <div className="bg-gray-200 p-4 rounded-xl">
-                  <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
+              </div>
+
+              {/* Sales by Channel */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                  <h2 className="text-base font-semibold text-gray-900">Sales By Channel</h2>
+                  <Dropdown 
+                    value={salesChannelPeriod}
+                    onChange={setSalesChannelPeriod}
+                    options={periodOptions}
+                    size="xs"
+                  />
+                </div>
+                <div className="p-8 text-center">
+                  <p className="text-sm text-gray-600">No sales data found during this period.</p>
                 </div>
               </div>
-              <div className="mt-4 text-sm text-gray-600">
-                Inventory health status
+            </div>
+
+            {/* Sales Order Summary */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                <h2 className="text-base font-semibold text-gray-900">Sales Order Summary</h2>
+                <Dropdown 
+                  value={salesOrderPeriod}
+                  onChange={setSalesOrderPeriod}
+                  options={periodOptions}
+                  size="xs"
+                />
+              </div>
+              <div className="p-4">
+                <div className="flex space-x-2 mb-4">
+                  <button 
+                    onClick={() => setSalesOrderView('quantity')}
+                    className={`px-4 py-1.5 text-sm font-medium rounded ${
+                      salesOrderView === 'quantity'
+                        ? 'bg-[#1a1d2e] text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    By Quantity
+                  </button>
+                  <button 
+                    onClick={() => setSalesOrderView('value')}
+                    className={`px-4 py-1.5 text-sm font-medium rounded ${
+                      salesOrderView === 'value'
+                        ? 'bg-[#1a1d2e] text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    By Value
+                  </button>
+                </div>
+                
+                {/* Chart Area */}
+                <div className="relative h-48 flex items-center justify-center border border-gray-200 rounded bg-gray-50">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-500">
+                      {salesOrderView === 'quantity'
+                        ? 'No sales orders created during this period (by quantity).'
+                        : 'No sales orders created during this period (by value).'}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* X-axis dates */}
+                <div className="flex justify-between mt-2 text-xs text-gray-500 px-2">
+                  <span>01 Feb</span>
+                  <span>05 Feb</span>
+                  <span>09 Feb</span>
+                  <span>13 Feb</span>
+                  <span>17 Feb</span>
+                  <span>21 Feb</span>
+                  <span>25 Feb</span>
+                  <span>27 Feb</span>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Top Products Table */}
-        <div className="card mb-8 animate-slide-up">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">Top Products by Stock</h2>
-                <p className="text-gray-500 mt-1">Highest quantity items in inventory</p>
+            {/* Top Vendors and Receive History */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Top Vendors */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                  <h2 className="text-base font-semibold text-gray-900">Top Vendors</h2>
+                  <Dropdown 
+                    value={topVendorsPeriod}
+                    onChange={setTopVendorsPeriod}
+                    options={periodOptions}
+                    size="xs"
+                  />
+                </div>
+                <div className="p-4">
+                  <div className="flex space-x-2 mb-4">
+                    <button 
+                      onClick={() => setTopVendorsView('quantity')}
+                      className={`px-4 py-1.5 text-sm font-medium rounded ${
+                        topVendorsView === 'quantity'
+                          ? 'bg-[#1a1d2e] text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      By Quantity
+                    </button>
+                    <button 
+                      onClick={() => setTopVendorsView('value')}
+                      className={`px-4 py-1.5 text-sm font-medium rounded ${
+                        topVendorsView === 'value'
+                          ? 'bg-[#1a1d2e] text-white'
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      By Value
+                    </button>
+                  </div>
+                  <div className="py-6 text-center">
+                    <p className="text-sm text-gray-600">
+                      {topVendorsView === 'quantity'
+                        ? 'No vendor activity found for this period (by quantity).'
+                        : 'No vendor activity found for this period (by value).'}
+                    </p>
+                  </div>
+                </div>
               </div>
-              <Link to="/products" className="btn-outline">
-                View All
+
+              {/* Receive History */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                  <h2 className="text-base font-semibold text-gray-900">Receive History</h2>
+                  <Dropdown 
+                    value={receiveHistoryPeriod}
+                    onChange={setReceiveHistoryPeriod}
+                    options={periodOptions}
+                    size="xs"
+                  />
+                </div>
+                <div className="p-8 text-center">
+                  <p className="text-sm text-gray-600">No purchase receives found for this period.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Sidebar - 1 column */}
+          <div className="lg:col-span-1 space-y-6">
+            
+            {/* Quick Stats Card - Moved to top */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+              <h3 className="text-sm font-semibold text-gray-700 mb-4">Quick Stats</h3>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Total Items</span>
+                  <span className="text-lg font-bold text-gray-900">{metrics.totalItems}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Total Stock</span>
+                  <span className="text-lg font-bold text-gray-900">{metrics.totalStock}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Low Stock</span>
+                  <span className="text-lg font-bold text-orange-600">{metrics.lowStockCount}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-600">Out of Stock</span>
+                  <span className="text-lg font-bold text-red-600">{metrics.outOfStockCount}</span>
+                </div>
+              </div>
+              <Link 
+                to="/products" 
+                className="mt-4 block w-full text-center bg-[#1a1d2e] hover:opacity-90 text-white text-sm font-medium py-2 rounded transition-opacity"
+              >
+                View All Products
               </Link>
             </div>
-          </div>
-          <div className="p-6">
-            {metrics.topProducts && metrics.topProducts.length > 0 ? (
-              <div className="overflow-x-auto">
-                <table className="min-w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-4 font-semibold text-gray-700">Product Name</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-700">Type</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-700">Quantity</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-700">Designer</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {metrics.topProducts.map((product, index) => (
-                      <tr key={product._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                        <td className="py-4 px-4">
-                          <Link 
-                            to={`/products/${product._id}`}
-                            className="text-gold-600 hover:text-gold-700 font-semibold flex items-center"
-                          >
-                            <span className="bg-gray-100 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-3">
-                              {index + 1}
-                            </span>
-                            {product.name}
-                          </Link>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                            {product.type}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className="font-bold text-gray-900">{product.quantity}</span>
-                        </td>
-                        <td className="py-4 px-4 text-gray-600">
-                          {product.designer?.name || 'N/A'}
-                        </td>
-                      </tr>
+
+            {/* Pending Actions / Recent Activities */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <div className="border-b border-gray-200">
+                <div className="flex">
+                  <button
+                    onClick={() => setActiveSection('pending')}
+                    className={`flex-1 px-4 py-3 text-sm font-medium ${
+                      activeSection === 'pending'
+                        ? 'text-[#1a1d2e] border-b-2 border-[#1a1d2e]'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Pending Actions
+                  </button>
+                  <button
+                    onClick={() => setActiveSection('recent')}
+                    className={`flex-1 px-4 py-3 text-sm font-medium ${
+                      activeSection === 'recent'
+                        ? 'text-[#1a1d2e] border-b-2 border-[#1a1d2e]'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    Recent Activities
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-4 space-y-4">
+                {activeSection === 'pending' ? (
+                  <>
+                    {/* SALES Section */}
+                    <div>
+                      <div className="flex items-center mb-3">
+                        <svg className="w-4 h-4 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <h3 className="text-sm font-semibold text-gray-700 uppercase">SALES</h3>
+                      </div>
+                      <div className="space-y-2 ml-6">
+                        <div className="flex items-center justify-between text-sm">
+                          <button className="text-gray-600 hover:text-blue-600">To Be Packed</button>
+                          <span className="text-gray-900 font-medium">0.00</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <button className="text-gray-600 hover:text-blue-600">To Be Shipped</button>
+                          <span className="text-gray-900 font-medium">0.00</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <button className="text-gray-600 hover:text-blue-600">To Be Delivered</button>
+                          <span className="text-gray-900 font-medium">0.00</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <button className="text-gray-600 hover:text-blue-600">To Be Invoiced</button>
+                          <span className="text-gray-900 font-medium">0.00</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* PURCHASES Section */}
+                    <div className="pt-4 border-t border-gray-200">
+                      <div className="flex items-center mb-3">
+                        <svg className="w-4 h-4 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <h3 className="text-sm font-semibold text-gray-700 uppercase">PURCHASES</h3>
+                      </div>
+                      <div className="space-y-2 ml-6">
+                        <div className="flex items-center justify-between text-sm">
+                          <button className="text-gray-600 hover:text-blue-600">To Be Received</button>
+                          <span className="text-gray-900 font-medium">0.00</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <button className="text-gray-600 hover:text-blue-600">Receive In Progress</button>
+                          <span className="text-gray-900 font-medium">0.00</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* INVENTORY Section */}
+                    <div className="pt-4 border-t border-gray-200">
+                      <div className="flex items-center mb-3">
+                        <svg className="w-4 h-4 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                        <h3 className="text-sm font-semibold text-gray-700 uppercase">INVENTORY</h3>
+                      </div>
+                      <div className="space-y-2 ml-6">
+                        <div className="flex items-center justify-between text-sm">
+                          <button className="text-gray-600 hover:text-blue-600">Below Reorder Level</button>
+                          <span className="text-gray-900 font-medium">0.00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  /* Recent Activities */
+                  <div className="space-y-3">
+                    {recentActivities.map((activity) => (
+                      <div key={activity.id} className="flex items-start space-x-3 pb-3 border-b border-gray-100 last:border-0">
+                        <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={activity.icon} />
+                          </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-gray-900">
+                            {activity.title} <span className="font-medium">By {activity.user}</span>
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">{activity.timestamp}</p>
+                        </div>
+                      </div>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                </svg>
-                <p className="text-gray-500">No products available</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Additional Metrics */}
-        <div className="card animate-slide-up" style={{animationDelay: '0.2s'}}>
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900">Business Metrics</h2>
-            <p className="text-gray-500 mt-1">Additional performance indicators</p>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-blue-700 font-semibold">To Be Shipped</p>
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                  </svg>
-                </div>
-                <p className="text-3xl font-bold text-blue-900">{metrics.toBeShipped}</p>
-              </div>
-
-              <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-green-700 font-semibold">To Be Delivered</p>
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                  </svg>
-                </div>
-                <p className="text-3xl font-bold text-green-900">{metrics.toBeDelivered}</p>
-              </div>
-
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-purple-700 font-semibold">To Be Invoiced</p>
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <p className="text-3xl font-bold text-purple-900">{metrics.toBeInvoiced}</p>
-              </div>
-
-              <div className="bg-gradient-to-br from-gold-50 to-gold-100 p-6 rounded-xl">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-gold-700 font-semibold">Reorder Value</p>
-                  <svg className="w-6 h-6 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <p className="text-3xl font-bold text-gold-900">₹{metrics.suggestedReorder}</p>
+                  </div>
+                )}
               </div>
             </div>
+
           </div>
         </div>
       </div>
