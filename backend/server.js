@@ -48,15 +48,14 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const HOST = '0.0.0.0'; // Listen on all interfaces for Railway
 
 // Connect to MySQL and start server
 const startServer = async () => {
     try {
         await connectDB();
         
-        app.listen(PORT, HOST, () => {
-            console.log(`Server is running on ${HOST}:${PORT}`);
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
             console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`Database: MySQL`);
         });
