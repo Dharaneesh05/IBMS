@@ -116,6 +116,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       const newSections = [...new Set([...prev, ...shouldExpandSections])];
       return newSections.length !== prev.length ? newSections : prev;
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   const toggleSection = (sectionId) => {
