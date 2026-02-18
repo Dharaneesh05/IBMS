@@ -13,7 +13,17 @@ const ProductEdit = () => {
     quantity: '',
     cost: '',
     price: '',
-    designer: ''
+    designer: '',
+    frontImage: null,
+    rearImage: null,
+    otherImages: [],
+    returnable: 'yes',
+    dimensionLength: '',
+    dimensionWidth: '',
+    dimensionHeight: '',
+    dimensionUnit: 'cm',
+    weight: '',
+    weightUnit: 'g'
   });
   const [originalData, setOriginalData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,7 +46,17 @@ const ProductEdit = () => {
         quantity: product.quantity,
         cost: product.cost,
         price: product.price,
-        designer: product.designer?._id || ''
+        designer: product.designer?.id || '',
+        frontImage: null,
+        rearImage: null,
+        otherImages: [],
+        returnable: product.returnable || 'yes',
+        dimensionLength: product.dimensionLength || '',
+        dimensionWidth: product.dimensionWidth || '',
+        dimensionHeight: product.dimensionHeight || '',
+        dimensionUnit: product.dimensionUnit || 'cm',
+        weight: product.weight || '',
+        weightUnit: product.weightUnit || 'g'
       };
       setFormData(data);
       setOriginalData(data);
@@ -60,6 +80,31 @@ const ProductEdit = () => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
+    });
+  };
+
+  const handleImageUpload = (e, imageType) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (imageType === 'other') {
+        setFormData({
+          ...formData,
+          otherImages: [...formData.otherImages, file]
+        });
+      } else {
+        setFormData({
+          ...formData,
+          [imageType]: file
+        });
+      }
+    }
+  };
+
+  const handleRemoveOtherImage = (index) => {
+    const updatedImages = formData.otherImages.filter((_, i) => i !== index);
+    setFormData({
+      ...formData,
+      otherImages: updatedImages
     });
   };
 
@@ -215,7 +260,7 @@ const ProductEdit = () => {
                     >
                       <option value="">Select a designer</option>
                       {designers.map((designer) => (
-                        <option key={designer._id} value={designer._id}>
+                        <option key={designer.id} value={designer.id}>
                           {designer.name}
                         </option>
                       ))}
@@ -278,6 +323,239 @@ const ProductEdit = () => {
                         placeholder="0.00"
                         required
                       />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Product Images */}
+              <div className="card">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">Product Images</h2>
+                
+                <div className="space-y-4">
+                  {/* Front View */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Front View
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-purple-400 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, 'frontImage')}
+                        className="hidden"
+                        id="frontImage"
+                      />
+                      <label htmlFor="frontImage" className="cursor-pointer flex flex-col items-center">
+                        {formData.frontImage ? (
+                          <div className="text-center">
+                            <svg className="w-12 h-12 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <p className="text-sm text-gray-700 font-medium">{formData.frontImage.name}</p>
+                          </div>
+                        ) : (
+                          <>
+                            <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p className="text-sm text-gray-600">Click to upload or drag and drop</p>
+                            <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+                          </>
+                        )}
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Rear View */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Rear View
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-purple-400 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, 'rearImage')}
+                        className="hidden"
+                        id="rearImage"
+                      />
+                      <label htmlFor="rearImage" className="cursor-pointer flex flex-col items-center">
+                        {formData.rearImage ? (
+                          <div className="text-center">
+                            <svg className="w-12 h-12 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <p className="text-sm text-gray-700 font-medium">{formData.rearImage.name}</p>
+                          </div>
+                        ) : (
+                          <>
+                            <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p className="text-sm text-gray-600">Click to upload or drag and drop</p>
+                            <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+                          </>
+                        )}
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Other Images */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Other Images
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-purple-400 transition-colors">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e, 'other')}
+                        className="hidden"
+                        id="otherImages"
+                        multiple
+                      />
+                      <label htmlFor="otherImages" className="cursor-pointer flex flex-col items-center">
+                        <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p className="text-sm text-gray-600">Click to upload additional images</p>
+                        <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB each</p>
+                      </label>
+                    </div>
+                    {formData.otherImages.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {formData.otherImages.map((img, idx) => (
+                          <div key={idx} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs">
+                            <span className="text-gray-700">{img.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveOtherImage(idx)}
+                              className="text-red-600 hover:text-red-800 font-bold"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Cancellation and Returns */}
+              <div className="card">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">Cancellation and Returns</h2>
+                
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    Returnable Item
+                  </label>
+                  <div className="flex items-center gap-6">
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="returnable"
+                        value="yes"
+                        checked={formData.returnable === 'yes'}
+                        onChange={handleChange}
+                        className="w-4 h-4 text-[#1a1d2e] focus:ring-[#1a1d2e]"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">Yes</span>
+                    </label>
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="returnable"
+                        value="no"
+                        checked={formData.returnable === 'no'}
+                        onChange={handleChange}
+                        className="w-4 h-4 text-[#1a1d2e] focus:ring-[#1a1d2e]"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Fulfillment Details */}
+              <div className="card">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">Fulfillment Details</h2>
+                
+                <div className="space-y-4">
+                  {/* Dimensions */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Dimensions
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        name="dimensionLength"
+                        value={formData.dimensionLength}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        placeholder="L"
+                        step="0.01"
+                      />
+                      <span className="text-gray-500 font-bold">×</span>
+                      <input
+                        type="number"
+                        name="dimensionWidth"
+                        value={formData.dimensionWidth}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        placeholder="W"
+                        step="0.01"
+                      />
+                      <span className="text-gray-500 font-bold">×</span>
+                      <input
+                        type="number"
+                        name="dimensionHeight"
+                        value={formData.dimensionHeight}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        placeholder="H"
+                        step="0.01"
+                      />
+                      <select
+                        name="dimensionUnit"
+                        value={formData.dimensionUnit}
+                        onChange={handleChange}
+                        className="input-field text-sm w-20"
+                      >
+                        <option value="cm">cm</option>
+                        <option value="mm">mm</option>
+                        <option value="in">in</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Weight */}
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Weight
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        name="weight"
+                        value={formData.weight}
+                        onChange={handleChange}
+                        className="input-field text-sm flex-1"
+                        placeholder="0.00"
+                        step="0.01"
+                      />
+                      <select
+                        name="weightUnit"
+                        value={formData.weightUnit}
+                        onChange={handleChange}
+                        className="input-field text-sm w-20"
+                      >
+                        <option value="g">g</option>
+                        <option value="kg">kg</option>
+                        <option value="oz">oz</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -374,3 +652,5 @@ const ProductEdit = () => {
 };
 
 export default ProductEdit;
+
+

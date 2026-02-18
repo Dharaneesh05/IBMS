@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
+import { useActivity } from '../contexts/ActivityContext';
+import { useSettings } from '../contexts/SettingsContext';
+import { useFilter } from '../contexts/FilterContext';
 
 const SlidePanel = ({ isOpen, onClose, type, title }) => {
   return (
@@ -14,18 +18,18 @@ const SlidePanel = ({ isOpen, onClose, type, title }) => {
 
       {/* Slide Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-96 bg-white dark:bg-gray-800 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b dark:border-gray-700">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
-            <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -33,7 +37,7 @@ const SlidePanel = ({ isOpen, onClose, type, title }) => {
 
         {/* Content */}
         <div className="overflow-y-auto h-[calc(100%-4rem)] p-6">
-          {type === 'filter' && <FilterContent />}
+          {type === 'filter' && <FilterContent onClose={onClose} />}
           {type === 'notification' && <NotificationContent />}
           {type === 'mail' && <MailContent />}
           {type === 'settings' && <SettingsContent />}
@@ -44,63 +48,108 @@ const SlidePanel = ({ isOpen, onClose, type, title }) => {
 };
 
 // Filter Content Component
-const FilterContent = () => {
+const FilterContent = ({ onClose }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { filters, updateFilter, updateStockStatus, applyFilters, resetFilters } = useFilter();
+
+  const handleApply = () => {
+    applyFilters();
+    // If not on products page, navigate there to show results
+    if (!location.pathname.startsWith('/products')) {
+      navigate('/products');
+    }
+    // Close panel after navigating
+    setTimeout(() => onClose(), 100);
+  };
+
+  const handleReset = () => {
+    resetFilters();
+  };
+
   return (
     <div className="space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-        <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent">
-          <option>All Categories</option>
-          <option>Rings</option>
-          <option>Necklaces</option>
-          <option>Bracelets</option>
-          <option>Earrings</option>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+        <select 
+          value={filters.category}
+          onChange={(e) => updateFilter('category', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+        >
+          <option value="all">All Categories</option>
+          <option value="rings">Rings</option>
+          <option value="necklaces">Necklaces</option>
+          <option value="bracelets">Bracelets</option>
+          <option value="earrings">Earrings</option>
+          <option value="pendants">Pendants</option>
         </select>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price Range</label>
         <div className="flex items-center space-x-2">
           <input
             type="number"
             placeholder="Min"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent"
+            value={filters.minPrice}
+            onChange={(e) => updateFilter('minPrice', e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
-          <span className="text-gray-500">-</span>
+          <span className="text-gray-500 dark:text-gray-400">-</span>
           <input
             type="number"
             placeholder="Max"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent"
+            value={filters.maxPrice}
+            onChange={(e) => updateFilter('maxPrice', e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Stock Status</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stock Status</label>
         <div className="space-y-2">
-          {['All Items', 'In Stock', 'Low Stock', 'Out of Stock'].map((status) => (
-            <label key={status} className="flex items-center">
-              <input type="checkbox" className="rounded border-gray-300 text-[#0d9488] focus:ring-[#0d9488]" />
-              <span className="ml-2 text-sm text-gray-700">{status}</span>
+          {[
+            { key: 'all', label: 'All Items' },
+            { key: 'inStock', label: 'In Stock' },
+            { key: 'lowStock', label: 'Low Stock' },
+            { key: 'outOfStock', label: 'Out of Stock' }
+          ].map((status) => (
+            <label key={status.key} className="flex items-center cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={filters.stockStatus[status.key]}
+                onChange={() => updateStockStatus(status.key)}
+                className="rounded border-gray-300 dark:border-gray-600 text-[#0d9488] focus:ring-[#0d9488]" 
+              />
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{status.label}</span>
             </label>
           ))}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Designer</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Designer</label>
         <input
           type="text"
           placeholder="Search designer"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent"
+          value={filters.designer}
+          onChange={(e) => updateFilter('designer', e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         />
       </div>
 
       <div className="flex space-x-3 pt-4">
-        <button className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+        <button 
+          onClick={handleReset}
+          className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+        >
           Reset
         </button>
-        <button className="flex-1 px-4 py-2 bg-[#1a1d2e] text-white rounded-lg hover:bg-gray-900 transition-colors">
+        <button 
+          onClick={handleApply}
+          className="flex-1 px-4 py-2 bg-[#1a1d2e] dark:bg-[#0d9488] text-white rounded-lg hover:bg-gray-900 dark:hover:bg-[#0a7a6f] transition-colors"
+        >
           Apply Filters
         </button>
       </div>
@@ -113,62 +162,51 @@ const NotificationContent = () => {
   const notifications = [
     {
       id: 1,
-      type: 'success',
       title: 'New Order Received',
       message: 'Order #ORD2040 has been placed successfully',
       time: '2 minutes ago',
-      icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-      color: 'text-green-600',
-      bg: 'bg-green-50'
+      type: 'success'
     },
     {
       id: 2,
-      type: 'warning',
       title: 'Low Stock Alert',
       message: 'Diamond Ring #DR123 is running low on stock',
       time: '1 hour ago',
-      icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
-      color: 'text-yellow-600',
-      bg: 'bg-yellow-50'
+      type: 'warning'
     },
     {
       id: 3,
-      type: 'info',
       title: 'Product Added',
       message: 'New product "Gold Bracelet" added to inventory',
       time: '3 hours ago',
-      icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-      color: 'text-blue-600',
-      bg: 'bg-blue-50'
+      type: 'info'
     },
     {
       id: 4,
-      type: 'danger',
       title: 'Payment Failed',
       message: 'Order #ORD2039 payment processing failed',
       time: '5 hours ago',
-      icon: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
-      color: 'text-red-600',
-      bg: 'bg-red-50'
+      type: 'danger'
     },
   ];
 
+  const getBgColor = (type) => {
+    switch(type) {
+      case 'success': return 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800';
+      case 'warning': return 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800';
+      case 'info': return 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800';
+      case 'danger': return 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800';
+      default: return 'bg-gray-50 dark:bg-gray-900/20 border-gray-200 dark:border-gray-700';
+    }
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {notifications.map((notification) => (
-        <div key={notification.id} className={`p-4 rounded-lg ${notification.bg} border border-gray-200`}>
-          <div className="flex items-start space-x-3">
-            <div className={`flex-shrink-0 ${notification.color}`}>
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" d={notification.icon} clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <h4 className="text-sm font-semibold text-gray-900">{notification.title}</h4>
-              <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-              <p className="text-xs text-gray-500 mt-2">{notification.time}</p>
-            </div>
-          </div>
+        <div key={notification.id} className={`p-4 rounded-lg border ${getBgColor(notification.type)}`}>
+          <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100">{notification.title}</h4>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{notification.message}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">{notification.time}</p>
         </div>
       ))}
     </div>
@@ -184,8 +222,7 @@ const MailContent = () => {
       subject: 'Order Inquiry - Diamond Ring',
       preview: 'Hi, I would like to inquire about the diamond ring listed on your website...',
       time: '10:30 AM',
-      unread: true,
-      avatar: 'SJ'
+      unread: true
     },
     {
       id: 2,
@@ -193,8 +230,7 @@ const MailContent = () => {
       subject: 'Bulk Order Request',
       preview: 'We are interested in placing a bulk order for wedding rings. Could you please...',
       time: '9:15 AM',
-      unread: true,
-      avatar: 'MC'
+      unread: true
     },
     {
       id: 3,
@@ -202,8 +238,7 @@ const MailContent = () => {
       subject: 'Product Catalog Request',
       preview: 'Can you send me the latest product catalog with pricing information?',
       time: 'Yesterday',
-      unread: false,
-      avatar: 'ER'
+      unread: false
     },
     {
       id: 4,
@@ -211,8 +246,7 @@ const MailContent = () => {
       subject: 'Thank you for the service',
       preview: 'The necklace arrived safely and my wife loves it! Thank you for the excellent...',
       time: '2 days ago',
-      unread: false,
-      avatar: 'DW'
+      unread: false
     },
   ];
 
@@ -223,29 +257,20 @@ const MailContent = () => {
           key={mail.id}
           className={`p-4 rounded-lg border transition-colors cursor-pointer ${
             mail.unread
-              ? 'bg-blue-50 border-blue-200 hover:bg-blue-100'
-              : 'bg-white border-gray-200 hover:bg-gray-50'
+              ? 'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/20'
+              : 'bg-white dark:bg-transparent border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50'
           }`}
         >
-          <div className="flex items-start space-x-3">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-[#0d9488] rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                {mail.avatar}
-              </div>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between">
-                <h4 className={`text-sm ${mail.unread ? 'font-bold' : 'font-medium'} text-gray-900 truncate`}>
-                  {mail.from}
-                </h4>
-                <span className="text-xs text-gray-500 ml-2">{mail.time}</span>
-              </div>
-              <p className={`text-sm ${mail.unread ? 'font-semibold' : 'font-normal'} text-gray-700 mt-1 truncate`}>
-                {mail.subject}
-              </p>
-              <p className="text-sm text-gray-500 mt-1 truncate">{mail.preview}</p>
-            </div>
+          <div className="flex items-start justify-between mb-2">
+            <h4 className={`text-sm ${mail.unread ? 'font-bold' : 'font-medium'} ${mail.unread ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'} truncate`}>
+              {mail.from}
+            </h4>
+            <span className="text-xs text-gray-500 dark:text-gray-500 ml-2">{mail.time}</span>
           </div>
+          <p className={`text-sm ${mail.unread ? 'font-semibold' : 'font-normal'} ${mail.unread ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'} mb-1 truncate`}>
+            {mail.subject}
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{mail.preview}</p>
         </div>
       ))}
     </div>
@@ -255,15 +280,16 @@ const MailContent = () => {
 // Settings Content Component
 const SettingsContent = () => {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { settings, toggleSetting } = useSettings();
   
   return (
     <div className="space-y-6">
       {/* Appearance */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-900 mb-3">Appearance</h3>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Appearance</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-700">Dark Mode</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">Dark Mode</span>
             <label className="relative inline-flex items-center cursor-pointer">
               <input 
                 type="checkbox" 
@@ -271,15 +297,20 @@ const SettingsContent = () => {
                 checked={isDarkMode}
                 onChange={toggleDarkMode}
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
             </label>
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-gray-700">Compact View</span>
+            <span className="text-sm text-gray-700 dark:text-gray-300">Compact View</span>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={settings.compactView}
+                onChange={() => toggleSetting('compactView')}
+              />
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
             </label>
           </div>
         </div>
@@ -287,38 +318,53 @@ const SettingsContent = () => {
 
       {/* Notifications */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-900 mb-3">Notifications</h3>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Notifications</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-700">Email Notifications</p>
-              <p className="text-xs text-gray-500">Receive email updates</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Email Notifications</p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">Receive email updates</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" defaultChecked className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={settings.emailNotifications}
+                onChange={() => toggleSetting('emailNotifications')}
+              />
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
             </label>
           </div>
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-700">Push Notifications</p>
-              <p className="text-xs text-gray-500">Receive push alerts</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Push Notifications</p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">Receive push alerts</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" defaultChecked className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={settings.pushNotifications}
+                onChange={() => toggleSetting('pushNotifications')}
+              />
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
             </label>
           </div>
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-700">Low Stock Alerts</p>
-              <p className="text-xs text-gray-500">Get notified on low inventory</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Low Stock Alerts</p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">Get notified on low inventory</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" defaultChecked className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <input 
+                type="checkbox" 
+                className="sr-only peer" 
+                checked={settings.lowStockAlerts}
+                onChange={() => toggleSetting('lowStockAlerts')}
+              />
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
             </label>
           </div>
         </div>
@@ -326,13 +372,13 @@ const SettingsContent = () => {
 
       {/* System */}
       <div>
-        <h3 className="text-sm font-semibold text-gray-900 mb-3">System</h3>
+        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">System</h3>
         <div className="space-y-2">
-          <button className="w-full p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+          <button className="w-full p-3 text-left bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">Language</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Language</span>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">English</span>
+                <span className="text-sm text-gray-500 dark:text-gray-500">{settings.language}</span>
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                 </svg>
@@ -340,11 +386,11 @@ const SettingsContent = () => {
             </div>
           </button>
 
-          <button className="w-full p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+          <button className="w-full p-3 text-left bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">Time Zone</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Time Zone</span>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">GMT+5:30</span>
+                <span className="text-sm text-gray-500 dark:text-gray-500">{settings.timeZone}</span>
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                 </svg>
@@ -352,11 +398,11 @@ const SettingsContent = () => {
             </div>
           </button>
 
-          <button className="w-full p-3 text-left bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
+          <button className="w-full p-3 text-left bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">Currency</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Currency</span>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">INR (₹)</span>
+                <span className="text-sm text-gray-500 dark:text-gray-500">{settings.currency}</span>
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                 </svg>
@@ -372,3 +418,5 @@ const SettingsContent = () => {
 };
 
 export default SlidePanel;
+
+

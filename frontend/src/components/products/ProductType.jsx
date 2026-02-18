@@ -179,11 +179,11 @@ const ProductType = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map((product, index) => (
               <div 
-                key={product._id} 
+                key={product.id} 
                 className="card group animate-fade-in"
                 style={{animationDelay: `${index * 50}ms`}}
               >
-                <Link to={`/products/${product._id}`} className="block relative overflow-hidden">
+                <Link to={`/products/${product.id}`} className="block relative overflow-hidden">
                   <div className="aspect-square bg-gray-100">
                     <img 
                       src='https://images.unsplash.com/photo-1598560917807-1bae44bd2be8?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
@@ -197,14 +197,14 @@ const ProductType = () => {
                 </Link>
 
                 <div className="p-5">
-                  <Link to={`/products/${product._id}`}>
+                  <Link to={`/products/${product.id}`}>
                     <h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-gold-600 transition-colors line-clamp-2">
                       {product.name}
                     </h3>
                   </Link>
 
                   <Link 
-                    to={`/designers/${product.designer?._id}`}
+                    to={`/designers/${product.designer?.id}`}
                     className="text-sm text-gray-600 hover:text-gold-600 transition-colors mb-3 block"
                   >
                     by <span className="font-semibold">{product.designer?.name || 'Unknown Designer'}</span>
@@ -223,13 +223,13 @@ const ProductType = () => {
 
                   <div className="flex items-center gap-2">
                     <Link 
-                      to={`/products/${product._id}/edit`}
+                      to={`/products/${product.id}/edit`}
                       className="flex-1 bg-gold-50 text-gold-700 py-2 px-4 rounded-lg font-semibold hover:bg-gold-100 transition-colors text-center text-sm"
                     >
                       Edit
                     </Link>
                     <button 
-                      onClick={() => handleDelete(product._id)}
+                      onClick={() => handleDelete(product.id)}
                       className="bg-red-50 text-red-700 py-2 px-4 rounded-lg font-semibold hover:bg-red-100 transition-colors text-sm"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -259,10 +259,10 @@ const ProductType = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {products.map((product) => (
-                    <tr key={product._id} className="hover:bg-gold-50 transition-colors">
+                    <tr key={product.id} className="hover:bg-gold-50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Link 
-                          to={`/products/${product._id}`}
+                          to={`/products/${product.id}`}
                           className="text-sm font-semibold text-gray-900 hover:text-gold-600 transition-colors"
                         >
                           {product.name}
@@ -270,7 +270,7 @@ const ProductType = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Link 
-                          to={`/designers/${product.designer?._id}`}
+                          to={`/designers/${product.designer?.id}`}
                           className="text-sm text-gray-600 hover:text-gold-600 transition-colors"
                         >
                           {product.designer?.name || 'N/A'}
@@ -291,7 +291,7 @@ const ProductType = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         <div className="flex items-center justify-center gap-2">
                           <Link 
-                            to={`/products/${product._id}/edit`}
+                            to={`/products/${product.id}/edit`}
                             className="p-2 bg-gold-50 text-gold-700 rounded-lg hover:bg-gold-100 transition-colors"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -299,7 +299,7 @@ const ProductType = () => {
                             </svg>
                           </Link>
                           <button 
-                            onClick={() => handleDelete(product._id)}
+                            onClick={() => handleDelete(product.id)}
                             className="p-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -321,3 +321,5 @@ const ProductType = () => {
 };
 
 export default ProductType;
+
+

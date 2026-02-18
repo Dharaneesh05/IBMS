@@ -229,10 +229,10 @@ const DesignerShow = () => {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {products.map((product) => (
-                          <tr key={product._id} className="hover:bg-gray-50 transition-colors">
+                          <tr key={product.id} className="hover:bg-gray-50 transition-colors">
                             <td className="px-4 py-3 whitespace-nowrap">
                               <Link 
-                                to={`/products/${product._id}`}
+                                to={`/products/${product.id}`}
                                 className="text-sm font-medium text-gray-900 hover:text-[#0d9488] transition-colors"
                               >
                                 {product.name}
@@ -254,7 +254,7 @@ const DesignerShow = () => {
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap text-center">
                               <Link 
-                                to={`/products/${product._id}/edit`}
+                                to={`/products/${product.id}/edit`}
                                 className="text-[#0d9488] hover:text-[#0f766e] font-medium text-sm transition-colors"
                               >
                                 Edit
@@ -333,3 +333,5 @@ const DesignerShow = () => {
 };
 
 export default DesignerShow;
+
+

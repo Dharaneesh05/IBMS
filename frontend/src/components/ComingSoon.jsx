@@ -25,3 +25,5 @@ const ComingSoon = ({ title, description }) => {
 };
 
 export default ComingSoon;
+
+

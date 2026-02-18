@@ -1,60 +1,87 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db');
 
-const productSchema = new mongoose.Schema({
+const Product = sequelize.define('Product', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     name: {
-        type: String,
-        required: [true, 'Please add a product name'],
-        trim: true
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        validate: {
+            notEmpty: { msg: 'Please add a product name' }
+        }
     },
     type: {
-        type: String,
-        required: [true, 'Please add a product type'],
-        trim: true
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        validate: {
+            notEmpty: { msg: 'Please add a product type' }
+        }
     },
     description: {
-        type: String,
-        required: [true, 'Please add a description'],
-        trim: true
+        type: DataTypes.TEXT,
+        allowNull: false,
+        validate: {
+            notEmpty: { msg: 'Please add a description' }
+        }
     },
     quantity: {
-        type: Number,
-        required: [true, 'Please add quantity'],
-        min: 0,
-        default: 0
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+            min: { args: [0], msg: 'Quantity cannot be negative' }
+        }
     },
     cost: {
-        type: Number,
-        required: [true, 'Please add cost'],
-        min: 0
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        validate: {
+            min: { args: [0], msg: 'Cost cannot be negative' }
+        }
     },
     price: {
-        type: Number,
-        required: [true, 'Please add price'],
-        min: 0
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false,
+        validate: {
+            min: { args: [0], msg: 'Price cannot be negative' }
+        }
     },
-    designer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Designer',
-        required: [true, 'Please add a designer']
+    designerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'designers',
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
     }
 }, {
-    timestamps: true
+    tableName: 'products',
+    timestamps: true,
+    indexes: [
+        { fields: ['type'] },
+        { fields: ['designerId'] },
+        { fields: ['quantity'] }
+    ]
 });
 
-// Instance method to check low stock
-productSchema.methods.lowStock = function() {
+// Instance methods
+Product.prototype.lowStock = function() {
     const LOW_QUANTITY = 5;
     return this.quantity <= LOW_QUANTITY && this.quantity > 0;
 };
 
-// Instance method to check out of stock
-productSchema.methods.outOfStock = function() {
+Product.prototype.outOfStock = function() {
     return this.quantity <= 0;
 };
 
-// Instance method to calculate markup
-productSchema.methods.calculateMarkup = function() {
-    return this.price - this.cost;
+Product.prototype.calculateMarkup = function() {
+    return parseFloat(this.price) - parseFloat(this.cost);
 };
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = Product;

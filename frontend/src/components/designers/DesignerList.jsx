@@ -60,7 +60,7 @@ const DesignerList = () => {
       setSelectedItems(new Set());
       setSelectAll(false);
     } else {
-      setSelectedItems(new Set(sortedDesigners.map(d => d._id)));
+      setSelectedItems(new Set(sortedDesigners.map(d => d.id)));
       setSelectAll(true);
     }
   };
@@ -348,19 +348,19 @@ const DesignerList = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {sortedDesigners.map((designer) => (
-                    <tr key={designer._id} className="hover:bg-gray-50 transition-colors duration-150">
+                    <tr key={designer.id} className="hover:bg-gray-50 transition-colors duration-150">
                       <td className={`whitespace-nowrap ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
                         <input
                           type="checkbox"
-                          checked={selectedItems.has(designer._id)}
-                          onChange={() => handleSelectItem(designer._id)}
+                          checked={selectedItems.has(designer.id)}
+                          onChange={() => handleSelectItem(designer.id)}
                           className="rounded border-gray-300 text-[#1a1d2e] focus:ring-[#1a1d2e]/20"
                         />
                       </td>
                       <td className={`whitespace-nowrap ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
                         <div>
                           <Link 
-                            to={`/designers/${designer._id}`}
+                            to={`/designers/${designer.id}`}
                             className={`${isCompactView ? 'text-xs' : 'text-sm'} font-semibold text-gray-900 hover:text-[#0d9488] transition-colors`}
                           >
                             {designer.companyName || designer.displayName || designer.name}
@@ -396,7 +396,7 @@ const DesignerList = () => {
                       </td>
                       <td className={`whitespace-nowrap text-center ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
                         <Link 
-                          to={`/designers/${designer._id}/edit`}
+                          to={`/designers/${designer.id}/edit`}
                           className={`text-[#1a1d2e] hover:text-[#2a2e42] font-medium transition-colors ${isCompactView ? 'text-xs' : 'text-sm'}`}
                           title="Edit designer"
                         >
@@ -416,3 +416,5 @@ const DesignerList = () => {
 };
 
 export default DesignerList;
+
+

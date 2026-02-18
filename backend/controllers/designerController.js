@@ -1,12 +1,37 @@
-const Designer = require('../models/Designer');
-const Product = require('../models/Product');
+const { Designer, Product, UserActivity } = require('../models');
+const { Op } = require('sequelize');
+
+// Helper function to log user activity
+const logActivity = async (action, entityType, entityId, description, req, oldValue = null, newValue = null) => {
+    try {
+        await UserActivity.create({
+            userId: req.headers['x-user-id'] || req.headers['x-user-name'] || 'Dharaneesh C',
+            sessionId: req.headers['x-session-id'] || req.sessionID || null,
+            ipAddress: req.ip || req.connection.remoteAddress,
+            userAgent: req.headers['user-agent'],
+            action,
+            entityType,
+            entityId,
+            description,
+            oldValue,
+            newValue,
+            success: true
+        });
+    } catch (error) {
+        console.error('Error logging activity:', error);
+    }
+};
 
 // @desc    Get all designers
 // @route   GET /api/designers
 // @access  Public
 exports.getAllDesigners = async (req, res) => {
     try {
-        const designers = await Designer.find().sort({ _id: 1 });
+        const designers = await Designer.findAll({
+            order: [['id', 'ASC']]
+        });
+        
+        await logActivity('VIEW', 'DESIGNERS', null, 'Viewed all designers', req);
         res.json(designers);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -18,14 +43,17 @@ exports.getAllDesigners = async (req, res) => {
 // @access  Public
 exports.getDesignerById = async (req, res) => {
     try {
-        const designer = await Designer.findById(req.params.id);
+        const designer = await Designer.findByPk(req.params.id);
         
         if (!designer) {
             return res.status(404).json({ message: 'Designer not found' });
         }
         
-        const products = await Product.find({ designer: req.params.id });
+        const products = await Product.findAll({ 
+            where: { designerId: req.params.id }
+        });
         
+        await logActivity('VIEW', 'DESIGNER', req.params.id, `Viewed designer: ${designer.name}`, req);
         res.json({ designer, products });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -37,7 +65,7 @@ exports.getDesignerById = async (req, res) => {
 // @access  Public
 exports.createDesigner = async (req, res) => {
     try {
-        const { companyName, displayName, name, email, phone, address, gstin } = req.body;
+        const { companyName, displayName, name, email, phone, street, city, state, pincode, country, gstin } = req.body;
         
         if (!companyName || !displayName || !name || !email) {
             return res.status(400).json({ message: 'Please provide company name, display name, contact person name, and email' });
@@ -49,14 +77,19 @@ exports.createDesigner = async (req, res) => {
             name,
             email,
             phone,
-            address,
+            street,
+            city,
+            state,
+            pincode,
+            country: country || 'India',
             gstin,
             status: 'active'
         });
         
+        await logActivity('CREATE', 'DESIGNER', designer.id, `Created designer: ${designer.name}`, req, null, designer.toJSON());
         res.status(201).json(designer);
     } catch (error) {
-        if (error.code === 11000) {
+        if (error.name === 'SequelizeUniqueConstraintError') {
             return res.status(400).json({ message: 'Email already exists' });
         }
         res.status(500).json({ message: error.message });
@@ -68,33 +101,41 @@ exports.createDesigner = async (req, res) => {
 // @access  Public
 exports.updateDesigner = async (req, res) => {
     try {
-        const { companyName, displayName, name, email, phone, address, gstin, status } = req.body;
+        const { companyName, displayName, name, email, phone, street, city, state, pincode, country, gstin, status } = req.body;
         
         if (!companyName || !displayName || !name || !email) {
             return res.status(400).json({ message: 'Please provide company name, display name, contact person name, and email' });
         }
         
-        const designer = await Designer.findByIdAndUpdate(
-            req.params.id,
-            { 
-                companyName,
-                displayName,
-                name,
-                email,
-                phone,
-                address,
-                gstin,
-                status: status || 'active' 
-            },
-            { new: true, runValidators: true }
-        );
+        const designer = await Designer.findByPk(req.params.id);
         
         if (!designer) {
             return res.status(404).json({ message: 'Designer not found' });
         }
         
+        const oldValue = designer.toJSON();
+        
+        await designer.update({
+            companyName,
+            displayName,
+            name,
+            email,
+            phone,
+            street,
+            city,
+            state,
+            pincode,
+            country: country || 'India',
+            gstin,
+            status: status || 'active'
+        });
+        
+        await logActivity('UPDATE', 'DESIGNER', designer.id, `Updated designer: ${designer.name}`, req, oldValue, designer.toJSON());
         res.json(designer);
     } catch (error) {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({ message: 'Email already exists' });
+        }
         res.status(500).json({ message: error.message });
     }
 };
@@ -104,15 +145,25 @@ exports.updateDesigner = async (req, res) => {
 // @access  Public
 exports.deleteDesigner = async (req, res) => {
     try {
-        const designer = await Designer.findByIdAndDelete(req.params.id);
+        const designer = await Designer.findByPk(req.params.id);
         
         if (!designer) {
             return res.status(404).json({ message: 'Designer not found' });
         }
         
-        // Delete all products associated with this designer
-        await Product.deleteMany({ designer: req.params.id });
+        // Check if designer has products
+        const productCount = await Product.count({ where: { designerId: req.params.id } });
         
+        if (productCount > 0) {
+            return res.status(400).json({ 
+                message: `Cannot delete designer. ${productCount} product(s) are associated with this designer.` 
+            });
+        }
+        
+        const oldValue = designer.toJSON();
+        await designer.destroy();
+        
+        await logActivity('DELETE', 'DESIGNER', req.params.id, `Deleted designer: ${oldValue.name}`, req, oldValue, null);
         res.json({ message: 'Designer deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });

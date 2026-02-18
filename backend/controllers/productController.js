@@ -1,12 +1,61 @@
-const Product = require('../models/Product');
-const Designer = require('../models/Designer');
+const { Product, Designer, InventoryChange, UserActivity } = require('../models');
+const { sequelize } = require('../config/db');
+const { Op } = require('sequelize');
+
+// Helper function to log user activity
+const logActivity = async (action, entityType, entityId, description, req, oldValue = null, newValue = null) => {
+    try {
+        await UserActivity.create({
+            userId: req.headers['x-user-id'] || req.headers['x-user-name'] || 'Dharaneesh C',
+            sessionId: req.headers['x-session-id'] || req.sessionID || null,
+            ipAddress: req.ip || req.connection.remoteAddress,
+            userAgent: req.headers['user-agent'],
+            action,
+            entityType,
+            entityId,
+            description,
+            oldValue,
+            newValue,
+            success: true
+        });
+    } catch (error) {
+        console.error('Error logging activity:', error);
+    }
+};
+
+// Helper function to log inventory changes
+const logInventoryChange = async (productId, changeType, quantityBefore, quantityChange, quantityAfter, reason, referenceType = null, referenceId = null, performedBy = 'system') => {
+    try {
+        await InventoryChange.create({
+            productId,
+            changeType,
+            quantityBefore,
+            quantityChange,
+            quantityAfter,
+            referenceType,
+            referenceId,
+            reason,
+            performedBy
+        });
+    } catch (error) {
+        console.error('Error logging inventory change:', error);
+    }
+};
 
 // @desc    Get all products
 // @route   GET /api/products
 // @access  Public
 exports.getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate('designer', 'name email status');
+        const products = await Product.findAll({
+            include: [{
+                model: Designer,
+                as: 'designer',
+                attributes: ['id', 'name', 'email', 'status']
+            }]
+        });
+        
+        await logActivity('VIEW', 'PRODUCTS', null, 'Viewed all products', req);
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -18,12 +67,19 @@ exports.getAllProducts = async (req, res) => {
 // @access  Public
 exports.getProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id).populate('designer', 'name email status');
+        const product = await Product.findByPk(req.params.id, {
+            include: [{
+                model: Designer,
+                as: 'designer',
+                attributes: ['id', 'name', 'email', 'status']
+            }]
+        });
         
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
         
+        await logActivity('VIEW', 'PRODUCT', req.params.id, `Viewed product: ${product.name}`, req);
         res.json(product);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -35,7 +91,16 @@ exports.getProductById = async (req, res) => {
 // @access  Public
 exports.getProductsByType = async (req, res) => {
     try {
-        const products = await Product.find({ type: req.params.type }).populate('designer', 'name email status');
+        const products = await Product.findAll({
+            where: { type: req.params.type },
+            include: [{
+                model: Designer,
+                as: 'designer',
+                attributes: ['id', 'name', 'email', 'status']
+            }]
+        });
+        
+        await logActivity('VIEW', 'PRODUCTS', null, `Viewed products of type: ${req.params.type}`, req);
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -47,7 +112,16 @@ exports.getProductsByType = async (req, res) => {
 // @access  Public
 exports.getProductsByDesigner = async (req, res) => {
     try {
-        const products = await Product.find({ designer: req.params.designerId }).populate('designer', 'name email status');
+        const products = await Product.findAll({
+            where: { designerId: req.params.designerId },
+            include: [{
+                model: Designer,
+                as: 'designer',
+                attributes: ['id', 'name', 'email', 'status']
+            }]
+        });
+        
+        await logActivity('VIEW', 'PRODUCTS', null, `Viewed products by designer ID: ${req.params.designerId}`, req);
         res.json(products);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -59,8 +133,13 @@ exports.getProductsByDesigner = async (req, res) => {
 // @access  Public
 exports.getProductTypes = async (req, res) => {
     try {
-        const types = await Product.distinct('type');
-        res.json(types);
+        const types = await Product.findAll({
+            attributes: [[sequelize.fn('DISTINCT', sequelize.col('type')), 'type']],
+            raw: true
+        });
+        
+        const typeList = types.map(t => t.type);
+        res.json(typeList);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -79,7 +158,7 @@ exports.createProduct = async (req, res) => {
         }
         
         // Check if designer exists
-        const designerExists = await Designer.findById(designer);
+        const designerExists = await Designer.findByPk(designer);
         if (!designerExists) {
             return res.status(404).json({ message: 'Designer not found' });
         }
@@ -91,11 +170,33 @@ exports.createProduct = async (req, res) => {
             quantity,
             cost,
             price,
-            designer
+            designerId: designer
         });
         
-        const populatedProduct = await Product.findById(product._id).populate('designer', 'name email status');
+        // Log inventory change for initial stock
+        if (quantity > 0) {
+            await logInventoryChange(
+                product.id,
+                'restock',
+                0,
+                quantity,
+                quantity,
+                'Initial stock on product creation',
+                'PRODUCT_CREATION',
+                product.id,
+                req.headers['x-user-id'] || 'system'
+            );
+        }
         
+        const populatedProduct = await Product.findByPk(product.id, {
+            include: [{
+                model: Designer,
+                as: 'designer',
+                attributes: ['id', 'name', 'email', 'status']
+            }]
+        });
+        
+        await logActivity('CREATE', 'PRODUCT', product.id, `Created product: ${product.name}`, req, null, populatedProduct.toJSON());
         res.status(201).json(populatedProduct);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -109,25 +210,61 @@ exports.updateProduct = async (req, res) => {
     try {
         const { name, type, description, quantity, cost, price, designer } = req.body;
         
-        // Check if designer exists
-        if (designer) {
-            const designerExists = await Designer.findById(designer);
-            if (!designerExists) {
-                return res.status(404).json({ message: 'Designer not found' });
-            }
-        }
-        
-        const product = await Product.findByIdAndUpdate(
-            req.params.id,
-            { name, type, description, quantity, cost, price, designer },
-            { new: true, runValidators: true }
-        ).populate('designer', 'name email status');
+        const product = await Product.findByPk(req.params.id);
         
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
         
-        res.json(product);
+        const oldValue = product.toJSON();
+        const oldQuantity = product.quantity;
+        
+        // Check if designer exists
+        if (designer) {
+            const designerExists = await Designer.findByPk(designer);
+            if (!designerExists) {
+                return res.status(404).json({ message: 'Designer not found' });
+            }
+        }
+        
+        await product.update({
+            name: name !== undefined ? name : product.name,
+            type: type !== undefined ? type : product.type,
+            description: description !== undefined ? description : product.description,
+            quantity: quantity !== undefined ? quantity : product.quantity,
+            cost: cost !== undefined ? cost : product.cost,
+            price: price !== undefined ? price : product.price,
+            designerId: designer !== undefined ? designer : product.designerId
+        });
+        
+        // Log inventory change if quantity changed
+        if (quantity !== undefined && quantity !== oldQuantity) {
+            const changeType = quantity > oldQuantity ? 'restock' : 'adjustment';
+            const quantityChange = quantity - oldQuantity;
+            
+            await logInventoryChange(
+                product.id,
+                changeType,
+                oldQuantity,
+                quantityChange,
+                quantity,
+                `Manual ${changeType} via product update`,
+                'PRODUCT_UPDATE',
+                product.id,
+                req.headers['x-user-id'] || 'system'
+            );
+        }
+        
+        const populatedProduct = await Product.findByPk(product.id, {
+            include: [{
+                model: Designer,
+                as: 'designer',
+                attributes: ['id', 'name', 'email', 'status']
+            }]
+        });
+        
+        await logActivity('UPDATE', 'PRODUCT', product.id, `Updated product: ${product.name}`, req, oldValue, populatedProduct.toJSON());
+        res.json(populatedProduct);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -138,12 +275,32 @@ exports.updateProduct = async (req, res) => {
 // @access  Public
 exports.deleteProduct = async (req, res) => {
     try {
-        const product = await Product.findByIdAndDelete(req.params.id);
+        const product = await Product.findByPk(req.params.id);
         
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
         
+        const oldValue = product.toJSON();
+        
+        // Log inventory change for deletion
+        if (product.quantity > 0) {
+            await logInventoryChange(
+                product.id,
+                'adjustment',
+                product.quantity,
+                -product.quantity,
+                0,
+                'Product deleted from system',
+                'PRODUCT_DELETION',
+                product.id,
+                req.headers['x-user-id'] || 'system'
+            );
+        }
+        
+        await product.destroy();
+        
+        await logActivity('DELETE', 'PRODUCT', req.params.id, `Deleted product: ${oldValue.name}`, req, oldValue, null);
         res.json({ message: 'Product deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });

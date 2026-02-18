@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { DarkModeProvider } from './contexts/DarkModeContext';
+import { ActivityProvider } from './contexts/ActivityContext';
+import { SettingsProvider } from './contexts/SettingsContext';
+import { FilterProvider } from './contexts/FilterContext';
 
 // Components
 import Sidebar from './components/Sidebar';
@@ -32,13 +35,16 @@ function App() {
 
   return (
     <DarkModeProvider>
-      <Router>
+      <SettingsProvider>
+        <ActivityProvider>
+          <FilterProvider>
+            <Router>
         <div className="App flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
         {/* Sidebar */}
         <Sidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
         
         {/* Main Content */}
-        <div className={`flex-1 flex flex-col ${isSidebarCollapsed ? 'ml-20' : 'ml-64'} overflow-hidden transition-all duration-300`}>
+        <div className={`flex-1 flex flex-col ${isSidebarCollapsed ? 'ml-20' : 'ml-56'} overflow-hidden transition-all duration-300`}>
           {/* Top Bar */}
           <TopBar
             onFilterClick={() => openSlidePanel('filter', 'Filters')}
@@ -108,6 +114,9 @@ function App() {
         />
       </div>
     </Router>
+          </FilterProvider>
+        </ActivityProvider>
+      </SettingsProvider>
     </DarkModeProvider>
   );
 }

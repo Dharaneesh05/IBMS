@@ -131,6 +131,19 @@ const ProductShow = () => {
               <p className="text-gray-600 leading-relaxed">{product.description}</p>
             </div>
 
+            {/* Low Stock Warning */}
+            {product.quantity > 0 && product.quantity <= 5 && (
+              <div className="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-4 mb-4 flex items-start gap-3">
+                <svg className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-amber-800">Low Stock Alert</p>
+                  <p className="text-sm text-amber-700">Only {product.quantity} {product.quantity === 1 ? 'item' : 'items'} remaining. Consider restocking soon.</p>
+                </div>
+              </div>
+            )}
+
             {/* Pricing Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 text-center">
@@ -179,7 +192,7 @@ const ProductShow = () => {
                     </div>
                     <div>
                       <Link 
-                        to={`/designers/${product.designer._id}`}
+                        to={`/designers/${product.designer.id}`}
                         className="text-lg font-bold text-gray-900 hover:text-[#0d9488] transition-colors"
                       >
                         {product.designer.name}
@@ -188,7 +201,7 @@ const ProductShow = () => {
                     </div>
                   </div>
                   <Link 
-                    to={`/designers/${product.designer._id}`}
+                    to={`/designers/${product.designer.id}`}
                     className="px-4 py-2 bg-[#1a1d2e] text-white rounded-lg hover:bg-[#2a2e42] transition-colors text-sm font-medium"
                   >
                     View Profile
@@ -204,3 +217,5 @@ const ProductShow = () => {
 };
 
 export default ProductShow;
+
+

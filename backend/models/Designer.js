@@ -1,63 +1,93 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/db');
 
-const designerSchema = new mongoose.Schema({
+const Designer = sequelize.define('Designer', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     companyName: {
-        type: String,
-        required: [true, 'Please add a company name'],
-        trim: true
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        validate: {
+            notEmpty: { msg: 'Please add a company name' }
+        }
     },
     displayName: {
-        type: String,
-        required: [true, 'Please add a display name'],
-        trim: true
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        validate: {
+            notEmpty: { msg: 'Please add a display name' }
+        }
     },
     name: {
-        type: String,
-        required: [true, 'Please add a designer name'],
-        trim: true
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        validate: {
+            notEmpty: { msg: 'Please add a designer name' }
+        }
     },
     email: {
-        type: String,
-        required: [true, 'Please add an email'],
-        unique: true,
-        trim: true,
-        lowercase: true
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: { 
+            msg: 'Email already exists' 
+        },
+        validate: {
+            notEmpty: { msg: 'Please add an email' },
+            isEmail: { msg: 'Please add a valid email' }
+        },
+        set(value) {
+            this.setDataValue('email', value.toLowerCase().trim());
+        }
     },
     phone: {
-        type: String,
-        trim: true
+        type: DataTypes.STRING(20),
+        allowNull: true
     },
-    address: {
-        street: { type: String, trim: true },
-        city: { type: String, trim: true },
-        state: { type: String, trim: true },
-        pincode: { type: String, trim: true },
-        country: { type: String, trim: true, default: 'India' }
+    street: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
+    city: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    state: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    pincode: {
+        type: DataTypes.STRING(10),
+        allowNull: true
+    },
+    country: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        defaultValue: 'India'
     },
     gstin: {
-        type: String,
-        trim: true,
-        uppercase: true
+        type: DataTypes.STRING(20),
+        allowNull: true,
+        set(value) {
+            if (value) {
+                this.setDataValue('gstin', value.toUpperCase().trim());
+            }
+        }
     },
     status: {
-        type: String,
-        enum: ['active', 'inactive'],
-        default: 'active'
+        type: DataTypes.ENUM('active', 'inactive'),
+        defaultValue: 'active',
+        allowNull: false
     }
 }, {
-    timestamps: true
+    tableName: 'designers',
+    timestamps: true,
+    indexes: [
+        { fields: ['email'], unique: true },
+        { fields: ['status'] }
+    ]
 });
 
-// Virtual for products
-designerSchema.virtual('products', {
-    ref: 'Product',
-    localField: '_id',
-    foreignField: 'designer'
-});
-
-// Method to get detail string
-designerSchema.methods.detail = function() {
-    return `All products by ${this.name}. Order more by email ${this.email}.`;
-};
-
-module.exports = mongoose.model('Designer', designerSchema);
+module.exports = Designer;

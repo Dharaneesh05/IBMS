@@ -14,23 +14,13 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       single: true
     },
     {
-      id: 'items',
-      name: 'Items',
-      icon: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
-      submenu: [
-        { name: 'Items List', path: '/products', hasQuickAdd: true, quickAddPath: '/products/new', quickAddTooltip: 'Add Item' },
-        { name: 'Add Item', path: '/products/new' }
-      ]
-    },
-    {
       id: 'inventory',
       name: 'Inventory',
       icon: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4',
       submenu: [
-        { name: 'Inventory Adjustments', path: '/inventory/adjustments', hasQuickAdd: true, quickAddPath: '/inventory/adjustments/new', quickAddTooltip: 'New Adjustment' },
-        { name: 'Stock Overview', path: '/inventory/overview' },
-        { name: 'Packages', path: '/inventory/packages' },
-        { name: 'Shipments', path: '/inventory/shipments' }
+        { name: 'Jewellery Items', path: '/products', hasQuickAdd: true, quickAddPath: '/products/new', quickAddTooltip: 'Add Item' },
+        { name: 'Stock Levels', path: '/inventory/stock-levels' },
+        { name: 'Low Stock Alerts', path: '/inventory/low-stock' }
       ]
     },
     {
@@ -38,10 +28,9 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       name: 'Sales',
       icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z',
       submenu: [
-        { name: 'Customers', path: '/designers' },
+        { name: 'Customers', path: '/designers', hasQuickAdd: true, quickAddPath: '/designers/new', quickAddTooltip: 'Add Customer' },
         { name: 'Sales Orders', path: '/sales/orders', hasQuickAdd: true, quickAddPath: '/sales/orders/new', quickAddTooltip: 'Create Order' },
-        { name: 'Invoices', path: '/sales/invoices' },
-        { name: 'Payments Received', path: '/sales/payments' },
+        { name: 'Invoices', path: '/sales/invoices', hasQuickAdd: true, quickAddPath: '/sales/invoices/new', quickAddTooltip: 'Create Invoice' },
         { name: 'Sales Returns', path: '/sales/returns' }
       ]
     },
@@ -50,18 +39,28 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       name: 'Purchases',
       icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
       submenu: [
-        { name: 'Vendors', path: '/purchases/vendors' },
+        { name: 'Vendors', path: '/purchases/vendors', hasQuickAdd: true, quickAddPath: '/purchases/vendors/new', quickAddTooltip: 'Add Vendor' },
         { name: 'Purchase Orders', path: '/purchases/orders', hasQuickAdd: true, quickAddPath: '/purchases/orders/new', quickAddTooltip: 'Create PO' },
         { name: 'Purchase Receives', path: '/purchases/receives' },
-        { name: 'Bills', path: '/purchases/bills' }
+        { name: 'Bills', path: '/purchases/bills', hasQuickAdd: true, quickAddPath: '/purchases/bills/new', quickAddTooltip: 'Create Bill' }
+      ]
+    },
+    {
+      id: 'insights',
+      name: 'Insights',
+      icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
+      submenu: [
+        { name: 'Stock Risk Prediction (AI)', path: '/insights/stock-risk' }
       ]
     },
     {
       id: 'reports',
       name: 'Reports',
       icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
-      path: '/reports',
-      single: true
+      submenu: [
+        { name: 'Sales Report', path: '/reports/sales' },
+        { name: 'Inventory Report', path: '/reports/inventory' }
+      ]
     },
     {
       id: 'documents',
@@ -95,6 +94,10 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     return location.pathname.startsWith(path);
   };
 
+  const isAnySubmenuActive = (submenu) => {
+    return submenu?.some(subItem => isActive(subItem.path));
+  };
+
   // Auto-expand sections when current path matches a submenu item
   useEffect(() => {
     const shouldExpandSections = [];
@@ -126,76 +129,84 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
 
   return (
-    <div className={`${isCollapsed ? 'w-20 overflow-visible' : 'w-64'} bg-[#1a1d2e] dark:bg-gray-900 text-white h-screen fixed left-0 top-0 transition-all duration-300 ease-in-out flex flex-col z-50 shadow-xl`}>
+    <div className={`${isCollapsed ? 'w-20 overflow-visible' : 'w-56'} bg-[#1e2139] dark:bg-gray-900 text-white h-screen fixed left-0 top-0 transition-all duration-300 ease-in-out flex flex-col z-50 shadow-xl`}>
       {/* Logo and Menu Icon Section */}
-      <div className="p-4 border-b border-gray-700/30 dark:border-gray-700">
+      <div className="p-3 border-b border-gray-700/30 dark:border-gray-700">
         <div className="flex items-center justify-between">
-          {!isCollapsed && (
-            <h1 className="text-lg font-semibold">IBMS</h1>
+          {!isCollapsed ? (
+            <>
+              <h1 className="text-base font-semibold text-center flex-1">IBMS</h1>
+              <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="p-1.5 hover:bg-[#0d9488]/20 transition-colors rounded-md"
+                title="Collapse Sidebar"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                </svg>
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="flex items-center justify-center w-full p-1.5 hover:bg-[#0d9488]/20 transition-colors rounded-md"
+              title="Expand Sidebar"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           )}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-gray-800/50 transition-colors rounded-lg"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <rect x="3" y="3" width="18" height="18" rx="2" strokeWidth="2"/>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 3v18"/>
-            </svg>
-          </button>
         </div>
       </div>
 
       {/* Navigation Menu */}
-      <nav className={`flex-1 py-4 ${isCollapsed ? 'overflow-visible' : 'overflow-y-auto'}`}>
+      <nav className={`flex-1 py-3 ${isCollapsed ? 'overflow-visible' : 'overflow-y-auto'}`}>
         <div className={isCollapsed ? '' : ''}>
-          <ul className="space-y-1 px-3">{menuStructure.map((item) => (
+          <ul className={`space-y-0.5 ${isCollapsed ? 'px-1' : 'px-2'}`}>{menuStructure.map((item) => (
               <li key={item.id}>
                 {/* Single Menu Item (No Submenu) */}
                 {item.single ? (
                   <div className="relative group">
                     <Link
                       to={item.path}
-                      className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'} px-3 py-3 transition-all duration-200 rounded ${
+                      className={`flex ${isCollapsed ? 'flex-col items-center py-3' : 'flex-row items-center space-x-3 py-2.5'} px-3 transition-all duration-200 rounded-lg ${
                         isActive(item.path)
                           ? 'bg-[#0d9488] text-white font-medium shadow-sm'
-                          : 'text-gray-400 hover:bg-gray-800/50 dark:hover:bg-gray-700/50 hover:text-white'
+                          : 'text-gray-400 hover:bg-[#0d9488] hover:text-white'
                       }`}
                       title={isCollapsed ? item.name : ''}
                     >
                       <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                       </svg>
-                      {!isCollapsed && (
-                        <span className="text-sm">{item.name}</span>
+                      {isCollapsed ? (
+                        <span className="text-[10px] mt-1 font-medium text-center w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.name}</span>
+                      ) : (
+                        <span className="text-sm font-medium">{item.name}</span>
                       )}
                     </Link>
                     
-                    {/* Hover Tooltip for Collapsed Sidebar */}
-                    {isCollapsed && (
-                      <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 hidden group-hover:block z-[999]">
-                        <div className="bg-[#2c3142] dark:bg-gray-800 rounded-md shadow-lg py-2 px-3 whitespace-nowrap border border-gray-700/20 dark:border-gray-600">
-                          <span className="text-[13px] text-white font-medium">{item.name}</span>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 ) : (
                   /* Expandable Menu Item */
                   <div className="relative group">
                     <button
                       onClick={() => toggleSection(item.id)}
-                      className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-3 py-3 transition-all duration-200 rounded ${
-                        expandedSections.includes(item.id)
-                          ? 'text-white bg-gray-800/50 dark:bg-gray-700/50'
-                          : 'text-gray-400 hover:bg-gray-800/50 dark:hover:bg-gray-700/50 hover:text-white'
+                      className={`w-full flex ${isCollapsed ? 'flex-col items-center py-3' : 'flex-row items-center justify-between py-2.5'} px-3 transition-all duration-200 rounded-lg ${
+                        isAnySubmenuActive(item.submenu)
+                          ? 'bg-[#0d9488] text-white font-medium shadow-sm'
+                          : 'text-gray-400 hover:bg-[#0d9488] hover:text-white'
                       }`}
                       title={isCollapsed ? item.name : ''}
                     >
-                      <div className={`flex items-center ${isCollapsed ? '' : 'space-x-3'}`}>
+                      <div className={`flex ${isCollapsed ? 'flex-col items-center' : 'flex-row items-center space-x-3'}`}>
                         <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
                         </svg>
-                        {!isCollapsed && (
+                        {isCollapsed ? (
+                          <span className="text-[10px] mt-1 font-medium text-center w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.name}</span>
+                        ) : (
                           <span className="text-sm font-medium">{item.name}</span>
                         )}
                       </div>
@@ -215,27 +226,35 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
                     {/* Hover Popup for Collapsed Sidebar */}
                     {isCollapsed && (
-                      <div className="absolute left-full top-0 ml-3 hidden group-hover:block z-[999]">
-                        <div className="bg-[#2c3142] dark:bg-gray-800 rounded-md shadow-lg py-2 px-0 min-w-[180px] border border-gray-700/20 dark:border-gray-600">
-                          <div className="text-[10px] font-bold text-gray-400 mb-1.5 px-3 uppercase tracking-wider">
+                      <div className="absolute left-full top-0 ml-1 hidden group-hover:block z-[999]">
+                        <div className="bg-[#2a2d42] dark:bg-gray-800 rounded-lg shadow-xl py-2.5 px-0 min-w-[240px] border border-gray-700/30 dark:border-gray-600">
+                          <div className="text-[10px] font-bold text-gray-400 mb-2 px-3 uppercase tracking-wider">
                             {item.name}
                           </div>
                           <ul className="space-y-0">
                             {item.submenu.map((subItem, idx) => (
-                              <li key={idx}>
+                              <li key={idx} className="relative group/item">
                                 <Link
                                   to={subItem.path}
-                                  className={`flex items-center justify-between px-3 py-2 text-sm transition-colors duration-150 ${
+                                  className={`flex items-center justify-between px-3 py-2.5 text-sm transition-colors duration-150 ${
                                     isActive(subItem.path)
-                                      ? 'bg-blue-500 text-white font-medium'
-                                      : 'text-gray-300 hover:bg-gray-700/70 hover:text-white'
+                                      ? 'bg-[#0d9488] text-white font-medium'
+                                      : 'text-gray-300 hover:bg-[#0d9488] hover:text-white'
                                   }`}
                                 >
                                   <span className="text-[13px]">{subItem.name}</span>
+                                  {/* Quick Add Button - Show only on hover */}
                                   {subItem.hasQuickAdd && (
-                                    <svg className="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
-                                    </svg>
+                                    <Link
+                                      to={subItem.quickAddPath}
+                                      className="opacity-0 group-hover/item:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity duration-150"
+                                      title={subItem.quickAddTooltip}
+                                      onClick={(e) => e.stopPropagation()}
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
+                                      </svg>
+                                    </Link>
                                   )}
                                 </Link>
                               </li>
@@ -247,16 +266,16 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
 
                     {/* Submenu */}
                     {!isCollapsed && expandedSections.includes(item.id) && (
-                      <div className="mt-2 mx-3 bg-[#252a3d] dark:bg-gray-800 rounded-lg p-2">
+                      <div className="mt-1 ml-2 mr-2">
                         <ul className="space-y-0.5">
                           {item.submenu.map((subItem, idx) => (
-                            <li key={idx} className="relative group">
+                            <li key={idx} className="relative group/subitem">
                               <Link
                                 to={subItem.path}
-                                className={`flex items-center justify-between px-3 py-2.5 text-sm transition-all duration-200 rounded ${
+                                className={`flex items-center justify-between px-4 py-2 text-sm transition-all duration-150 rounded-md ${
                                   isActive(subItem.path)
-                                    ? 'bg-[#0d9488] text-white font-medium shadow-sm'
-                                    : 'text-gray-300 hover:bg-gray-600/50 dark:hover:bg-gray-700/50 hover:text-white'
+                                    ? 'bg-[#0d9488] text-white font-medium'
+                                    : 'text-gray-400 hover:bg-[#0d9488] hover:text-white'
                                 }`}
                               >
                                 <span>{subItem.name}</span>
@@ -264,12 +283,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                                 {subItem.hasQuickAdd && (
                                   <Link
                                     to={subItem.quickAddPath}
-                                    className="opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white rounded transition-all duration-200"
+                                    className="opacity-0 group-hover/subitem:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity duration-150"
                                     title={subItem.quickAddTooltip}
                                     onClick={(e) => e.stopPropagation()}
                                   >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
                                     </svg>
                                   </Link>
                                 )}
@@ -285,13 +304,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
             ))}
           </ul>
         </div>
-
-
       </nav>
-
 
     </div>
   );
 };
 
 export default Sidebar;
+
+

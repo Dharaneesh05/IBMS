@@ -12,7 +12,34 @@ const ProductNew = () => {
     quantity: '',
     cost: '',
     price: '',
-    designer: ''
+    designer: '',
+    frontImage: null,
+    rearImage: null,
+    otherImages: [],
+    returnable: 'yes',
+    dimensionLength: '',
+    dimensionWidth: '',
+    dimensionHeight: '',
+    dimensionUnit: 'cm',
+    weight: '',
+    weightUnit: 'g',
+    // Jewellery-specific fields
+    metalType: '',
+    purity: '',
+    hallmarkCertified: 'no',
+    certificationAuthority: '',
+    grossWeight: '',
+    stoneWeight: '',
+    netMetalWeight: '',
+    metalRate: '',
+    makingCharges: '',
+    makingChargesType: 'flat',
+    stoneValue: '',
+    gstPercent: '3',
+    sku: '',
+    occasion: '',
+    gender: '',
+    size: ''
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,9 +59,77 @@ const ProductNew = () => {
   };
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => {
+      const updated = {
+        ...prev,
+        [name]: value
+      };
+      
+      // Auto-calculate net metal weight
+      if (name === 'grossWeight' || name === 'stoneWeight') {
+        const gross = parseFloat(name === 'grossWeight' ? value : prev.grossWeight) || 0;
+        const stone = parseFloat(name === 'stoneWeight' ? value : prev.stoneWeight) || 0;
+        updated.netMetalWeight = (gross - stone).toFixed(3);
+      }
+      
+      // Auto-calculate final selling price
+      if (name === 'metalRate' || name === 'netMetalWeight' || name === 'makingCharges' || name === 'makingChargesType' || name === 'stoneValue' || name === 'gstPercent') {
+        const netWeight = parseFloat(name === 'netMetalWeight' ? value : updated.netMetalWeight) || 0;
+        const metalRate = parseFloat(name === 'metalRate' ? value : prev.metalRate) || 0;
+        const stoneValue = parseFloat(name === 'stoneValue' ? value : prev.stoneValue) || 0;
+        const makingCharges = parseFloat(name === 'makingCharges' ? value : prev.makingCharges) || 0;
+        const makingType = name === 'makingChargesType' ? value : prev.makingChargesType;
+        const gstPercent = parseFloat(name === 'gstPercent' ? value : prev.gstPercent) || 0;
+        
+        const metalValue = netWeight * metalRate;
+        const makingAmount = makingType === 'percentage' ? (metalValue * makingCharges / 100) : makingCharges;
+        const subtotal = metalValue + makingAmount + stoneValue;
+        const gstAmount = subtotal * gstPercent / 100;
+        updated.price = (subtotal + gstAmount).toFixed(2);
+      }
+      
+      return updated;
+    });
+  };
+
+  const getPurityOptions = () => {
+    switch(formData.metalType) {
+      case 'Gold':
+        return ['24K (999)', '22K (916)', '18K (750)', '14K (585)'];
+      case 'Silver':
+        return ['999 (Fine Silver)', '925 (Sterling)', '800'];
+      case 'Platinum':
+        return ['950', '900', '850'];
+      case 'Diamond':
+        return ['N/A'];
+      default:
+        return [];
+    }
+  };
+
+  const handleImageUpload = (e, imageType) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (imageType === 'other') {
+        setFormData({
+          ...formData,
+          otherImages: [...formData.otherImages, file]
+        });
+      } else {
+        setFormData({
+          ...formData,
+          [imageType]: file
+        });
+      }
+    }
+  };
+
+  const handleRemoveOtherImage = (index) => {
+    const updatedImages = formData.otherImages.filter((_, i) => i !== index);
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      otherImages: updatedImages
     });
   };
 
@@ -65,65 +160,87 @@ const ProductNew = () => {
     : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gray-50 relative">
+      {/* Background Pattern */}
+      <div 
+        className="fixed inset-0 opacity-[0.04] pointer-events-none bg-repeat z-0"
+        style={{
+          backgroundImage: 'url(/99172127-vector-jewelry-pattern-jewelry-seamless-background.jpg)',
+          backgroundSize: '300px 300px'
+        }}
+      />
+      
+      {/* Header with Price Calculator - Sticky */}
+      <div className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between gap-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Add New Product</h1>
-              <p className="text-gray-600 text-sm mt-1">Create a new jewellery product in your inventory</p>
+              <h1 className="text-2xl font-bold text-gray-900">Add New Jewellery Product</h1>
             </div>
+            
+            {/* Price Calculator - Horizontal */}
+            <div className="flex items-center gap-6 bg-gray-50 border border-gray-200 rounded-lg px-6 py-3">
+              <div className="text-center">
+                <p className="text-xs text-gray-500 mb-1">Cost Price</p>
+                <p className="text-base font-bold text-gray-900">
+                  ₹{formData.cost ? parseFloat(formData.cost).toLocaleString() : '0'}
+                </p>
+              </div>
+              <div className="w-px h-10 bg-gray-300"></div>
+              <div className="text-center">
+                <p className="text-xs text-gray-500 mb-1">Selling Price</p>
+                <p className="text-base font-bold text-gray-900">
+                  ₹{formData.price ? parseFloat(formData.price).toLocaleString() : '0'}
+                </p>
+              </div>
+              <div className="w-px h-10 bg-gray-300"></div>
+              <div className="text-center">
+                <p className="text-xs text-gray-500 mb-1">Markup</p>
+                <p className="text-base font-bold text-gray-900">₹{estimatedMarkup.toLocaleString()}</p>
+              </div>
+              <div className="w-px h-10 bg-gray-300"></div>
+              <div className="text-center">
+                <p className="text-xs text-gray-500 mb-1">Margin</p>
+                <p className="text-base font-bold text-gray-900">{estimatedMargin}%</p>
+              </div>
+            </div>
+            
             <Link 
               to="/products" 
-              className="btn-outline flex items-center text-sm px-3 py-2"
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
             >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Back to Products
+              Back
             </Link>
           </div>
         </div>
       </div>
 
       {/* Form Content */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-6 py-6 relative z-10">
         {error && (
           <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 flex items-start">
-            <svg className="w-4 h-4 text-red-600 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
             <p className="text-red-700 text-sm">{error}</p>
           </div>
         )}
 
         {designers.length === 0 ? (
-          <div className="card text-center p-12">
-            <svg className="w-24 h-24 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            <h3 className="text-2xl font-bold text-gray-700 mb-2">No Designers Found</h3>
-            <p className="text-gray-500 mb-6">You need to add at least one active designer before creating products</p>
-            <Link to="/designers/new" className="btn-primary inline-block">
+          <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">No Designers Found</h3>
+            <p className="text-gray-600 mb-6">You need to add at least one active designer before creating products</p>
+            <Link to="/designers/new" className="inline-block px-6 py-2 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors">
               Add Your First Designer
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              {/* Main Form - Takes 2.5 columns */}
-              <div className="lg:col-span-3 space-y-4">
+          <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Left Column - Form Fields (2/3) */}
+              <div className="lg:col-span-2 space-y-4">
                 {/* Basic Information */}
-                <div className="card p-4">
-                  <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                    <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Basic Information
-                  </h2>
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Basic Information</h2>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">
                         Product Name *
@@ -182,7 +299,7 @@ const ProductNew = () => {
                       >
                         <option value="">Select a designer</option>
                         {designers.map((designer) => (
-                          <option key={designer._id} value={designer._id}>
+                          <option key={designer.id} value={designer.id}>
                             {designer.name}
                           </option>
                         ))}
@@ -207,19 +324,614 @@ const ProductNew = () => {
                   </div>
                 </div>
 
-                {/* Pricing Information */}
-                <div className="card p-4">
-                  <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                    <svg className="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                    </svg>
-                    Pricing Information
-                  </h2>
+                {/* Metal & Purity Information */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Metal & Purity</h2>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">
-                        Cost Price (₹) *
+                        Metal Type *
+                      </label>
+                      <select
+                        name="metalType"
+                        value={formData.metalType}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        required
+                      >
+                        <option value="">Select metal type</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Platinum">Platinum</option>
+                        <option value="Diamond">Diamond</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Purity / Karat *
+                      </label>
+                      <select
+                        name="purity"
+                        value={formData.purity}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        required
+                        disabled={!formData.metalType}
+                      >
+                        <option value="">Select purity</option>
+                        {getPurityOptions().map((option, idx) => (
+                          <option key={idx} value={option}>{option}</option>
+                        ))}
+                      </select>
+                      {!formData.metalType && (
+                        <p className="text-xs text-gray-500 mt-1">Select metal type first</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Hallmark Certified
+                      </label>
+                      <div className="flex items-center gap-6">
+                        <label className="flex items-center cursor-pointer">
+                          <input
+                            type="radio"
+                            name="hallmarkCertified"
+                            value="yes"
+                            checked={formData.hallmarkCertified === 'yes'}
+                            onChange={handleChange}
+                            className="w-4 h-4 text-teal-600 focus:ring-teal-500"
+                          />
+                          <span className="ml-2 text-sm text-gray-700">Yes</span>
+                        </label>
+                        <label className="flex items-center cursor-pointer">
+                          <input
+                            type="radio"
+                            name="hallmarkCertified"
+                            value="no"
+                            checked={formData.hallmarkCertified === 'no'}
+                            onChange={handleChange}
+                            className="w-4 h-4 text-teal-600 focus:ring-teal-500"
+                          />
+                          <span className="ml-2 text-sm text-gray-700">No</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Certification Authority
+                      </label>
+                      <select
+                        name="certificationAuthority"
+                        value={formData.certificationAuthority}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                      >
+                        <option value="">Select authority</option>
+                        <option value="BIS">BIS (Bureau of Indian Standards)</option>
+                        <option value="IGI">IGI (International Gemological Institute)</option>
+                        <option value="GIA">GIA (Gemological Institute of America)</option>
+                        <option value="None">None</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Weight Details */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Weight Details</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Gross Weight (g) *
+                      </label>
+                      <input
+                        type="number"
+                        name="grossWeight"
+                        value={formData.grossWeight}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        step="0.001"
+                        placeholder="0.000"
+                        required
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Total weight with stones</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Stone Weight (g/ct)
+                      </label>
+                      <input
+                        type="number"
+                        name="stoneWeight"
+                        value={formData.stoneWeight}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        step="0.001"
+                        placeholder="0.000"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Weight of stones/gems</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Net Metal Weight (g)
+                      </label>
+                      <input
+                        type="number"
+                        name="netMetalWeight"
+                        value={formData.netMetalWeight}
+                        className="input-field text-sm bg-gray-50"
+                        readOnly
+                        placeholder="Auto-calculated"
+                      />
+                      <p className="text-xs text-teal-600 mt-1">✓ Auto-calculated</p>
+                    </div>
+                  </div>
+
+                  {formData.grossWeight && formData.stoneWeight && (
+                    <div className="mt-3 p-3 bg-indigo-50 rounded-lg border border-indigo-100">
+                      <p className="text-sm text-indigo-800">
+                        <strong>Net Metal:</strong> {formData.netMetalWeight}g = Gross ({formData.grossWeight}g) - Stone ({formData.stoneWeight}g)
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Additional Product Details */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Additional Details</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        SKU / Item Code
+                      </label>
+                      <input
+                        type="text"
+                        name="sku"
+                        value={formData.sku}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        placeholder="e.g., GR-001-22K"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Occasion
+                      </label>
+                      <select
+                        name="occasion"
+                        value={formData.occasion}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                      >
+                        <option value="">Select occasion</option>
+                        <option value="Wedding">Wedding</option>
+                        <option value="Engagement">Engagement</option>
+                        <option value="Daily Wear">Daily Wear</option>
+                        <option value="Festive">Festive</option>
+                        <option value="Party">Party</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Gender
+                      </label>
+                      <select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                      >
+                        <option value="">Select gender</option>
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                        <option value="Unisex">Unisex</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Size
+                      </label>
+                      <input
+                        type="text"
+                        name="size"
+                        value={formData.size}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        placeholder="e.g., 7, 18 inches"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Ring size, chain length, etc.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Product Images */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Product Images</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* Front View */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Front View
+                      </label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-purple-400 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, 'frontImage')}
+                          className="hidden"
+                          id="frontImage"
+                        />
+                        <label htmlFor="frontImage" className="cursor-pointer flex flex-col items-center">
+                          {formData.frontImage ? (
+                            <div className="text-center">
+                              <p className="text-sm text-gray-700 font-medium">{formData.frontImage.name}</p>
+                              <p className="text-xs text-green-600 mt-1">Uploaded</p>
+                            </div>
+                          ) : (
+                            <>
+                              <p className="text-sm text-gray-600">Click to upload</p>
+                              <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+                            </>
+                          )}
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Rear View */}
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Rear View
+                      </label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-purple-400 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, 'rearImage')}
+                          className="hidden"
+                          id="rearImage"
+                        />
+                        <label htmlFor="rearImage" className="cursor-pointer flex flex-col items-center">
+                          {formData.rearImage ? (
+                            <div className="text-center">
+                              <p className="text-sm text-gray-700 font-medium">{formData.rearImage.name}</p>
+                              <p className="text-xs text-green-600 mt-1">Uploaded</p>
+                            </div>
+                          ) : (
+                            <>
+                              <p className="text-sm text-gray-600">Click to upload</p>
+                              <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
+                            </>
+                          )}
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Other Images */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Other Images
+                      </label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-purple-400 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(e, 'other')}
+                          className="hidden"
+                          id="otherImages"
+                          multiple
+                        />
+                        <label htmlFor="otherImages" className="cursor-pointer flex flex-col items-center">
+                          <p className="text-sm text-gray-600">Click to upload additional images</p>
+                          <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB each</p>
+                        </label>
+                      </div>
+                      {formData.otherImages.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {formData.otherImages.map((img, idx) => (
+                            <div key={idx} className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-full text-xs">
+                              <span className="text-gray-700">{img.name}</span>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveOtherImage(idx)}
+                                className="text-red-600 hover:text-red-800 font-bold"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Cancellation and Returns */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Cancellation & Returns</h2>
+                  
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                      Returnable Item
+                    </label>
+                    <div className="flex items-center gap-6">
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="returnable"
+                          value="yes"
+                          checked={formData.returnable === 'yes'}
+                          onChange={handleChange}
+                          className="w-4 h-4 text-[#1a1d2e] focus:ring-[#1a1d2e]"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">Yes</span>
+                      </label>
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="returnable"
+                          value="no"
+                          checked={formData.returnable === 'no'}
+                          onChange={handleChange}
+                          className="w-4 h-4 text-[#1a1d2e] focus:ring-[#1a1d2e]"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">No</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dimensions */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Dimensions</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* Dimensions */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Product Dimensions (L × W × H)
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          name="dimensionLength"
+                          value={formData.dimensionLength}
+                          onChange={handleChange}
+                          className="input-field text-sm"
+                          placeholder="L"
+                          step="0.01"
+                        />
+                        <span className="text-gray-500 font-bold">×</span>
+                        <input
+                          type="number"
+                          name="dimensionWidth"
+                          value={formData.dimensionWidth}
+                          onChange={handleChange}
+                          className="input-field text-sm"
+                          placeholder="W"
+                          step="0.01"
+                        />
+                        <span className="text-gray-500 font-bold">×</span>
+                        <input
+                          type="number"
+                          name="dimensionHeight"
+                          value={formData.dimensionHeight}
+                          onChange={handleChange}
+                          className="input-field text-sm"
+                          placeholder="H"
+                          step="0.01"
+                        />
+                        <select
+                          name="dimensionUnit"
+                          value={formData.dimensionUnit}
+                          onChange={handleChange}
+                          className="input-field text-sm w-20"
+                        >
+                          <option value="cm">cm</option>
+                          <option value="mm">mm</option>
+                          <option value="in">in</option>
+                        </select>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">For packaging and display purposes</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pricing Breakdown */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Pricing Breakdown</h2>
+                  
+                  <div className="space-y-3">
+                    {/* Metal Rate and Value */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          Metal Rate (₹/g) *
+                        </label>
+                        <input
+                          type="number"
+                          name="metalRate"
+                          value={formData.metalRate}
+                          onChange={handleChange}
+                          className="input-field text-sm"
+                          step="0.01"
+                          placeholder="Current market rate"
+                          required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Today's rate per gram</p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          Metal Value (₹)
+                        </label>
+                        <input
+                          type="number"
+                          value={formData.netMetalWeight && formData.metalRate ? (parseFloat(formData.netMetalWeight) * parseFloat(formData.metalRate)).toFixed(2) : '0'}
+                          className="input-field text-sm bg-gray-50"
+                          readOnly
+                        />
+                        <p className="text-xs text-teal-600 mt-1">✓ Auto-calculated</p>
+                      </div>
+                    </div>
+
+                    {/* Making Charges */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          Making Charges *
+                        </label>
+                        <div className="flex gap-2">
+                          <input
+                            type="number"
+                            name="makingCharges"
+                            value={formData.makingCharges}
+                            onChange={handleChange}
+                            className="input-field text-sm flex-1"
+                            step="0.01"
+                            placeholder="0.00"
+                            required
+                          />
+                          <select
+                            name="makingChargesType"
+                            value={formData.makingChargesType}
+                            onChange={handleChange}
+                            className="input-field text-sm w-24"
+                          >
+                            <option value="flat">₹ Flat</option>
+                            <option value="percentage">% of Metal</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          Stone Value (₹)
+                        </label>
+                        <input
+                          type="number"
+                          name="stoneValue"
+                          value={formData.stoneValue}
+                          onChange={handleChange}
+                          className="input-field text-sm"
+                          step="0.01"
+                          placeholder="0.00"
+                        />
+                      </div>
+                    </div>
+
+                    {/* GST */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          GST % *
+                        </label>
+                        <select
+                          name="gstPercent"
+                          value={formData.gstPercent}
+                          onChange={handleChange}
+                          className="input-field text-sm"
+                          required
+                        >
+                          <option value="0">0% - No GST</option>
+                          <option value="3">3% - Gold/Silver Jewellery</option>
+                          <option value="5">5%</option>
+                          <option value="12">12%</option>
+                          <option value="18">18%</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          Final Selling Price (₹)
+                        </label>
+                        <input
+                          type="number"
+                          name="price"
+                          value={formData.price}
+                          className="input-field text-sm bg-yellow-50 font-bold text-green-700"
+                          readOnly
+                        />
+                        <p className="text-xs text-teal-600 mt-1">✓ Auto-calculated with GST</p>
+                      </div>
+                    </div>
+
+                    {/* Price Summary */}
+                    {formData.metalRate && formData.netMetalWeight && (
+                      <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-100">
+                        <h4 className="text-sm font-semibold text-green-800 mb-3">💰 Price Calculation Summary</h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center justify-between">
+                            <span className="text-gray-700">Metal Value ({formData.netMetalWeight}g × ₹{formData.metalRate})</span>
+                            <span className="font-medium">₹{(parseFloat(formData.netMetalWeight) * parseFloat(formData.metalRate)).toFixed(2)}</span>
+                          </div>
+                          {formData.makingCharges && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-700">Making Charges</span>
+                              <span className="font-medium">
+                                ₹{formData.makingChargesType === 'flat' 
+                                  ? parseFloat(formData.makingCharges).toFixed(2)
+                                  : ((parseFloat(formData.netMetalWeight) * parseFloat(formData.metalRate) * parseFloat(formData.makingCharges) / 100).toFixed(2))
+                                }
+                              </span>
+                            </div>
+                          )}
+                          {formData.stoneValue && parseFloat(formData.stoneValue) > 0 && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-700">Stone Value</span>
+                              <span className="font-medium">₹{parseFloat(formData.stoneValue).toFixed(2)}</span>
+                            </div>
+                          )}
+                          <div className="border-t border-green-200 pt-2 flex items-center justify-between">
+                            <span className="text-gray-700">Subtotal</span>
+                            <span className="font-medium">
+                              ₹{(() => {
+                                const metalValue = parseFloat(formData.netMetalWeight) * parseFloat(formData.metalRate);
+                                const makingAmount = formData.makingChargesType === 'flat' 
+                                  ? parseFloat(formData.makingCharges || 0)
+                                  : (metalValue * parseFloat(formData.makingCharges || 0) / 100);
+                                return (metalValue + makingAmount + parseFloat(formData.stoneValue || 0)).toFixed(2);
+                              })()}
+                            </span>
+                          </div>
+                          {formData.gstPercent && parseFloat(formData.gstPercent) > 0 && (
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-700">GST ({formData.gstPercent}%)</span>
+                              <span className="font-medium">
+                                ₹{(() => {
+                                  const metalValue = parseFloat(formData.netMetalWeight) * parseFloat(formData.metalRate);
+                                  const makingAmount = formData.makingChargesType === 'flat' 
+                                    ? parseFloat(formData.makingCharges || 0)
+                                    : (metalValue * parseFloat(formData.makingCharges || 0) / 100);
+                                  const subtotal = metalValue + makingAmount + parseFloat(formData.stoneValue || 0);
+                                  return (subtotal * parseFloat(formData.gstPercent) / 100).toFixed(2);
+                                })()}
+                              </span>
+                            </div>
+                          )}
+                          <div className="border-t border-green-300 pt-2 flex items-center justify-between">
+                            <span className="text-green-800 font-bold">Final Selling Price</span>
+                            <span className="text-lg font-bold text-green-700">₹{formData.price || '0.00'}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Cost Price (Optional) */}
+                    <div className="pt-3 border-t border-gray-200">
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Cost Price (₹) <span className="text-gray-500 font-normal">(Optional - for margin calculation)</span>
                       </label>
                       <input
                         type="number"
@@ -227,195 +939,79 @@ const ProductNew = () => {
                         value={formData.cost}
                         onChange={handleChange}
                         className="input-field text-sm"
-                        min="0"
                         step="0.01"
-                        placeholder="0.00"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">
-                        Selling Price (₹) *
-                      </label>
-                      <input
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleChange}
-                        className="input-field text-sm"
-                        min="0"
-                        step="0.01"
-                        placeholder="0.00"
-                        required
+                        placeholder="Your purchase/manufacturing cost"
                       />
                     </div>
                   </div>
-
-                  {/* Quick Pricing Suggestions */}
-                  {formData.cost && (
-                    <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                      <h4 className="text-sm font-medium text-blue-800 mb-2">💡 Suggested Pricing</h4>
-                      <div className="grid grid-cols-3 gap-2 text-xs">
-                        <button
-                          type="button"
-                          onClick={() => setFormData({...formData, price: (parseFloat(formData.cost) * 1.5).toFixed(2)})}
-                          className="p-2 bg-blue-100 hover:bg-blue-200 rounded text-blue-700 transition-colors"
-                        >
-                          50% Margin<br/>₹{(parseFloat(formData.cost) * 1.5).toFixed(0)}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setFormData({...formData, price: (parseFloat(formData.cost) * 2).toFixed(2)})}
-                          className="p-2 bg-green-100 hover:bg-green-200 rounded text-green-700 transition-colors"
-                        >
-                          100% Margin<br/>₹{(parseFloat(formData.cost) * 2).toFixed(0)}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setFormData({...formData, price: (parseFloat(formData.cost) * 2.5).toFixed(2)})}
-                          className="p-2 bg-yellow-100 hover:bg-yellow-200 rounded text-yellow-700 transition-colors"
-                        >
-                          150% Margin<br/>₹{(parseFloat(formData.cost) * 2.5).toFixed(0)}
-                        </button>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* Form Actions */}
                 <div className="flex items-center gap-3">
                   <button 
                     type="submit" 
-                    className="btn-primary flex-1 flex items-center justify-center text-sm py-3"
+                    className="flex-1 px-6 py-2.5 bg-teal-600 text-white font-bold rounded-lg hover:bg-teal-700 transition-colors text-sm"
                     disabled={loading}
                   >
-                    {loading ? (
-                      <>
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Creating...
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        Create Product
-                      </>
-                    )}
+                    {loading ? 'Creating...' : 'Create Product'}
                   </button>
-                  <Link to="/products" className="btn-outline flex-1 text-center text-sm py-3">
+                  <Link to="/products" className="flex-1 text-center px-6 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-sm">
                     Cancel
                   </Link>
                 </div>
               </div>
 
-              {/* Sidebar - Enhanced Features */}
-              <div className="lg:col-span-1 space-y-4">
-                {/* Price Calculator */}
-                <div className="card p-4 sticky top-4">
-                  <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center">
-                    <svg className="w-4 h-4 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                    Price Calculator
-                  </h3>
+              {/* Right Column - Product Preview (1/3) */}
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm sticky top-6">
+                  <h3 className="text-sm font-bold text-gray-900 mb-3">Product Preview</h3>
                   
-                  <div className="space-y-3">
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-xs text-gray-600 mb-1">Cost Price</p>
-                      <p className="text-xl font-bold text-gray-900">
-                        {formData.cost ? `₹${parseFloat(formData.cost).toLocaleString()}` : '₹0'}
-                      </p>
-                    </div>
-
-                    <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-                      <p className="text-xs text-gray-600 mb-1">Selling Price</p>
-                      <p className="text-xl font-bold text-yellow-700">
-                        {formData.price ? `₹${parseFloat(formData.price).toLocaleString()}` : '₹0'}
-                      </p>
-                    </div>
-
-                    <div className="border-t border-gray-200 pt-3 space-y-2">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Markup:</span>
-                        <span className="font-bold text-green-600">
-                          ₹{estimatedMarkup.toLocaleString()}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Margin:</span>
-                        <span className="font-bold text-purple-600">
-                          {estimatedMargin}%
-                        </span>
-                      </div>
-                    </div>
-
-                    {formData.quantity && formData.price && (
-                      <div className="bg-blue-50 p-3 rounded-lg">
-                        <p className="text-xs text-gray-600 mb-1">Total Inventory Value</p>
-                        <p className="text-lg font-bold text-blue-600">
-                          ₹{(formData.quantity * formData.price).toLocaleString()}
-                        </p>
+                  {/* Product Image Placeholder */}
+                  <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center mb-4">
+                    {formData.frontImage ? (
+                      <img src={URL.createObjectURL(formData.frontImage)} alt="Preview" className="w-full h-full object-cover rounded-lg" />
+                    ) : (
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500">No image</p>
                       </div>
                     )}
                   </div>
-                </div>
 
-                {/* Product Preview */}
-                <div className="card p-4">
-                  <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center">
-                    <svg className="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    Preview
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <div className="p-2 bg-gray-50 rounded border-l-4 border-blue-500">
-                      <p className="font-medium text-gray-800">
-                        {formData.name || 'Product Name'}
-                      </p>
-                      <p className="text-xs text-gray-600 mt-1">
-                        {formData.type || 'Category'}
-                      </p>
+                  {/* Product Info */}
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs text-gray-500 mb-1">Product Name</p>
+                      <p className="text-sm font-bold text-gray-900">{formData.name || 'Not set'}</p>
                     </div>
-                    <div className="text-xs space-y-1 text-gray-600">
-                      <div>Qty: <span className="font-medium">{formData.quantity || 0}</span></div>
-                      <div>Designer: <span className="font-medium">
-                        {designers.find(d => d._id === formData.designer)?.name || 'Not Selected'}
-                      </span></div>
+                    
+                    <div className="border-t border-gray-200 pt-3">
+                      <p className="text-xs text-gray-500 mb-1">Category</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.type || 'Not set'}</p>
                     </div>
-                  </div>
-                </div>
-
-                {/* Quick Tips */}
-                <div className="card p-4">
-                  <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center">
-                    <svg className="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                    Quick Tips
-                  </h3>
-                  <div className="space-y-2 text-xs text-gray-600">
-                    <div className="flex items-start space-x-2">
-                      <span className="text-green-600 font-bold">•</span>
-                      <span>Use clear, searchable product names</span>
+                    
+                    <div className="border-t border-gray-200 pt-3">
+                      <p className="text-xs text-gray-500 mb-1">Metal</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.metalType || 'Not set'}</p>
                     </div>
-                    <div className="flex items-start space-x-2">
-                      <span className="text-blue-600 font-bold">•</span>
-                      <span>Include materials and key features</span>
+                    
+                    <div className="border-t border-gray-200 pt-3">
+                      <p className="text-xs text-gray-500 mb-1">Purity</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.purity || 'Not set'}</p>
                     </div>
-                    <div className="flex items-start space-x-2">
-                      <span className="text-yellow-600 font-bold">•</span>
-                      <span>Standard jewellery markup: 100-200%</span>
+                    
+                    <div className="border-t border-gray-200 pt-3">
+                      <p className="text-xs text-gray-500 mb-1">Net Weight</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.netMetalWeight || '0'}g</p>
                     </div>
-                    <div className="flex items-start space-x-2">
-                      <span className="text-purple-600 font-bold">•</span>
-                      <span>Consider seasonal pricing strategy</span>
+                    
+                    <div className="border-t border-gray-200 pt-3">
+                      <p className="text-xs text-gray-500 mb-1">Quantity</p>
+                      <p className="text-sm font-medium text-gray-900">{formData.quantity || '0'} pcs</p>
+                    </div>
+                    
+                    <div className="border-t border-gray-200 pt-3 bg-gray-50 -mx-4 -mb-4 px-4 py-3 rounded-b-lg">
+                      <p className="text-xs text-gray-500 mb-1">Final Price</p>
+                      <p className="text-lg font-bold text-gray-900">₹{formData.price ? parseFloat(formData.price).toLocaleString() : '0'}</p>
                     </div>
                   </div>
                 </div>
@@ -429,3 +1025,5 @@ const ProductNew = () => {
 };
 
 export default ProductNew;
+
+
