@@ -25,6 +25,7 @@ const DesignerEdit = () => {
   const [updating, setUpdating] = useState(false);
   const [error, setError] = useState(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchDesigner();
   }, [id]);

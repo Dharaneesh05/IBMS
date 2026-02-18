@@ -33,16 +33,16 @@ const DesignerList = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure? This will also delete all products by this designer.')) {
-      try {
-        await api.delete(`/designers/${id}`);
-        fetchDesigners();
-      } catch (err) {
-        alert('Failed to delete designer');
-      }
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   if (window.confirm('Are you sure? This will also delete all products by this designer.')) {
+  //     try {
+  //       await api.delete(`/designers/${id}`);
+  //       fetchDesigners();
+  //     } catch (err) {
+  //       alert('Failed to delete designer');
+  //     }
+  //   }
+  // };
 
   const handleSelectItem = (designerId) => {
     const newSelected = new Set(selectedItems);

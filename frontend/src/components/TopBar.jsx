@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 
 const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsClick }) => {
@@ -94,6 +94,7 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
   }, []);
 
   // Search function with debounce
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       if (searchQuery.trim().length > 0) {
