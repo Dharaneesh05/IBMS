@@ -33,6 +33,7 @@ const ProductEdit = () => {
   useEffect(() => {
     fetchProduct();
     fetchDesigners();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchProduct = async () => {

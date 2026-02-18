@@ -11,6 +11,7 @@ const ProductType = () => {
 
   useEffect(() => {
     fetchProductsByType();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
   const fetchProductsByType = async () => {

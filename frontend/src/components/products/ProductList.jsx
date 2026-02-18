@@ -4,12 +4,12 @@ import api from '../../api/api';
 import { useFilter } from '../../contexts/FilterContext';
 
 const ProductList = () => {
-  const { getFilteredProducts, isFilterApplied } = useFilter();
+  const { getFilteredProducts } = useFilter();
   const [products, setProducts] = useState([]);
   const [types, setTypes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedType, setSelectedType] = useState('all');
+  const [selectedType] = useState('all');
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
   const [isCompactView, setIsCompactView] = useState(false);
   const [sortBy, setSortBy] = useState('name');
@@ -69,16 +69,16 @@ const ProductList = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        await api.delete(`/products/${id}`);
-        fetchProducts();
-      } catch (err) {
-        alert('Failed to delete product');
-      }
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   if (window.confirm('Are you sure you want to delete this product?')) {
+  //     try {
+  //       await api.delete(`/products/${id}`);
+  //       fetchProducts();
+  //     } catch (err) {
+  //       alert('Failed to delete product');
+  //     }
+  //   }
+  // };
 
   const handleSelectItem = (productId) => {
     const newSelected = new Set(selectedItems);
