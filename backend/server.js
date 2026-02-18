@@ -24,12 +24,26 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/metal-rates', require('./routes/metalRatesRoutes'));
 
+// Health check route
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Test route
 app.get('/api', (req, res) => {
     res.json({ 
         message: 'Jewellery Shop API is running',
         database: 'MySQL',
         version: '2.0.0'
+    }); 
+});
+
+// Root route
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'Jewellery Shop API',
+        docs: '/api',
+        health: '/health'
     }); 
 });
 
@@ -48,16 +62,24 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+const HOST = process.env.HOST || '0.0.0.0';
 
 // Connect to MySQL and start server
 const startServer = async () => {
     try {
         await connectDB();
         
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+        const server = app.listen(PORT, HOST, () => {
+            console.log(`✅ Server is running on ${HOST}:${PORT}`);
             console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`Database: MySQL`);
+            console.log(`Health check: http://${HOST}:${PORT}/health`);
+        });
+
+        // Handle server errors
+        server.on('error', (error) => {
+            console.error('❌ Server error:', error);
+            process.exit(1);
         });
     } catch (error) {
         console.error('Failed to start server:', error);
