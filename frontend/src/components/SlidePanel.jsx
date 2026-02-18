@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
-import { useActivity } from '../contexts/ActivityContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useFilter } from '../contexts/FilterContext';
 

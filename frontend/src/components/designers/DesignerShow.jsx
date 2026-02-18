@@ -10,9 +10,9 @@ const DesignerShow = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchDesigner();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchDesigner = async () => {

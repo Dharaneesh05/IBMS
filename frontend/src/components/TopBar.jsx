@@ -94,7 +94,6 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
   }, []);
 
   // Search function with debounce
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       if (searchQuery.trim().length > 0) {
@@ -106,6 +105,7 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
     }, 300);
 
     return () => clearTimeout(delaySearch);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   const performSearch = async () => {
