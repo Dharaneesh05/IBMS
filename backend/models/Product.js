@@ -59,6 +59,18 @@ const Product = sequelize.define('Product', {
         },
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT'
+    },
+    frontImage: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    rearImage: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    otherImages: {
+        type: DataTypes.TEXT,
+        allowNull: true
     }
 }, {
     tableName: 'products',

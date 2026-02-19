@@ -1,6 +1,7 @@
 const { Product, Designer, InventoryChange, UserActivity } = require('../models');
 const { sequelize } = require('../config/db');
 const { Op } = require('sequelize');
+const { checkStockLevel } = require('../utils/stockMonitor');
 
 // Helper function to log user activity
 const logActivity = async (action, entityType, entityId, description, req, oldValue = null, newValue = null) => {
@@ -150,7 +151,7 @@ exports.getProductTypes = async (req, res) => {
 // @access  Public
 exports.createProduct = async (req, res) => {
     try {
-        const { name, type, description, quantity, cost, price, designer } = req.body;
+        const { name, type, description, quantity, cost, price, designer, frontImage, rearImage, otherImages } = req.body;
         
         // Validate required fields
         if (!name || !type || !description || quantity === undefined || !cost || !price || !designer) {
@@ -170,7 +171,10 @@ exports.createProduct = async (req, res) => {
             quantity,
             cost,
             price,
-            designerId: designer
+            designerId: designer,
+            frontImage: frontImage || null,
+            rearImage: rearImage || null,
+            otherImages: otherImages || null
         });
         
         // Log inventory change for initial stock
@@ -196,6 +200,12 @@ exports.createProduct = async (req, res) => {
             }]
         });
         
+        // Check and emit stock level alert for new product
+        const io = req.app.get('io');
+        if (io && quantity !== undefined) {
+            checkStockLevel(io, populatedProduct);
+        }
+        
         await logActivity('CREATE', 'PRODUCT', product.id, `Created product: ${product.name}`, req, null, populatedProduct.toJSON());
         res.status(201).json(populatedProduct);
     } catch (error) {
@@ -208,7 +218,7 @@ exports.createProduct = async (req, res) => {
 // @access  Public
 exports.updateProduct = async (req, res) => {
     try {
-        const { name, type, description, quantity, cost, price, designer } = req.body;
+        const { name, type, description, quantity, cost, price, designer, frontImage, rearImage, otherImages } = req.body;
         
         const product = await Product.findByPk(req.params.id);
         
@@ -234,7 +244,10 @@ exports.updateProduct = async (req, res) => {
             quantity: quantity !== undefined ? quantity : product.quantity,
             cost: cost !== undefined ? cost : product.cost,
             price: price !== undefined ? price : product.price,
-            designerId: designer !== undefined ? designer : product.designerId
+            designerId: designer !== undefined ? designer : product.designerId,
+            frontImage: frontImage !== undefined ? frontImage : product.frontImage,
+            rearImage: rearImage !== undefined ? rearImage : product.rearImage,
+            otherImages: otherImages !== undefined ? otherImages : product.otherImages
         });
         
         // Log inventory change if quantity changed
@@ -262,6 +275,14 @@ exports.updateProduct = async (req, res) => {
                 attributes: ['id', 'name', 'email', 'status']
             }]
         });
+        
+        // Check and emit stock level alerts via Socket.IO
+        if (quantity !== undefined) {
+            const io = req.app.get('io');
+            if (io) {
+                checkStockLevel(io, populatedProduct);
+            }
+        }
         
         await logActivity('UPDATE', 'PRODUCT', product.id, `Updated product: ${product.name}`, req, oldValue, populatedProduct.toJSON());
         res.json(populatedProduct);

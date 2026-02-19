@@ -4,6 +4,7 @@ import { DarkModeProvider } from './contexts/DarkModeContext';
 import { ActivityProvider } from './contexts/ActivityContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { FilterProvider } from './contexts/FilterContext';
+import { SocketProvider } from './contexts/SocketContext';
 
 // Components
 import Sidebar from './components/Sidebar';
@@ -20,6 +21,10 @@ import DesignerList from './components/designers/DesignerList';
 import DesignerShow from './components/designers/DesignerShow';
 import DesignerNew from './components/designers/DesignerNew';
 import DesignerEdit from './components/designers/DesignerEdit';
+import StockLevels from './components/inventory/StockLevels';
+import LowStockAlerts from './components/inventory/LowStockAlerts';
+import StockNotifications from './components/StockNotifications';
+import ConnectionStatus from './components/ConnectionStatus';
 
 function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -38,8 +43,15 @@ function App() {
       <SettingsProvider>
         <ActivityProvider>
           <FilterProvider>
-            <Router>
+            <SocketProvider>
+              <Router>
         <div className="App flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+        {/* Real-time Stock Notifications */}
+        <StockNotifications />
+        
+        {/* Connection Status Indicator */}
+        <ConnectionStatus />
+        
         {/* Sidebar */}
         <Sidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
         
@@ -67,6 +79,8 @@ function App() {
               <Route path="/products/type/:type" element={<ProductType />} />
               
               {/* Inventory Routes */}
+              <Route path="/inventory/stock-levels" element={<StockLevels />} />
+              <Route path="/inventory/low-stock" element={<LowStockAlerts />} />
               <Route path="/inventory/adjustments" element={<ComingSoon title="Inventory Adjustments" description="Track and manage inventory adjustments" />} />
               <Route path="/inventory/adjustments/new" element={<ComingSoon title="New Adjustment" description="Create a new inventory adjustment" />} />
               <Route path="/inventory/overview" element={<ComingSoon title="Stock Overview" description="View complete stock status across all locations" />} />
@@ -113,7 +127,8 @@ function App() {
           title={slidePanel.title}
         />
       </div>
-    </Router>
+              </Router>
+            </SocketProvider>
           </FilterProvider>
         </ActivityProvider>
       </SettingsProvider>

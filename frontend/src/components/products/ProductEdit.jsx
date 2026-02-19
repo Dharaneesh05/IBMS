@@ -48,9 +48,9 @@ const ProductEdit = () => {
         cost: product.cost,
         price: product.price,
         designer: product.designer?.id || '',
-        frontImage: null,
-        rearImage: null,
-        otherImages: [],
+        frontImage: product.frontImage || null,
+        rearImage: product.rearImage || null,
+        otherImages: product.otherImages ? JSON.parse(product.otherImages) : [],
         returnable: product.returnable || 'yes',
         dimensionLength: product.dimensionLength || '',
         dimensionWidth: product.dimensionWidth || '',
@@ -109,13 +109,48 @@ const ProductEdit = () => {
     });
   };
 
+  const convertImageToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
 
     try {
-      await api.put(`/products/${id}`, formData);
+      // Convert images to base64
+      const productData = { ...formData };
+      
+      if (formData.frontImage && typeof formData.frontImage !== 'string') {
+        productData.frontImage = await convertImageToBase64(formData.frontImage);
+      }
+      
+      if (formData.rearImage && typeof formData.rearImage !== 'string') {
+        productData.rearImage = await convertImageToBase64(formData.rearImage);
+      }
+      
+      // Handle otherImages - combine existing (strings) and new (files)
+      if (formData.otherImages && formData.otherImages.length > 0) {
+        const existingImages = formData.otherImages.filter(img => typeof img === 'string');
+        const newImages = formData.otherImages.filter(img => typeof img !== 'string');
+        
+        const newImagesBase64 = newImages.length > 0 
+          ? await Promise.all(newImages.map(img => convertImageToBase64(img)))
+          : [];
+        
+        const allImages = [...existingImages, ...newImagesBase64];
+        productData.otherImages = allImages.length > 0 ? JSON.stringify(allImages) : null;
+      } else {
+        productData.otherImages = null;
+      }
+
+      await api.put(`/products/${id}`, productData);
       navigate(`/products/${id}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update product');

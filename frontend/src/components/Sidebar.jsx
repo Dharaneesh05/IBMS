@@ -28,7 +28,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       name: 'Sales',
       icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z',
       submenu: [
-        { name: 'Customers', path: '/designers', hasQuickAdd: true, quickAddPath: '/designers/new', quickAddTooltip: 'Add Customer' },
+        { name: 'Customers', path: '/sales/customers', hasQuickAdd: true, quickAddPath: '/sales/customers/new', quickAddTooltip: 'Add Customer' },
         { name: 'Sales Orders', path: '/sales/orders', hasQuickAdd: true, quickAddPath: '/sales/orders/new', quickAddTooltip: 'Create Order' },
         { name: 'Invoices', path: '/sales/invoices', hasQuickAdd: true, quickAddPath: '/sales/invoices/new', quickAddTooltip: 'Create Invoice' },
         { name: 'Sales Returns', path: '/sales/returns' }
@@ -39,7 +39,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       name: 'Purchases',
       icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
       submenu: [
-        { name: 'Vendors', path: '/purchases/vendors', hasQuickAdd: true, quickAddPath: '/purchases/vendors/new', quickAddTooltip: 'Add Vendor' },
+        { name: 'Designers / Vendors', path: '/designers', hasQuickAdd: true, quickAddPath: '/designers/new', quickAddTooltip: 'Add Designer' },
         { name: 'Purchase Orders', path: '/purchases/orders', hasQuickAdd: true, quickAddPath: '/purchases/orders/new', quickAddTooltip: 'Create PO' },
         { name: 'Purchase Receives', path: '/purchases/receives' },
         { name: 'Bills', path: '/purchases/bills', hasQuickAdd: true, quickAddPath: '/purchases/bills/new', quickAddTooltip: 'Create Bill' }

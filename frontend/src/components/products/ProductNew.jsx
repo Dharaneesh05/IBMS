@@ -133,6 +133,15 @@ const ProductNew = () => {
     });
   };
 
+  const convertImageToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -146,7 +155,25 @@ const ProductNew = () => {
     setError(null);
 
     try {
-      await api.post('/products', formData);
+      // Convert images to base64
+      const productData = { ...formData };
+      
+      if (formData.frontImage) {
+        productData.frontImage = await convertImageToBase64(formData.frontImage);
+      }
+      
+      if (formData.rearImage) {
+        productData.rearImage = await convertImageToBase64(formData.rearImage);
+      }
+      
+      if (formData.otherImages && formData.otherImages.length > 0) {
+        const otherImagesBase64 = await Promise.all(
+          formData.otherImages.map(img => convertImageToBase64(img))
+        );
+        productData.otherImages = JSON.stringify(otherImagesBase64);
+      }
+
+      await api.post('/products', productData);
       navigate('/products');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create product');

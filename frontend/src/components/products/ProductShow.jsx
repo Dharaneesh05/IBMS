@@ -92,7 +92,7 @@ const ProductShow = () => {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <div className="aspect-square bg-gray-100">
                 <img 
-                  src="https://images.unsplash.com/photo-1598560917807-1bae44bd2be8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                  src={product.frontImage || "https://images.unsplash.com/photo-1598560917807-1bae44bd2be8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />

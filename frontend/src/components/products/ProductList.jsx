@@ -11,7 +11,6 @@ const ProductList = () => {
   const [error, setError] = useState(null);
   const [selectedType] = useState('all');
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
-  const [isCompactView, setIsCompactView] = useState(false);
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
   const [selectedItems, setSelectedItems] = useState(new Set());
@@ -114,6 +113,84 @@ const ProductList = () => {
         alert('Failed to delete some products');
       }
     }
+  };
+
+  const exportToCSV = (data, filename) => {
+    // Prepare CSV data
+    const headers = ['Name', 'Type', 'Description', 'Designer', 'Quantity', 'Cost', 'Price', 'SKU'];
+    const csvContent = [
+      headers.join(','),
+      ...data.map(product => [
+        `"${product.name}"`,
+        `"${product.type}"`,
+        `"${product.description || ''}"`,
+        `"${product.designer?.name || ''}"`,
+        product.quantity,
+        product.cost,
+        product.price,
+        `"${product.sku || ''}"`
+      ].join(','))
+    ].join('\\n');
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleExportAll = () => {
+    exportToCSV(products, `inventory_all_${new Date().toISOString().split('T')[0]}.csv`);
+    setExportMenuOpen(false);
+  };
+
+  const handleExportLowStock = () => {
+    const lowStockProducts = products.filter(p => p.quantity > 0 && p.quantity <= 5);
+    exportToCSV(lowStockProducts, `inventory_low_stock_${new Date().toISOString().split('T')[0]}.csv`);
+    setExportMenuOpen(false);
+  };
+
+  const handleImportCSV = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const text = e.target.result;
+        const lines = text.split('\\n');
+        const headers = lines[0].split(',');
+        
+        // Parse CSV data (simplified - in production you'd want a proper CSV parser)
+        const importedProducts = lines.slice(1)
+          .filter(line => line.trim())
+          .map(line => {
+            const values = line.split(',').map(v => v.replace(/^"|"$/g, ''));
+            return {
+              name: values[0],
+              type: values[1],
+              description: values[2],
+              quantity: parseInt(values[4]) || 0,
+              cost: parseFloat(values[5]) || 0,
+              price: parseFloat(values[6]) || 0,
+            };
+          });
+
+        console.log('Imported products:', importedProducts);
+        alert(`Successfully parsed ${importedProducts.length} products. Import functionality coming soon!`);
+        setImportMenuOpen(false);
+      } catch (error) {
+        console.error('Import error:', error);
+        alert('Error parsing CSV file. Please check the format.');
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = ''; // Reset file input
   };
 
   const calculateTotals = (productsList) => {
@@ -351,11 +428,29 @@ const ProductList = () => {
                   </button>
                   {importMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-10 animate-fadeIn">
-                      <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-teal-50 transition-colors rounded-md mx-1">
-                        <span className="font-semibold text-teal-600">Import Items</span>
-                        <p className="text-xs text-gray-500 mt-0.5">Upload CSV file</p>
-                      </button>
-                      <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-md mx-1">
+                      <label className="w-full block">
+                        <input 
+                          type="file" 
+                          accept=".csv" 
+                          onChange={handleImportCSV}
+                          className="hidden"
+                          id="csv-upload"
+                        />
+                        <label 
+                          htmlFor="csv-upload"
+                          className="w-full cursor-pointer text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-teal-50 transition-colors rounded-md mx-1 block"
+                        >
+                          <span className="font-semibold text-teal-600">Import Items</span>
+                          <p className="text-xs text-gray-500 mt-0.5">Upload CSV file</p>
+                        </label>
+                      </label>
+                      <button 
+                        onClick={() => {
+                          alert('Image import coming soon!');
+                          setImportMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-md mx-1"
+                      >
                         Import Items Images
                       </button>
                     </div>
@@ -381,10 +476,16 @@ const ProductList = () => {
                   </button>
                   {exportMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-10 animate-fadeIn">
-                      <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-md mx-1">
+                      <button 
+                        onClick={handleExportAll}
+                        className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-md mx-1"
+                      >
                         Export Inventory
                       </button>
-                      <button className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-md mx-1">
+                      <button 
+                        onClick={handleExportLowStock}
+                        className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-md mx-1"
+                      >
                         Export Low Stock
                       </button>
                     </div>
@@ -427,7 +528,7 @@ const ProductList = () => {
                     </button>
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-2.5 transition-all border-l border-gray-200 ${
+                      className={`p-2.5 rounded-r-lg transition-all border-l border-gray-200 ${
                         viewMode === 'grid'
                           ? 'bg-teal-600 text-white shadow-inner'
                           : 'bg-white text-gray-600 hover:bg-gray-50'
@@ -438,22 +539,6 @@ const ProductList = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                       </svg>
                     </button>
-                    {/* Compact Toggle - Only for table view */}
-                    {viewMode === 'table' && (
-                      <button
-                        onClick={() => setIsCompactView(!isCompactView)}
-                        className={`p-2.5 rounded-r-lg transition-all border-l border-gray-200 ${
-                          isCompactView
-                            ? 'bg-teal-600 text-white shadow-inner'
-                            : 'bg-white text-gray-600 hover:bg-gray-50'
-                        }`}
-                        title="Compact View"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16" />
-                        </svg>
-                      </button>
-                    )}
                   </div>
               </div>
 
@@ -587,7 +672,7 @@ const ProductList = () => {
               <table className="w-full">
                 <thead className="bg-gray-50/80 border-b border-gray-100">
                   <tr>
-                    <th className={`text-left ${isCompactView ? 'px-4 py-3' : 'px-6 py-4'} w-12`}>
+                    <th className="text-left px-6 py-4 w-12">
                       <input
                        type="checkbox"
                         checked={selectAll}
@@ -595,22 +680,22 @@ const ProductList = () => {
                         className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500 focus:ring-2"
                       />
                     </th>
-                    <th className={`text-left text-xs font-semibold text-gray-600 uppercase tracking-wider ${isCompactView ? 'px-4 py-3' : 'px-6 py-4'}`}>
+                    <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider px-6 py-4">
                       Product
                     </th>
-                    <th className={`text-left text-xs font-semibold text-gray-600 uppercase tracking-wider ${isCompactView ? 'px-4 py-3' : 'px-6 py-4'}`}>
+                    <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider px-6 py-4">
                       Designer
                     </th>
-                    <th className={`text-center text-xs font-semibold text-gray-600 uppercase tracking-wider ${isCompactView ? 'px-4 py-3' : 'px-6 py-4'}`}>
+                    <th className="text-center text-xs font-semibold text-gray-600 uppercase tracking-wider px-6 py-4">
                       Qty
                     </th>
-                    <th className={`text-right text-xs font-semibold text-gray-600 uppercase tracking-wider ${isCompactView ? 'px-4 py-3' : 'px-6 py-4'}`}>
+                    <th className="text-right text-xs font-semibold text-gray-600 uppercase tracking-wider px-6 py-4">
                       Selling Price
                     </th>
-                    <th className={`text-center text-xs font-semibold text-gray-600 uppercase tracking-wider ${isCompactView ? 'px-4 py-3' : 'px-6 py-4'}`}>
+                    <th className="text-center text-xs font-semibold text-gray-600 uppercase tracking-wider px-6 py-4">
                       Status
                     </th>
-                    <th className={`text-center text-xs font-semibold text-gray-600 uppercase tracking-wider ${isCompactView ? 'px-4 py-3' : 'px-6 py-4'}`}>
+                    <th className="text-center text-xs font-semibold text-gray-600 uppercase tracking-wider px-6 py-4">
                       Actions
                     </th>
                   </tr>
@@ -622,7 +707,7 @@ const ProductList = () => {
                       product.quantity > 0 && product.quantity <= 5 ? 'bg-amber-50 hover:bg-amber-100' : 
                       'hover:bg-gray-50'
                     }`}>
-                      <td className={`${isCompactView ? 'px-4 py-2' : 'px-6 py-4'} w-12`}>
+                      <td className="px-6 py-4 w-12">
                         <input
                           type="checkbox"
                           checked={selectedItems.has(product.id)}
@@ -630,12 +715,12 @@ const ProductList = () => {
                           className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500 focus:ring-2"
                         />
                       </td>
-                      <td className={`${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
+                      <td className="px-6 py-4">
                         <Link 
                           to={`/products/${product.id}`}
                           className="block group"
                         >
-                          <div className={`${isCompactView ? 'text-xs' : 'text-sm'} font-semibold text-gray-900 group-hover:text-teal-600 transition-colors`}>
+                          <div className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">
                             {product.name}
                           </div>
                           <div className="text-xs text-gray-500 mt-0.5">
@@ -643,27 +728,27 @@ const ProductList = () => {
                           </div>
                         </Link>
                       </td>
-                      <td className={`whitespace-nowrap ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
+                      <td className="whitespace-nowrap px-6 py-4">
                         <Link 
                           to={`/designers/${product.designer?.id}`}
-                          className={`${isCompactView ? 'text-xs' : 'text-sm'} text-gray-600 hover:text-teal-600 transition-colors`}
+                          className="text-sm text-gray-600 hover:text-teal-600 transition-colors"
                         >
                           {product.designer?.name || 'N/A'}
                         </Link>
                       </td>
-                      <td className={`whitespace-nowrap text-center ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
-                        <span className={`${isCompactView ? 'text-xs' : 'text-sm'} font-bold text-gray-900`}>{product.quantity}</span>
+                      <td className="whitespace-nowrap text-center px-6 py-4">
+                        <span className="text-sm font-bold text-gray-900">{product.quantity}</span>
                       </td>
-                      <td className={`whitespace-nowrap text-right ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
-                        <span className={`${isCompactView ? 'text-xs' : 'text-sm'} font-bold text-emerald-600`}>₹{product.price?.toLocaleString()}</span>
+                      <td className="whitespace-nowrap text-right px-6 py-4">
+                        <span className="text-sm font-bold text-emerald-600">₹{product.price?.toLocaleString()}</span>
                       </td>
-                      <td className={`whitespace-nowrap text-center ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
+                      <td className="whitespace-nowrap text-center px-6 py-4">
                         {getStockBadge(product.quantity)}
                       </td>
-                      <td className={`whitespace-nowrap text-center ${isCompactView ? 'px-4 py-2' : 'px-6 py-4'}`}>
+                      <td className="whitespace-nowrap text-center px-6 py-4">
                         <Link 
                           to={`/products/${product.id}/edit`}
-                          className={`text-teal-600 hover:text-teal-700 font-medium transition-colors ${isCompactView ? 'text-xs' : 'text-sm'}`}
+                          className="text-teal-600 hover:text-teal-700 font-medium transition-colors text-sm"
                           title="Edit product"
                         >
                           Edit
@@ -686,10 +771,18 @@ const ProductList = () => {
                 {/* Product Image */}
                 <Link to={`/products/${product.id}`} className="block relative">
                   <div className="aspect-square bg-gradient-to-br from-teal-50 to-cyan-100 rounded-t-lg flex items-center justify-center relative overflow-hidden">
-                    <svg className="w-16 h-16 text-teal-200" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                      <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/>
-                    </svg>
+                    {product.frontImage ? (
+                      <img 
+                        src={product.frontImage} 
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <svg className="w-16 h-16 text-teal-200" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                        <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/>
+                      </svg>
+                    )}
                   </div>
                 </Link>
 
