@@ -164,7 +164,7 @@ const ProductList = () => {
       try {
         const text = e.target.result;
         const lines = text.split('\\n');
-        const headers = lines[0].split(',');
+        // const headers = lines[0].split(','); // Reserved for future use
         
         // Parse CSV data (simplified - in production you'd want a proper CSV parser)
         const importedProducts = lines.slice(1)

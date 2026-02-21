@@ -148,7 +148,7 @@ const DesignerList = () => {
       try {
         const text = e.target.result;
         const lines = text.split('\\n');
-        const headers = lines[0].split(',');
+        // const headers = lines[0].split(','); // Reserved for future use
         
         // Parse CSV data (simplified - in production you'd want a proper CSV parser)
         const importedDesigners = lines.slice(1)
@@ -178,17 +178,18 @@ const DesignerList = () => {
     event.target.value = ''; // Reset file input
   };
 
-  const getStatusBadge = (status) => {
-    return (
-      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-        status === 'active' 
-          ? 'bg-green-100 text-green-700' 
-          : 'bg-red-100 text-red-700'
-      }`}>
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </span>
-    );
-  };
+  // Status badge helper - reserved for future use
+  // const getStatusBadge = (status) => {
+  //   return (
+  //     <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+  //       status === 'active' 
+  //         ? 'bg-green-100 text-green-700' 
+  //         : 'bg-red-100 text-red-700'
+  //     }`}>
+  //       {status.charAt(0).toUpperCase() + status.slice(1)}
+  //     </span>
+  //   );
+  // };
 
   const calculateStatsStats = () => {
     return {

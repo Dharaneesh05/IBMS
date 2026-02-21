@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/api';
 
@@ -8,11 +8,7 @@ function LowStockAlerts() {
   const [adjustingReorder, setAdjustingReorder] = useState(null);
   const [reorderValue, setReorderValue] = useState('');
 
-  useEffect(() => {
-    fetchLowStockProducts();
-  }, []);
-
-  const fetchLowStockProducts = async () => {
+  const fetchLowStockProducts = useCallback(async () => {
     try {
       setLoading(true);
       const response = await api.get('/products');
@@ -45,7 +41,11 @@ function LowStockAlerts() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchLowStockProducts();
+  }, [fetchLowStockProducts]);
 
   const calculateDaysLeft = (product) => {
     const avgSalesPerDay = product.avgSalesPerDay || 0.5; // Default to 0.5 if not available
