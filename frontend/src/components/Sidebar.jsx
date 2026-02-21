@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [expandedSections, setExpandedSections] = useState([]);
 
   const menuStructure = [
@@ -246,16 +247,19 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                                   <span className="text-[13px]">{subItem.name}</span>
                                   {/* Quick Add Button - Show only on hover */}
                                   {subItem.hasQuickAdd && (
-                                    <Link
-                                      to={subItem.quickAddPath}
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        navigate(subItem.quickAddPath);
+                                      }}
                                       className="opacity-0 group-hover/item:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity duration-150"
                                       title={subItem.quickAddTooltip}
-                                      onClick={(e) => e.stopPropagation()}
                                     >
                                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
                                       </svg>
-                                    </Link>
+                                    </button>
                                   )}
                                 </Link>
                               </li>
@@ -282,16 +286,19 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                                 <span>{subItem.name}</span>
                                 {/* Quick Add Button - Show only on hover */}
                                 {subItem.hasQuickAdd && (
-                                  <Link
-                                    to={subItem.quickAddPath}
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      navigate(subItem.quickAddPath);
+                                    }}
                                     className="opacity-0 group-hover/subitem:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity duration-150"
                                     title={subItem.quickAddTooltip}
-                                    onClick={(e) => e.stopPropagation()}
                                   >
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
                                     </svg>
-                                  </Link>
+                                  </button>
                                 )}
                               </Link>
                             </li>

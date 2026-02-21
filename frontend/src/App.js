@@ -44,7 +44,12 @@ function App() {
         <ActivityProvider>
           <FilterProvider>
             <SocketProvider>
-              <Router>
+              <Router
+                future={{
+                  v7_startTransition: true,
+                  v7_relativeSplatPath: true
+                }}
+              >
         <div className="App flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
         {/* Real-time Stock Notifications */}
         <StockNotifications />

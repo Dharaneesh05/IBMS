@@ -30,10 +30,10 @@ const connectDB = async () => {
         await sequelize.authenticate();
         console.log('✅ MySQL Database Connected Successfully');
         
-        // Sync all models with database (creates tables if they don't exist)
-        // Use { alter: true } to always update tables to match current models
-        // This ensures new columns and tables are created even in production
-        await sequelize.sync({ alter: true });
+        // Sync all models with database
+        // In production, ensure tables exist. Use migrations for schema changes.
+        // { alter: false } prevents automatic schema alterations that might cause index issues
+        await sequelize.sync({ alter: false });
         console.log('✅ Database Models Synchronized');
         console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     } catch (error) {
