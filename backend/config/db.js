@@ -31,11 +31,14 @@ const connectDB = async () => {
         console.log('✅ MySQL Database Connected Successfully');
         
         // Sync all models with database (creates tables if they don't exist)
-        // Use { alter: true } in development to update tables, { force: false } in production
-        await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
+        // Use { alter: true } to always update tables to match current models
+        // This ensures new columns and tables are created even in production
+        await sequelize.sync({ alter: true });
         console.log('✅ Database Models Synchronized');
+        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     } catch (error) {
         console.error('❌ Unable to connect to MySQL database:', error.message);
+        console.error('Error details:', error);
         process.exit(1);
     }
 };

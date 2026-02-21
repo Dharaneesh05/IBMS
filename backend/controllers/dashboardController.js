@@ -87,6 +87,8 @@ const getEntityIcon = (entityType, action) => {
 // @access  Public
 exports.getDashboardMetrics = async (req, res) => {
     try {
+        console.log('Fetching dashboard metrics...');
+        
         // Get all products with populated designer data
         const products = await Product.findAll({
             include: [{
@@ -95,6 +97,8 @@ exports.getDashboardMetrics = async (req, res) => {
                 attributes: ['id', 'name', 'email', 'status']
             }]
         });
+        
+        console.log(`Found ${products.length} products`);
         
         // Calculate dashboard metrics
         const totalItems = products.length;
@@ -208,6 +212,11 @@ exports.getDashboardMetrics = async (req, res) => {
             recentActivities: formattedActivities
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error in getDashboardMetrics:', error);
+        console.error('Error stack:', error.stack);
+        res.status(500).json({ 
+            message: error.message,
+            error: process.env.NODE_ENV === 'development' ? error.stack : 'Internal server error'
+        });
     }
 };
