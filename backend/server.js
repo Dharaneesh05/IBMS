@@ -34,7 +34,7 @@ app.get('/api', (req, res) => {
     res.json({ 
         message: 'Jewellery Shop API is running',
         database: 'MySQL',
-        version: '2.0.0'
+        version: '2.0.1'
     }); 
 });
 
