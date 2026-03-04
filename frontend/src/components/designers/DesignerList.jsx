@@ -9,7 +9,12 @@ import {
   HiMail, 
   HiPhone, 
   HiDocumentText, 
-  HiChevronRight 
+  HiChevronRight,
+  HiSearch,
+  HiUpload,
+  HiDownload,
+  HiViewList,
+  HiViewGrid
 } from 'react-icons/hi';
 
 const DesignerList = () => {
@@ -315,30 +320,31 @@ const DesignerList = () => {
       <div className="relative z-10">
       {/* Header Section */}
       <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-        <div className="max-w-[1920px] mx-auto px-6 py-3">
+        <div className="max-w-[1920px] mx-auto px-6 py-4">
           {/* Top Row: Title and Main Actions */}
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-3">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-4">
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Designers & Vendors</h1>
-              <p className="mt-0.5 text-xs text-gray-600 dark:text-gray-400">Manage your supplier network and design partners</p>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">Manage your supplier network and design partners</p>
             </div>
             
             {/* Action Buttons */}
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {/* Search with Dropdown */}
+            <div className="flex items-center gap-3 flex-shrink-0">
+              {/* Search with Icon */}
               <div className="relative dropdown-container">
-                <div className="relative flex items-center min-w-[280px]">
+                <div className="relative flex items-center min-w-[320px]">
+                  <HiSearch className="absolute left-3 w-5 h-5 text-gray-400" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search in All Items..."
-                    className="w-full pl-3 pr-8 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-xs"
+                    className="w-full pl-10 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                      className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -352,13 +358,14 @@ const DesignerList = () => {
               <div className="relative dropdown-container">
                 <button
                   onClick={() => setImportMenuOpen(!importMenuOpen)}
-                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                 >
+                  <HiUpload className="w-4 h-4" />
                   Import ▼
                 </button>
                 {importMenuOpen && (
-                  <div className="absolute right-0 mt-1 w-44 bg-white dark:bg-gray-700 rounded shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-20">
-                    <label className="block px-3 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-20">
+                    <label className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">
                       <input
                         type="file"
                         accept=".csv"
@@ -375,21 +382,22 @@ const DesignerList = () => {
               <div className="relative dropdown-container">
                 <button
                   onClick={() => setExportMenuOpen(!exportMenuOpen)}
-                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                 >
+                  <HiDownload className="w-4 h-4" />
                   Export ▼
                 </button>
                 {exportMenuOpen && (
-                  <div className="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-700 rounded shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-20">
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 py-1 z-20">
                     <button
                       onClick={handleExportAll}
-                      className="w-full text-left px-3 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                     >
                       Export All Designers
                     </button>
                     <button
                       onClick={handleExportActive}
-                      className="w-full text-left px-3 py-1.5 text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
                     >
                       Export Active Only
                     </button>
@@ -400,9 +408,10 @@ const DesignerList = () => {
               {/* Add Designer Button */}
               <Link
                 to="/designers/new"
-                className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-white bg-teal-600 rounded hover:bg-teal-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
               >
-                + Add Designer
+                <HiPlus className="w-5 h-5" />
+                Add Designer
               </Link>
             </div>
           </div>
@@ -410,38 +419,38 @@ const DesignerList = () => {
           {/* View Toggle and Sort Controls */}
           <div className="flex items-center justify-between">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded overflow-hidden">
+            <div className="flex items-center bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden">
               <button
                 onClick={() => setViewMode('table')}
-                className={`px-2 py-1 text-xs font-medium transition-colors ${
+                className={`flex items-center justify-center p-2 transition-colors ${
                   viewMode === 'table'
                     ? 'bg-teal-600 text-white'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
                 }`}
                 title="Table View"
               >
-                Table
+                <HiViewList className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setViewMode('grid')}
-                className={`px-2 py-1 text-xs font-medium transition-colors ${
+                className={`flex items-center justify-center p-2 transition-colors ${
                   viewMode === 'grid'
                     ? 'bg-teal-600 text-white'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
                 }`}
                 title="Grid View"
               >
-                Grid
+                <HiViewGrid className="w-5 h-5" />
               </button>
             </div>
 
             {/* Sort Controls */}
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Sort:</span>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               >
                 <option value="name">Company Name</option>
                 <option value="contact">Contact Person</option>
@@ -452,7 +461,7 @@ const DesignerList = () => {
               </select>
               <button
                 onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                className="px-1.5 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-xs"
+                className="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
                 title={`Sort ${sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
               >
                 {sortOrder === 'asc' ? '▲' : '▼'}
@@ -466,23 +475,23 @@ const DesignerList = () => {
       <div className="max-w-[1920px] mx-auto px-6 py-4">
         {/* Bulk Actions Bar */}
         {selectedItems.size > 0 && (
-          <div className="mb-3 bg-teal-600 text-white rounded px-4 py-2 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="font-medium text-xs">{selectedItems.size} designer(s) selected</span>
+          <div className="mb-4 bg-teal-600 text-white rounded-lg px-4 py-3 flex items-center justify-between shadow-sm">
+            <div className="flex items-center gap-3">
+              <span className="font-medium text-sm">{selectedItems.size} designer(s) selected</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => {
                   setSelectedItems(new Set());
                   setSelectAll(false);
                 }}
-                className="px-3 py-1 text-xs bg-white/20 hover:bg-white/30 rounded transition-colors font-medium"
+                className="px-4 py-1.5 text-sm bg-white/20 hover:bg-white/30 rounded-lg transition-colors font-medium"
               >
                 Clear Selection
               </button>
               <button
                 onClick={handleBulkDelete}
-                className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 rounded transition-colors font-medium"
+                className="px-4 py-1.5 text-sm bg-red-600 hover:bg-red-700 rounded-lg transition-colors font-medium"
               >
                 Delete Selected
               </button>
@@ -599,12 +608,12 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shadow-sm">
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
             <tr>
-              <th className="px-3 py-2 text-left">
+              <th className="px-4 py-3 text-left w-12">
                 <input
                   type="checkbox"
                   checked={selectAll}
@@ -612,25 +621,25 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
                   className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700"
                 />
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
                 Company Name
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
                 Contact Person
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
                 Email
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
                 Phone
               </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
                 GSTIN
               </th>
-              <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
                 Status
               </th>
-              <th className="px-3 py-2 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+              <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
                 Actions
               </th>
             </tr>
@@ -638,7 +647,7 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {designers.map((designer) => (
               <tr key={designer.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td className="px-3 py-2 whitespace-nowrap">
+                <td className="px-4 py-3 whitespace-nowrap">
                   <input
                     type="checkbox"
                     checked={selectedItems.has(designer.id)}
@@ -646,10 +655,10 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
                     className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700"
                   />
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
+                <td className="px-4 py-3 whitespace-nowrap">
                   <Link
                     to={`/designers/${designer.id}`}
-                    className="text-xs font-semibold text-gray-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                    className="text-sm font-semibold text-gray-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                   >
                     {designer.companyName || designer.displayName || designer.name}
                   </Link>
@@ -657,37 +666,37 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
                     <p className="text-xs text-gray-500 dark:text-gray-400">{designer.displayName}</p>
                   )}
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
-                  <span className="text-xs text-gray-700 dark:text-gray-300">{designer.name}</span>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{designer.name}</span>
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
+                <td className="px-4 py-3 whitespace-nowrap">
                   <a
                     href={`mailto:${designer.email}`}
-                    className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                    className="text-sm text-teal-600 dark:text-teal-400 hover:underline"
                   >
                     {designer.email}
                   </a>
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
-                  <span className="text-xs text-gray-600 dark:text-gray-400">{designer.phone || '-'}</span>
+                <td className="px-4 py-3 whitespace-nowrap">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">{designer.phone || '-'}</span>
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap">
+                <td className="px-4 py-3 whitespace-nowrap">
                   <span className="text-xs text-gray-600 dark:text-gray-400 font-mono">{designer.gstin || '-'}</span>
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap text-center">
+                <td className="px-4 py-3 whitespace-nowrap text-center">
                   {getStatusBadge(designer.status)}
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap text-center">
-                  <div className="flex items-center justify-center gap-2">
+                <td className="px-4 py-3 whitespace-nowrap text-center">
+                  <div className="flex items-center justify-center gap-3">
                     <Link
                       to={`/designers/${designer.id}`}
-                      className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-medium text-xs transition-colors"
+                      className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-medium text-sm transition-colors"
                     >
                       View
                     </Link>
                     <Link
                       to={`/designers/${designer.id}/edit`}
-                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-xs transition-colors"
+                      className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm transition-colors"
                     >
                       Edit
                     </Link>
