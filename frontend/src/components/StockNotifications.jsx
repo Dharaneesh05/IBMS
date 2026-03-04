@@ -21,16 +21,8 @@ const StockNotifications = () => {
   };
 
   const getNotificationIcon = (type) => {
-    switch (type) {
-      case 'error':
-        return '🚨';
-      case 'critical':
-        return '⚠️';
-      case 'warning':
-        return '📦';
-      default:
-        return 'ℹ️';
-    }
+    // Return empty string instead of emojis
+    return '';
   };
 
   const getTitleColor = (type) => {

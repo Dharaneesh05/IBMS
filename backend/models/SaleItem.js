@@ -29,7 +29,7 @@ const SaleItem = sequelize.define('SaleItem', {
     },
     productName: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
         comment: 'Snapshot of product name at time of sale'
     },
     quantity: {
@@ -46,13 +46,31 @@ const SaleItem = sequelize.define('SaleItem', {
     },
     totalPrice: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: true,
         comment: 'Total price for this line item (quantity * unitPrice)'
     },
     discount: {
         type: DataTypes.DECIMAL(10, 2),
         defaultValue: 0,
+        allowNull: true,
         comment: 'Discount applied to this item'
+    },
+    taxRate: {
+        type: DataTypes.DECIMAL(5, 2),
+        defaultValue: 3,
+        allowNull: true,
+        comment: 'Tax rate percentage'
+    },
+    taxAmount: {
+        type: DataTypes.DECIMAL(10, 2),
+        defaultValue: 0,
+        allowNull: true,
+        comment: 'Tax amount'
+    },
+    lineTotal: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+        comment: 'Line total (unitPrice * quantity + tax)'
     }
 }, {
     tableName: 'sale_items',

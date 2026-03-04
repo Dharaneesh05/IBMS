@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/api';
 import { useFilter } from '../../contexts/FilterContext';
+import { HiPlus, HiPencil } from 'react-icons/hi';
 
 const ProductListGrid = () => {
   const { getFilteredProducts, isFilterApplied } = useFilter();
@@ -103,9 +104,7 @@ const ProductListGrid = () => {
               to="/products/new" 
               className="btn-primary inline-flex items-center justify-center"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-              </svg>
+              <HiPlus className="w-5 h-5 mr-2" />
               Add New Product
             </Link>
           </div>
@@ -156,9 +155,7 @@ const ProductListGrid = () => {
               }
             </p>
             <Link to="/products/new" className="inline-flex items-center px-6 py-3 bg-[#1a1d2e] text-white font-medium rounded-lg hover:bg-[#2a2e42] transition-colors">
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-              </svg>
+              <HiPlus className="w-5 h-5 mr-2" />
               Add Your First Item
             </Link>
           </div>
@@ -244,9 +241,7 @@ const ProductListGrid = () => {
                       className="bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm"
                       title="Edit"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
+                      <HiPencil className="w-4 h-4" />
                     </Link>
                   </div>
                 </div>

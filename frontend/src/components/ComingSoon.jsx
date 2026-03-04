@@ -1,13 +1,12 @@
 import React from 'react';
+import { HiClock } from 'react-icons/hi';
 
 const ComingSoon = ({ title, description }) => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="text-center">
         <div className="inline-flex items-center justify-center w-24 h-24 bg-yellow-400 rounded-full mb-6">
-          <svg className="w-12 h-12 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <HiClock className="w-12 h-12 text-gray-900" />
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">{title}</h1>
         <p className="text-lg text-gray-600 mb-8">{description}</p>

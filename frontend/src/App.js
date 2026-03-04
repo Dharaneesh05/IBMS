@@ -21,10 +21,23 @@ import DesignerList from './components/designers/DesignerList';
 import DesignerShow from './components/designers/DesignerShow';
 import DesignerNew from './components/designers/DesignerNew';
 import DesignerEdit from './components/designers/DesignerEdit';
+import CustomerList from './components/customers/CustomerList';
+import SaleList from './components/sales/SaleList';
+import SaleNew from './components/sales/SaleNew';
+import SaleShow from './components/sales/SaleShow';
+import VendorList from './components/vendors/VendorList';
+import VendorNew from './components/vendors/VendorNew';
+import PurchaseOrderList from './components/purchaseOrders/PurchaseOrderList';
+import PurchaseOrderShow from './components/purchaseOrders/PurchaseOrderShow';
 import StockLevels from './components/inventory/StockLevels';
 import LowStockAlerts from './components/inventory/LowStockAlerts';
+import RepairOrderList from './components/services/RepairOrderList';
+import RepairOrderNew from './components/services/RepairOrderNew';
+import RepairOrderEdit from './components/services/RepairOrderEdit';
 import StockNotifications from './components/StockNotifications';
 import ConnectionStatus from './components/ConnectionStatus';
+import Reports from './components/Reports';
+import SystemAlerts from './components/SystemAlerts';
 
 function App() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -75,6 +88,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/alerts" element={<SystemAlerts />} />
               
               {/* Product/Items Routes */}
               <Route path="/products" element={<ProductList />} />
@@ -92,26 +106,42 @@ function App() {
               <Route path="/inventory/packages" element={<ComingSoon title="Packages" description="Manage product packages and bundles" />} />
               <Route path="/inventory/shipments" element={<ComingSoon title="Shipments" description="Track shipment status and delivery" />} />
               
+              {/* Customer Routes */}
+              <Route path="/customers" element={<CustomerList />} />
+              <Route path="/customers/new" element={<ComingSoon title="New Customer" description="Add a new customer" />} />
+              <Route path="/customers/:id" element={<ComingSoon title="Customer Details" description="View customer information" />} />
+              <Route path="/customers/:id/edit" element={<ComingSoon title="Edit Customer" description="Update customer information" />} />
+              
               {/* Sales Routes */}
+              <Route path="/sales/invoices" element={<SaleList />} />
+              <Route path="/sales/invoices/new" element={<SaleNew />} />
+              <Route path="/sales/invoices/:id" element={<SaleShow />} />
               <Route path="/designers" element={<DesignerList />} />
               <Route path="/designers/new" element={<DesignerNew />} />
               <Route path="/designers/:id" element={<DesignerShow />} />
               <Route path="/designers/:id/edit" element={<DesignerEdit />} />
               <Route path="/sales/orders" element={<ComingSoon title="Sales Orders" description="Manage customer sales orders" />} />
               <Route path="/sales/orders/new" element={<ComingSoon title="Create Sales Order" description="Create a new sales order" />} />
-              <Route path="/sales/invoices" element={<ComingSoon title="Invoices" description="Generate and manage invoices" />} />
               <Route path="/sales/payments" element={<ComingSoon title="Payments Received" description="Track customer payments" />} />
               <Route path="/sales/returns" element={<ComingSoon title="Sales Returns" description="Process customer returns and refunds" />} />
               
               {/* Purchases Routes */}
-              <Route path="/purchases/vendors" element={<ComingSoon title="Vendors" description="Manage vendor information and contacts" />} />
-              <Route path="/purchases/orders" element={<ComingSoon title="Purchase Orders" description="Create and track purchase orders" />} />
-              <Route path="/purchases/orders/new" element={<ComingSoon title="Create Purchase Order" description="Create a new purchase order" />} />
-              <Route path="/purchases/receives" element={<ComingSoon title="Purchase Receives" description="Record received inventory" />} />
+              <Route path="/vendors" element={<VendorList />} />
+              <Route path="/vendors/new" element={<VendorNew />} />
+              <Route path="/vendors/:id" element={<ComingSoon title="Vendor Details" description="View vendor information" />} />
+              <Route path="/vendors/:id/edit" element={<ComingSoon title="Edit Vendor" description="Update vendor information" />} />
+              <Route path="/purchase-orders" element={<PurchaseOrderList />} />
+              <Route path="/purchase-orders/new" element={<ComingSoon title="Create Purchase Order" description="Create a new purchase order" />} />
+              <Route path="/purchase-orders/:id" element={<PurchaseOrderShow />} />
               <Route path="/purchases/bills" element={<ComingSoon title="Bills" description="Manage vendor bills and payments" />} />
               
+              {/* Services Routes - Phase 2 */}
+              <Route path="/services/repair-orders" element={<RepairOrderList />} />
+              <Route path="/services/repair-orders/new" element={<RepairOrderNew />} />
+              <Route path="/services/repair-orders/:id/edit" element={<RepairOrderEdit />} />
+              
               {/* Reports & Documents */}
-              <Route path="/reports" element={<ComingSoon title="Reports" description="Advanced analytics and reporting coming soon" />} />
+              <Route path="/reports" element={<Reports />} />
               <Route path="/documents" element={<ComingSoon title="Documents" description="Store and manage business documents" />} />
               
               {/* Settings & Help */}

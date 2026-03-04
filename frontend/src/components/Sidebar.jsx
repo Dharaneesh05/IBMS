@@ -1,5 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { 
+  HiHome, 
+  HiCube, 
+  HiReceiptTax, 
+  HiShoppingCart, 
+  HiChartBar,
+  HiChevronDown,
+  HiChevronLeft,
+  HiMenu,
+  HiPlus,
+  HiCog
+} from 'react-icons/hi';
+import { RiBox3Line } from 'react-icons/ri';
+import { TbPackages } from 'react-icons/tb';
+import { BsBoxSeam } from 'react-icons/bs';
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const location = useLocation();
@@ -9,65 +24,52 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   const menuStructure = [
     {
       id: 'home',
-      name: 'Home',
-      icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+      name: 'Dashboard',
+      icon: HiHome,
       path: '/dashboard',
       single: true
     },
     {
       id: 'inventory',
       name: 'Inventory',
-      icon: 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4',
+      icon: BsBoxSeam,
       submenu: [
-        { name: 'Jewellery Items', path: '/products', hasQuickAdd: true, quickAddPath: '/products/new', quickAddTooltip: 'Add Item' },
-        { name: 'Stock Levels', path: '/inventory/stock-levels' },
-        { name: 'Low Stock Alerts', path: '/inventory/low-stock' }
+        { name: 'Products', path: '/products', hasQuickAdd: true, quickAddPath: '/products/new', quickAddTooltip: 'Add Product' },
+        { name: 'Designers', path: '/designers', hasQuickAdd: true, quickAddPath: '/designers/new', quickAddTooltip: 'Add Designer' },
+        { name: 'Stock Overview', path: '/inventory/stock-levels' }
       ]
     },
     {
       id: 'sales',
       name: 'Sales',
-      icon: 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z',
+      icon: HiReceiptTax,
       submenu: [
-        { name: 'Customers', path: '/sales/customers', hasQuickAdd: true, quickAddPath: '/sales/customers/new', quickAddTooltip: 'Add Customer' },
-        { name: 'Sales Orders', path: '/sales/orders', hasQuickAdd: true, quickAddPath: '/sales/orders/new', quickAddTooltip: 'Create Order' },
         { name: 'Invoices', path: '/sales/invoices', hasQuickAdd: true, quickAddPath: '/sales/invoices/new', quickAddTooltip: 'Create Invoice' },
-        { name: 'Sales Returns', path: '/sales/returns' }
+        { name: 'Customers', path: '/customers', hasQuickAdd: true, quickAddPath: '/customers/new', quickAddTooltip: 'Add Customer' }
       ]
     },
     {
       id: 'purchases',
       name: 'Purchases',
-      icon: 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
+      icon: HiShoppingCart,
       submenu: [
-        { name: 'Designers / Vendors', path: '/designers', hasQuickAdd: true, quickAddPath: '/designers/new', quickAddTooltip: 'Add Designer' },
-        { name: 'Purchase Orders', path: '/purchases/orders', hasQuickAdd: true, quickAddPath: '/purchases/orders/new', quickAddTooltip: 'Create PO' },
-        { name: 'Purchase Receives', path: '/purchases/receives' },
-        { name: 'Bills', path: '/purchases/bills', hasQuickAdd: true, quickAddPath: '/purchases/bills/new', quickAddTooltip: 'Create Bill' }
+        { name: 'Vendors', path: '/vendors', hasQuickAdd: true, quickAddPath: '/vendors/new', quickAddTooltip: 'Add Vendor' },
+        { name: 'Purchase Orders', path: '/purchase-orders', hasQuickAdd: true, quickAddPath: '/purchase-orders/new', quickAddTooltip: 'Create PO' }
       ]
     },
     {
-      id: 'insights',
-      name: 'Insights',
-      icon: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
+      id: 'services',
+      name: 'Services',
+      icon: HiCog,
       submenu: [
-        { name: 'Stock Risk Prediction (AI)', path: '/insights/stock-risk' }
+        { name: 'Repair Orders', path: '/services/repair-orders', hasQuickAdd: true, quickAddPath: '/services/repair-orders/new', quickAddTooltip: 'New Repair Order' }
       ]
     },
     {
-      id: 'reports',
+      id: 'reports', 
       name: 'Reports',
-      icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z',
-      submenu: [
-        { name: 'Sales Report', path: '/reports/sales' },
-        { name: 'Inventory Report', path: '/reports/inventory' }
-      ]
-    },
-    {
-      id: 'documents',
-      name: 'Documents',
-      icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-      path: '/documents',
+      icon: HiChartBar,
+      path: '/reports',
       single: true
     }
   ];
@@ -143,9 +145,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                 className="p-1.5 hover:bg-[#0d9488]/20 transition-colors rounded-md"
                 title="Collapse Sidebar"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-                </svg>
+                <HiChevronLeft className="w-5 h-5" />
               </button>
             </>
           ) : (
@@ -154,9 +154,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               className="flex items-center justify-center w-full p-1.5 hover:bg-[#0d9488]/20 transition-colors rounded-md"
               title="Expand Sidebar"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <HiMenu className="w-6 h-6" />
             </button>
           )}
         </div>
@@ -179,9 +177,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                       }`}
                       title={isCollapsed ? item.name : ''}
                     >
-                      <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
-                      </svg>
+                      <item.icon className="w-5 h-5 flex-shrink-0" />
                       {isCollapsed ? (
                         <span className="text-[10px] mt-1 font-medium text-center w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.name}</span>
                       ) : (
@@ -203,9 +199,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                       title={isCollapsed ? item.name : ''}
                     >
                       <div className={`flex ${isCollapsed ? 'flex-col items-center' : 'flex-row items-center space-x-3'}`}>
-                        <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={item.icon} />
-                        </svg>
+                        <item.icon className="w-5 h-5 flex-shrink-0" />
                         {isCollapsed ? (
                           <span className="text-[10px] mt-1 font-medium text-center w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.name}</span>
                         ) : (
@@ -213,16 +207,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                         )}
                       </div>
                       {!isCollapsed && (
-                        <svg
+                        <HiChevronDown
                           className={`w-4 h-4 transition-transform duration-200 ${
                             expandedSections.includes(item.id) ? 'rotate-180' : ''
                           }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
+                        />
                       )}
                     </button>
 
@@ -256,9 +245,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                                       className="opacity-0 group-hover/item:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity duration-150"
                                       title={subItem.quickAddTooltip}
                                     >
-                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
-                                      </svg>
+                                      <HiPlus className="w-4 h-4" />
                                     </button>
                                   )}
                                 </Link>
@@ -295,9 +282,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                                     className="opacity-0 group-hover/subitem:opacity-100 flex items-center justify-center text-gray-400 hover:text-white transition-opacity duration-150"
                                     title={subItem.quickAddTooltip}
                                   >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 4v16m8-8H4" />
-                                    </svg>
+                                    <HiPlus className="w-4 h-4" />
                                   </button>
                                 )}
                               </Link>

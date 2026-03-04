@@ -8,10 +8,14 @@ const {
     getProductTypes,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    generateSKUSuggestion,
+    getProductBySKU
 } = require('../controllers/productController');
 
 // Special routes first
+router.post('/generate-sku', generateSKUSuggestion);
+router.get('/sku/:sku', getProductBySKU);
 router.get('/types/all', getProductTypes);
 router.get('/type/:type', getProductsByType);
 router.get('/designer/:designerId', getProductsByDesigner);

@@ -21,6 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/designers', require('./routes/designerRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/customers', require('./routes/customerRoutes'));
+app.use('/api/vendors', require('./routes/vendorRoutes'));
+app.use('/api/sales', require('./routes/saleRoutes'));
+app.use('/api/purchase-orders', require('./routes/purchaseOrderRoutes'));
+app.use('/api/repair-orders', require('./routes/repairOrderRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/metal-rates', require('./routes/metalRatesRoutes'));
 

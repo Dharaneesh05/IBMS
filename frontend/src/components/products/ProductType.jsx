@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../../api/api';
+import { 
+  HiChevronRight, 
+  HiArrowLeft, 
+  HiCube, 
+  HiChartBar, 
+  HiCurrencyDollar, 
+  HiShieldExclamation,
+  HiViewGrid,
+  HiViewList,
+  HiPencil,
+  HiTrash
+} from 'react-icons/hi';
 
 const ProductType = () => {
   const { type } = useParams();
@@ -79,9 +91,7 @@ const ProductType = () => {
             <div>
               <nav className="flex items-center text-sm text-gold-100 mb-3">
                 <Link to="/products" className="hover:text-white transition-colors">Products</Link>
-                <svg className="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                </svg>
+                <HiChevronRight className="w-4 h-4 mx-2" />
                 <span className="text-white font-semibold">{type}</span>
               </nav>
               <h1 className="text-4xl font-bold mb-2">{type} Collection</h1>
@@ -91,9 +101,7 @@ const ProductType = () => {
               to="/products"
               className="bg-white text-gold-600 px-6 py-3 rounded-lg font-semibold hover:bg-gold-50 transition-colors flex items-center"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
+              <HiArrowLeft className="w-5 h-5 mr-2" />
               All Products
             </Link>
           </div>
@@ -106,30 +114,22 @@ const ProductType = () => {
         {products.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="card text-center animate-fade-in">
-              <svg className="w-8 h-8 text-blue-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
+              <HiCube className="w-8 h-8 text-blue-600 mx-auto mb-2" />
               <p className="text-sm text-gray-600 mb-1">Total Products</p>
               <p className="text-3xl font-bold text-gray-900">{products.length}</p>
             </div>
             <div className="card text-center animate-fade-in" style={{animationDelay: '50ms'}}>
-              <svg className="w-8 h-8 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-              </svg>
+              <HiChartBar className="w-8 h-8 text-green-600 mx-auto mb-2" />
               <p className="text-sm text-gray-600 mb-1">Total Quantity</p>
               <p className="text-3xl font-bold text-gray-900">{totalQuantity}</p>
             </div>
             <div className="card text-center animate-fade-in" style={{animationDelay: '100ms'}}>
-              <svg className="w-8 h-8 text-gold-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <HiCurrencyDollar className="w-8 h-8 text-gold-600 mx-auto mb-2" />
               <p className="text-sm text-gray-600 mb-1">Total Value</p>
               <p className="text-3xl font-bold text-gold-600">₹{totalValue.toLocaleString()}</p>
             </div>
             <div className="card text-center animate-fade-in" style={{animationDelay: '150ms'}}>
-              <svg className="w-8 h-8 text-yellow-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+              <HiShieldExclamation className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
               <p className="text-sm text-gray-600 mb-1">Low Stock</p>
               <p className="text-3xl font-bold text-yellow-600">{lowStockCount}</p>
             </div>
@@ -146,18 +146,14 @@ const ProductType = () => {
                 className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-gold-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
                 title="Grid view"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
+                <HiViewGrid className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setViewMode('table')}
                 className={`p-2 rounded-lg transition-colors ${viewMode === 'table' ? 'bg-gold-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
                 title="Table view"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                </svg>
+                <HiViewList className="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -166,9 +162,7 @@ const ProductType = () => {
         {/* Empty State */}
         {products.length === 0 ? (
           <div className="card p-12 text-center">
-            <svg className="w-24 h-24 text-gray-300 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
+            <HiCube className="w-24 h-24 text-gray-300 mx-auto mb-6" />
             <h3 className="text-2xl font-bold text-gray-700 mb-2">No Products in {type}</h3>
             <p className="text-gray-500 mb-6">There are currently no products in this category</p>
             <Link to="/products/new" className="btn-primary inline-block">
@@ -233,9 +227,7 @@ const ProductType = () => {
                       onClick={() => handleDelete(product.id)}
                       className="bg-red-50 text-red-700 py-2 px-4 rounded-lg font-semibold hover:bg-red-100 transition-colors text-sm"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
+                      <HiTrash className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -295,17 +287,13 @@ const ProductType = () => {
                             to={`/products/${product.id}/edit`}
                             className="p-2 bg-gold-50 text-gold-700 rounded-lg hover:bg-gold-100 transition-colors"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
+                            <HiPencil className="w-4 h-4" />
                           </Link>
                           <button 
                             onClick={() => handleDelete(product.id)}
                             className="p-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors"
                           >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
+                            <HiTrash className="w-4 h-4" />
                           </button>
                         </div>
                       </td>

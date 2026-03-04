@@ -3,6 +3,56 @@ const { sequelize } = require('../config/db');
 const { Op } = require('sequelize');
 const { checkStockLevel } = require('../utils/stockMonitor');
 
+// Auto SKU Generator based on product type and metal purity
+const generateSKU = async (type, metalPurity = '') => {
+    const typeMap = {
+        'Ring': 'RNG',
+        'Necklace': 'NKL',
+        'Bracelet': 'BRC',
+        'Earrings': 'ERG',
+        'Chain': 'CHN',
+        'Pendant': 'PND',
+        'Bangle': 'BNG',
+        'Anklet': 'ANK',
+        'Nose Pin': 'NSP',
+        'Mangalsutra': 'MNG',
+        'Other': 'OTH'
+    };
+    
+    const purityMap = {
+        '24K': '24K',
+        '22K': '22K',
+        '18K': '18K',
+        '14K': '14K',
+        '916': '916',
+        '750': '750',
+        'Silver': 'SLV'
+    };
+    
+    const prefix = typeMap[type] || 'PRD';
+    const purityCode = purityMap[metalPurity] || '';
+    
+    // Find the last SKU with this prefix
+    const lastProduct = await Product.findOne({
+        where: {
+            sku: {
+                [Op.like]: `${prefix}-${purityCode}%`
+            }
+        },
+        order: [['sku', 'DESC']]
+    });
+    
+    let sequence = 1;
+    if (lastProduct && lastProduct.sku) {
+        const lastSequence = parseInt(lastProduct.sku.split('-').pop());
+        if (!isNaN(lastSequence)) {
+            sequence = lastSequence + 1;
+        }
+    }
+    
+    return `${prefix}-${purityCode ? purityCode + '-' : ''}${String(sequence).padStart(4, '0')}`;
+};
+
 // Helper function to log user activity
 const logActivity = async (action, entityType, entityId, description, req, oldValue = null, newValue = null) => {
     try {
@@ -151,7 +201,11 @@ exports.getProductTypes = async (req, res) => {
 // @access  Public
 exports.createProduct = async (req, res) => {
     try {
-        const { name, type, description, quantity, cost, price, designer, frontImage, rearImage, otherImages } = req.body;
+        const { 
+            name, sku, type, metalType, metalPurity, grossWeight, netWeight, stoneWeight,
+            gemstoneType, gemstoneCount, gemstoneCarat, size, description, 
+            quantity, cost, price, designer, frontImage, rearImage, otherImages 
+        } = req.body;
         
         // Validate required fields
         if (!name || !type || !description || quantity === undefined || !cost || !price || !designer) {
@@ -164,9 +218,25 @@ exports.createProduct = async (req, res) => {
             return res.status(404).json({ message: 'Designer not found' });
         }
         
+        // Auto-generate SKU if not provided
+        let finalSKU = sku;
+        if (!finalSKU) {
+            finalSKU = await generateSKU(type, metalPurity);
+        }
+        
         const product = await Product.create({
             name,
+            sku: finalSKU,
             type,
+            metalType,
+            metalPurity,
+            grossWeight: grossWeight || 0,
+            netWeight: netWeight || 0,
+            stoneWeight: stoneWeight || 0,
+            gemstoneType,
+            gemstoneCount: gemstoneCount || 0,
+            gemstoneCarat: gemstoneCarat || 0,
+            size,
             description,
             quantity,
             cost,
@@ -325,5 +395,65 @@ exports.deleteProduct = async (req, res) => {
         res.json({ message: 'Product deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+// @route   POST /api/products/generate-sku
+// @desc    Generate SKU suggestion
+// @access  Public
+exports.generateSKUSuggestion = async (req, res) => {
+    try {
+        const { type, metalPurity } = req.body;
+        
+        if (!type) {
+            return res.status(400).json({ message: 'Product type is required' });
+        }
+        
+        const suggestedSKU = await generateSKU(type, metalPurity);
+        
+        res.json({ sku: suggestedSKU });
+    } catch (error) {
+        console.error('Error generating SKU:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+// @route   GET /api/products/sku/:sku
+// @desc    Get product by SKU (for barcode scanning)
+// @access  Public
+exports.getProductBySKU = async (req, res) => {
+    try {
+        const { sku } = req.params;
+        
+        if (!sku) {
+            return res.status(400).json({ message: 'SKU is required' });
+        }
+        
+        const product = await Product.findOne({
+            where: { sku: sku.trim().toUpperCase() },
+            include: [{
+                model: Designer,
+                as: 'designer',
+                attributes: ['id', 'name', 'email', 'status']
+            }]
+        });
+        
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found with this SKU' });
+        }
+        
+        // Check stock availability
+        if (product.quantity <= 0) {
+            return res.status(200).json({ 
+                ...product.toJSON(),
+                warning: 'Out of stock'
+            });
+        }
+        
+        await logActivity('SCAN', 'PRODUCT', product.id, `Scanned product: ${product.name} (SKU: ${sku})`, req);
+        res.json(product);
+    } catch (error) {
+        console.error('Error fetching product by SKU:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

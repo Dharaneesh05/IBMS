@@ -2,6 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/api';
 import { useFilter } from '../../contexts/FilterContext';
+import { 
+  HiSearch, 
+  HiChevronDown, 
+  HiX, 
+  HiCheck, 
+  HiUpload, 
+  HiDownload, 
+  HiPlus, 
+  HiViewList, 
+  HiViewGrid,
+  HiCube
+} from 'react-icons/hi';
 
 const ProductList = () => {
   const { getFilteredProducts } = useFilter();
@@ -305,7 +317,7 @@ const ProductList = () => {
     <div className="min-h-screen bg-gray-50 relative">
       {/* Background Pattern */}
       <div 
-        className="fixed inset-0 opacity-[0.04] pointer-events-none bg-repeat z-0"
+        className="fixed inset-0 opacity-[0.15] dark:opacity-[0.05] pointer-events-none bg-repeat z-0"
         style={{
           backgroundImage: 'url(/99172127-vector-jewelry-pattern-jewelry-seamless-background.jpg)',
           backgroundSize: '300px 300px'
@@ -331,12 +343,8 @@ const ProductList = () => {
                     onClick={() => setSearchScopeOpen(!searchScopeOpen)}
                     className="flex items-center gap-1 pl-3 pr-2 h-full text-teal-600 hover:text-teal-700 border-r border-gray-300 transition-colors"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <HiSearch className="w-4 h-4" />
+                    <HiChevronDown className="w-3 h-3" />
                   </button>
                 </div>
                 
@@ -353,9 +361,7 @@ const ProductList = () => {
                     onClick={() => setSearchQuery('')}
                     className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 transition-colors"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <HiX className="w-4 h-4" />
                   </button>
                 )}
 
@@ -375,9 +381,7 @@ const ProductList = () => {
                     >
                       <span>All Items ({products.length})</span>
                       {searchScope === 'all' && (
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
+                        <HiCheck className="w-4 h-4" />
                       )}
                     </button>
                     {types.map((type, index) => (
@@ -395,9 +399,7 @@ const ProductList = () => {
                       >
                         <span>{type} ({products.filter(p => p.type === type).length})</span>
                         {searchScope === type && (
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
+                          <HiCheck className="w-4 h-4" />
                         )}
                       </button>
                     ))}
@@ -418,13 +420,9 @@ const ProductList = () => {
                     }}
                     className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:border-teal-300 transition-all text-sm font-medium shadow-sm hover:shadow"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
+                    <HiUpload className="w-4 h-4" />
                     Import
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <HiChevronDown className="w-3 h-3" />
                   </button>
                   {importMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-10 animate-fadeIn">
@@ -466,13 +464,9 @@ const ProductList = () => {
                     }}
                     className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:border-teal-300 transition-all text-sm font-medium shadow-sm hover:shadow"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
+                    <HiDownload className="w-4 h-4" />
                     Export
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                    <HiChevronDown className="w-3 h-3" />
                   </button>
                   {exportMenuOpen && (
                     <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-10 animate-fadeIn">
@@ -497,9 +491,7 @@ const ProductList = () => {
                   to="/products/new" 
                   className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 transition-all text-sm font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                  </svg>
+                  <HiPlus className="w-4 h-4" />
                   Add Product
                 </Link>
               </div>
@@ -522,9 +514,7 @@ const ProductList = () => {
                       }`}
                       title="Table View"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                      </svg>
+                      <HiViewList className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setViewMode('grid')}
@@ -535,9 +525,7 @@ const ProductList = () => {
                       }`}
                       title="Grid View"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                      </svg>
+                      <HiViewGrid className="w-4 h-4" />
                     </button>
                   </div>
               </div>
@@ -658,9 +646,7 @@ const ProductList = () => {
             </p>
             {selectedType === 'all' && !searchQuery && (
               <Link to="/products/new" className="inline-flex items-center px-6 py-3 bg-[#1a1d2e] text-white font-medium rounded-lg hover:bg-[#2a2e42] transition-colors">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                </svg>
+                <HiPlus className="w-5 h-5 mr-2" />
                 Add Your First Item
               </Link>
             )}
@@ -778,10 +764,7 @@ const ProductList = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <svg className="w-16 h-16 text-teal-200" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                        <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/>
-                      </svg>
+                      <HiCube className="w-16 h-16 text-teal-200" />
                     )}
                   </div>
                 </Link>

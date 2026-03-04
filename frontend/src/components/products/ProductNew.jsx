@@ -39,7 +39,11 @@ const ProductNew = () => {
     sku: '',
     occasion: '',
     gender: '',
-    size: ''
+    size: '',
+    // Phase 2: Gemstone fields
+    gemstoneType: '',
+    gemstoneCount: '',
+    gemstoneCarat: ''
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -171,6 +175,9 @@ const ProductNew = () => {
           formData.otherImages.map(img => convertImageToBase64(img))
         );
         productData.otherImages = JSON.stringify(otherImagesBase64);
+      } else {
+        // Remove otherImages if empty to avoid sending array
+        delete productData.otherImages;
       }
 
       await api.post('/products', productData);
@@ -190,7 +197,7 @@ const ProductNew = () => {
     <div className="min-h-screen bg-gray-50 relative">
       {/* Background Pattern */}
       <div 
-        className="fixed inset-0 opacity-[0.04] pointer-events-none bg-repeat z-0"
+        className="fixed inset-0 opacity-[0.15] dark:opacity-[0.05] pointer-events-none bg-repeat z-0"
         style={{
           backgroundImage: 'url(/99172127-vector-jewelry-pattern-jewelry-seamless-background.jpg)',
           backgroundSize: '300px 300px'
@@ -497,7 +504,7 @@ const ProductNew = () => {
                         readOnly
                         placeholder="Auto-calculated"
                       />
-                      <p className="text-xs text-teal-600 mt-1">✓ Auto-calculated</p>
+                      <p className="text-xs text-teal-600 mt-1">Auto-calculated</p>
                     </div>
                   </div>
 
@@ -510,23 +517,111 @@ const ProductNew = () => {
                   )}
                 </div>
 
+                {/* Gemstone Information (Phase 2) */}
+                <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                  <h2 className="text-sm font-bold text-gray-900 mb-3">Gemstone Information</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Gemstone Type
+                      </label>
+                      <select
+                        name="gemstoneType"
+                        value={formData.gemstoneType}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                      >
+                        <option value="">None / Not Applicable</option>
+                        <option value="Diamond">Diamond</option>
+                        <option value="Ruby">Ruby</option>
+                        <option value="Emerald">Emerald</option>
+                        <option value="Sapphire">Sapphire</option>
+                        <option value="Pearl">Pearl</option>
+                        <option value="Topaz">Topaz</option>
+                        <option value="Amethyst">Amethyst</option>
+                        <option value="Aquamarine">Aquamarine</option>
+                        <option value="Opal">Opal</option>
+                        <option value="Turquoise">Turquoise</option>
+                        <option value="Mixed">Mixed Stones</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Number of Stones
+                      </label>
+                      <input
+                        type="number"
+                        name="gemstoneCount"
+                        value={formData.gemstoneCount}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        min="0"
+                        placeholder="0"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Total Carats
+                      </label>
+                      <input
+                        type="number"
+                        name="gemstoneCarat"
+                        value={formData.gemstoneCarat}
+                        onChange={handleChange}
+                        className="input-field text-sm"
+                        step="0.001"
+                        min="0"
+                        placeholder="0.000"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 {/* Additional Product Details */}
                 <div className="bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
                   <h2 className="text-sm font-bold text-gray-900 mb-3">Additional Details</h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
+                    <div className="md:col-span-2">
                       <label className="block text-sm font-semibold text-gray-700 mb-1">
                         SKU / Item Code
                       </label>
-                      <input
-                        type="text"
-                        name="sku"
-                        value={formData.sku}
-                        onChange={handleChange}
-                        className="input-field text-sm"
-                        placeholder="e.g., GR-001-22K"
-                      />
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          name="sku"
+                          value={formData.sku}
+                          onChange={handleChange}
+                          className="input-field text-sm flex-1"
+                          placeholder="e.g., RNG-22K-0001 (leave blank for auto-generate)"
+                        />
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!formData.type || !formData.purity) {
+                              alert('Please select Product Type and Purity first');
+                              return;
+                            }
+                            try {
+                              const metalPurity = formData.purity.split(' ')[0]; // Extract purity code
+                              const response = await api.post('/products/generate-sku', {
+                                type: formData.type,
+                                metalPurity
+                              });
+                              setFormData(prev => ({ ...prev, sku: response.data.sku }));
+                            } catch (err) {
+                              alert('Failed to generate SKU');
+                            }
+                          }}
+                          className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium whitespace-nowrap"
+                        >
+                          Generate SKU
+                        </button>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Auto-generates format: TYPE-PURITY-SEQUENCE (e.g., RNG-22K-0001)</p>
                     </div>
 
                     <div>
@@ -809,7 +904,7 @@ const ProductNew = () => {
                           className="input-field text-sm bg-gray-50"
                           readOnly
                         />
-                        <p className="text-xs text-teal-600 mt-1">✓ Auto-calculated</p>
+                        <p className="text-xs text-teal-600 mt-1">Auto-calculated</p>
                       </div>
                     </div>
 
@@ -890,14 +985,14 @@ const ProductNew = () => {
                           className="input-field text-sm bg-yellow-50 font-bold text-green-700"
                           readOnly
                         />
-                        <p className="text-xs text-teal-600 mt-1">✓ Auto-calculated with GST</p>
+                        <p className="text-xs text-teal-600 mt-1">Auto-calculated with GST</p>
                       </div>
                     </div>
 
                     {/* Price Summary */}
                     {formData.metalRate && formData.netMetalWeight && (
                       <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-100">
-                        <h4 className="text-sm font-semibold text-green-800 mb-3">💰 Price Calculation Summary</h4>
+                        <h4 className="text-sm font-semibold text-green-800 mb-3">Price Calculation Summary</h4>
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center justify-between">
                             <span className="text-gray-700">Metal Value ({formData.netMetalWeight}g × ₹{formData.metalRate})</span>

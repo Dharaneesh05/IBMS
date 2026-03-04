@@ -142,7 +142,7 @@ function LowStockAlerts() {
       <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-900 relative">
         {/* Background Pattern */}
         <div
-          className="absolute inset-0 opacity-[0.08] dark:opacity-[0.02] pointer-events-none bg-repeat"
+          className="absolute inset-0 opacity-[0.15] dark:opacity-[0.05] pointer-events-none bg-repeat"
           style={{
             backgroundImage: 'url(/99172127-vector-jewelry-pattern-jewelry-seamless-background.jpg)',
             backgroundSize: '400px 400px'
@@ -172,7 +172,9 @@ function LowStockAlerts() {
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="w-16 h-16 mx-auto mb-4 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-              <span className="text-3xl text-green-600 dark:text-green-400">✓</span>
+              <svg className="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">All Stock Levels Are Good</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -194,7 +196,7 @@ function LowStockAlerts() {
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-900 relative">
       {/* Background Pattern */}
       <div
-        className="absolute inset-0 opacity-[0.08] dark:opacity-[0.02] pointer-events-none bg-repeat"
+        className="absolute inset-0 opacity-[0.15] dark:opacity-[0.05] pointer-events-none bg-repeat"
         style={{
           backgroundImage: 'url(/99172127-vector-jewelry-pattern-jewelry-seamless-background.jpg)',
           backgroundSize: '400px 400px'

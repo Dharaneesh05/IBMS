@@ -194,7 +194,7 @@ function StockLevels() {
     <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-900 relative">
       {/* Background Pattern */}
       <div
-        className="absolute inset-0 opacity-[0.08] dark:opacity-[0.02] pointer-events-none bg-repeat"
+        className="absolute inset-0 opacity-[0.15] dark:opacity-[0.05] pointer-events-none bg-repeat"
         style={{
           backgroundImage: 'url(/99172127-vector-jewelry-pattern-jewelry-seamless-background.jpg)',
           backgroundSize: '400px 400px'

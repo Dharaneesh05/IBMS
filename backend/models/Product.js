@@ -14,12 +14,58 @@ const Product = sequelize.define('Product', {
             notEmpty: { msg: 'Please add a product name' }
         }
     },
+    sku: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        unique: true
+    },
     type: {
         type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
             notEmpty: { msg: 'Please add a product type' }
         }
+    },
+    metalType: {
+        type: DataTypes.STRING(50),
+        allowNull: true
+    },
+    metalPurity: {
+        type: DataTypes.STRING(50),
+        allowNull: true
+    },
+    grossWeight: {
+        type: DataTypes.DECIMAL(10, 3),
+        allowNull: true,
+        defaultValue: 0
+    },
+    netWeight: {
+        type: DataTypes.DECIMAL(10, 3),
+        allowNull: true,
+        defaultValue: 0
+    },
+    stoneWeight: {
+        type: DataTypes.DECIMAL(10, 3),
+        allowNull: true,
+        defaultValue: 0
+    },
+    gemstoneType: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    gemstoneCount: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
+    },
+    gemstoneCarat: {
+        type: DataTypes.DECIMAL(10, 3),
+        allowNull: true,
+        defaultValue: 0
+    },
+    size: {
+        type: DataTypes.STRING(50),
+        allowNull: true
     },
     description: {
         type: DataTypes.TEXT,
@@ -78,7 +124,8 @@ const Product = sequelize.define('Product', {
     indexes: [
         { fields: ['type'] },
         { fields: ['designerId'] },
-        { fields: ['quantity'] }
+        { fields: ['quantity'] },
+        { fields: ['sku'], unique: true }
     ]
 });
 
@@ -94,6 +141,16 @@ Product.prototype.outOfStock = function() {
 
 Product.prototype.calculateMarkup = function() {
     return parseFloat(this.price) - parseFloat(this.cost);
+};
+
+Product.prototype.calculateProfit = function() {
+    return parseFloat(this.price) - parseFloat(this.cost);
+};
+
+Product.prototype.calculateMarginPercentage = function() {
+    const profit = this.calculateProfit();
+    const price = parseFloat(this.price);
+    return price > 0 ? ((profit / price) * 100).toFixed(2) : 0;
 };
 
 module.exports = Product;

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { HiChevronDown } from 'react-icons/hi';
 
 const Dropdown = ({ value, onChange, options, size = 'sm' }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,14 +35,7 @@ const Dropdown = ({ value, onChange, options, size = 'sm' }) => {
         className={`${sizeClasses[size]} border border-gray-300 rounded text-gray-600 hover:bg-gray-50 transition-colors flex items-center space-x-2 bg-white`}
       >
         <span>{value}</span>
-        <svg 
-          className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-        </svg>
+        <HiChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (

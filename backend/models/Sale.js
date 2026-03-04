@@ -13,6 +13,17 @@ const Sale = sequelize.define('Sale', {
         unique: true,
         comment: 'Unique invoice number'
     },
+    customerId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'customers',
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+        comment: 'Reference to customer (optional for walk-in)'
+    },
     customerName: {
         type: DataTypes.STRING(255),
         allowNull: false

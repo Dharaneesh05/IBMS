@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { HiHome, HiCube, HiUserGroup, HiSearch, HiMenu, HiX } from 'react-icons/hi';
 
 const Header = () => {
   const [searchVisible, setSearchVisible] = useState(false);
@@ -14,7 +15,7 @@ const Header = () => {
       <div className="bg-gradient-gold py-2">
         <div className="container mx-auto px-4">
           <p className="text-center text-white text-sm font-medium">
-            ✨ Premium Handcrafted Jewellery | Free Shipping on Orders Above ₹50,000
+            Premium Handcrafted Jewellery | Free Shipping on Orders Above ₹50,000
           </p>
         </div>
       </div>
@@ -51,9 +52,7 @@ const Header = () => {
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
+                <HiHome className="w-5 h-5" />
                 <span>Dashboard</span>
               </Link>
 
@@ -65,9 +64,7 @@ const Header = () => {
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
+                <HiCube className="w-5 h-5" />
                 <span>Inventory</span>
               </Link>
 
@@ -79,9 +76,7 @@ const Header = () => {
                     : 'text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
+                <HiUserGroup className="w-5 h-5" />
                 <span>Designers</span>
               </Link>
             </div>
@@ -93,9 +88,7 @@ const Header = () => {
                 onClick={() => setSearchVisible(!searchVisible)}
                 className="p-2 text-gray-600 hover:text-gold-600 hover:bg-gold-50 rounded-lg transition-all duration-200"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+                <HiSearch className="w-6 h-6" />
               </button>
 
               {/* Mobile Menu Button */}
@@ -103,13 +96,11 @@ const Header = () => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="md:hidden p-2 text-gray-600 hover:text-gold-600 hover:bg-gold-50 rounded-lg transition-all duration-200"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {mobileMenuOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                  )}
-                </svg>
+                {mobileMenuOpen ? (
+                  <HiX className="w-6 h-6" />
+                ) : (
+                  <HiMenu className="w-6 h-6" />
+                )}
               </button>
             </div>
           </div>
@@ -128,9 +119,7 @@ const Header = () => {
                     : 'text-gray-700'
                 }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
+                <HiHome className="w-5 h-5" />
                 <span>Dashboard</span>
               </Link>
 
@@ -143,9 +132,7 @@ const Header = () => {
                     : 'text-gray-700'
                 }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
+                <HiCube className="w-5 h-5" />
                 <span>Inventory</span>
               </Link>
 
@@ -158,9 +145,7 @@ const Header = () => {
                     : 'text-gray-700'
                 }`}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
+                <HiUserGroup className="w-5 h-5" />
                 <span>Designers</span>
               </Link>
             </div>
@@ -180,9 +165,7 @@ const Header = () => {
                   className="w-full pl-12 pr-4 py-3 border-2 border-gold-300 rounded-lg focus:border-gold-500 focus:ring-2 focus:ring-gold-200 transition-all duration-200"
                   autoFocus
                 />
-                <svg className="w-6 h-6 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
+                <HiSearch className="w-6 h-6 absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
               </div>
             </div>
           </div>

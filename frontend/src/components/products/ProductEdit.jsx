@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../api/api';
+import { 
+  HiArrowLeft, 
+  HiExclamationCircle, 
+  HiShieldExclamation, 
+  HiCheck, 
+  HiCloudUpload,
+  HiRefresh
+} from 'react-icons/hi';
 
 const ProductEdit = () => {
   const { id } = useParams();
@@ -23,7 +31,18 @@ const ProductEdit = () => {
     dimensionHeight: '',
     dimensionUnit: 'cm',
     weight: '',
-    weightUnit: 'g'
+    weightUnit: 'g',
+    // Phase 2: Jewellery fields
+    sku: '',
+    metalType: '',
+    metalPurity: '',
+    grossWeight: '',
+    netWeight: '',
+    stoneWeight: '',
+    gemstoneType: '',
+    gemstoneCount: '',
+    gemstoneCarat: '',
+    size: ''
   });
   const [originalData, setOriginalData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -57,7 +76,18 @@ const ProductEdit = () => {
         dimensionHeight: product.dimensionHeight || '',
         dimensionUnit: product.dimensionUnit || 'cm',
         weight: product.weight || '',
-        weightUnit: product.weightUnit || 'g'
+        weightUnit: product.weightUnit || 'g',
+        // Phase 2: Jewellery fields
+        sku: product.sku || '',
+        metalType: product.metalType || '',
+        metalPurity: product.metalPurity || '',
+        grossWeight: product.grossWeight || '',
+        netWeight: product.netWeight || '',
+        stoneWeight: product.stoneWeight || '',
+        gemstoneType: product.gemstoneType || '',
+        gemstoneCount: product.gemstoneCount || '',
+        gemstoneCarat: product.gemstoneCarat || '',
+        size: product.size || ''
       };
       setFormData(data);
       setOriginalData(data);
@@ -187,9 +217,18 @@ const ProductEdit = () => {
   const hasChanges = JSON.stringify(formData) !== JSON.stringify(originalData);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
+      {/* Background Pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.15] dark:opacity-[0.05] pointer-events-none bg-repeat"
+        style={{
+          backgroundImage: 'url(/99172127-vector-jewelry-pattern-jewelry-seamless-background.jpg)',
+          backgroundSize: '400px 400px'
+        }}
+      />
+      <div className="relative z-10">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -200,9 +239,7 @@ const ProductEdit = () => {
               to={`/products/${id}`}
               className="btn-outline flex items-center"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
+              <HiArrowLeft className="w-5 h-5 mr-2" />
               Back to Product
             </Link>
           </div>
@@ -213,18 +250,14 @@ const ProductEdit = () => {
       <div className="container mx-auto px-4 py-8">
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start">
-            <svg className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <HiExclamationCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
             <p className="text-red-700">{error}</p>
           </div>
         )}
 
         {hasChanges && (
           <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-start">
-            <svg className="w-5 h-5 text-yellow-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
+            <HiShieldExclamation className="w-5 h-5 text-yellow-600 mr-3 flex-shrink-0 mt-0.5" />
             <p className="text-yellow-700">You have unsaved changes</p>
           </div>
         )}
@@ -301,6 +334,197 @@ const ProductEdit = () => {
                         </option>
                       ))}
                     </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phase 2: Metal & Gemstone Information */}
+              <div className="card">
+                <h2 className="text-xl font-bold text-gray-900 mb-6">Metal & Gemstone Information</h2>
+                
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Metal Type
+                      </label>
+                      <select
+                        name="metalType"
+                        value={formData.metalType}
+                        onChange={handleChange}
+                        className="input-field"
+                      >
+                        <option value="">Select metal type</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Platinum">Platinum</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Metal Purity
+                      </label>
+                      <input
+                        type="text"
+                        name="metalPurity"
+                        value={formData.metalPurity}
+                        onChange={handleChange}
+                        className="input-field"
+                        placeholder="e.g., 22K, 916, 925"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Gross Weight (g)
+                      </label>
+                      <input
+                        type="number"
+                        name="grossWeight"
+                        value={formData.grossWeight}
+                        onChange={handleChange}
+                        className="input-field"
+                        step="0.001"
+                        placeholder="0.000"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Net Weight (g)
+                      </label>
+                      <input
+                        type="number"
+                        name="netWeight"
+                        value={formData.netWeight}
+                        onChange={handleChange}
+                        className="input-field"
+                        step="0.001"
+                        placeholder="0.000"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Stone Weight (g)
+                      </label>
+                      <input
+                        type="number"
+                        name="stoneWeight"
+                        value={formData.stoneWeight}
+                        onChange={handleChange}
+                        className="input-field"
+                        step="0.001"
+                        placeholder="0.000"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Gemstone Type
+                      </label>
+                      <select
+                        name="gemstoneType"
+                        value={formData.gemstoneType}
+                        onChange={handleChange}
+                        className="input-field"
+                      >
+                        <option value="">None</option>
+                        <option value="Diamond">Diamond</option>
+                        <option value="Ruby">Ruby</option>
+                        <option value="Emerald">Emerald</option>
+                        <option value="Sapphire">Sapphire</option>
+                        <option value="Pearl">Pearl</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Number of Stones
+                      </label>
+                      <input
+                        type="number"
+                        name="gemstoneCount"
+                        value={formData.gemstoneCount}
+                        onChange={handleChange}
+                        className="input-field"
+                        min="0"
+                        placeholder="0"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Total Carats
+                      </label>
+                      <input
+                        type="number"
+                        name="gemstoneCarat"
+                        value={formData.gemstoneCarat}
+                        onChange={handleChange}
+                        className="input-field"
+                        step="0.001"
+                        placeholder="0.000"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        SKU / Item Code
+                      </label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="text"
+                          name="sku"
+                          value={formData.sku}
+                          onChange={handleChange}
+                          className="input-field flex-1"
+                          placeholder="e.g., RNG-22K-0001"
+                        />
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!formData.type || !formData.metalPurity) {
+                              alert('Product Type and Purity required');
+                              return;
+                            }
+                            try {
+                              const response = await api.post('/products/generate-sku', {
+                                type: formData.type,
+                                metalPurity: formData.metalPurity
+                              });
+                              setFormData(prev => ({ ...prev, sku: response.data.sku }));
+                            } catch (err) {
+                              alert('Failed to generate SKU');
+                            }
+                          }}
+                          className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium whitespace-nowrap"
+                        >
+                          Generate
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Size
+                      </label>
+                      <input
+                        type="text"
+                        name="size"
+                        value={formData.size}
+                        onChange={handleChange}
+                        className="input-field"
+                        placeholder="Ring size, etc."
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -385,16 +609,12 @@ const ProductEdit = () => {
                       <label htmlFor="frontImage" className="cursor-pointer flex flex-col items-center">
                         {formData.frontImage ? (
                           <div className="text-center">
-                            <svg className="w-12 h-12 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                            </svg>
+                            <HiCheck className="w-12 h-12 text-green-500 mx-auto mb-2" />
                             <p className="text-sm text-gray-700 font-medium">{formData.frontImage.name}</p>
                           </div>
                         ) : (
                           <>
-                            <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
+                            <HiCloudUpload className="w-12 h-12 text-gray-400 mb-2" />
                             <p className="text-sm text-gray-600">Click to upload or drag and drop</p>
                             <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
                           </>
@@ -419,16 +639,12 @@ const ProductEdit = () => {
                       <label htmlFor="rearImage" className="cursor-pointer flex flex-col items-center">
                         {formData.rearImage ? (
                           <div className="text-center">
-                            <svg className="w-12 h-12 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                            </svg>
+                            <HiCheck className="w-12 h-12 text-green-500 mx-auto mb-2" />
                             <p className="text-sm text-gray-700 font-medium">{formData.rearImage.name}</p>
                           </div>
                         ) : (
                           <>
-                            <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                            </svg>
+                            <HiCloudUpload className="w-12 h-12 text-gray-400 mb-2" />
                             <p className="text-sm text-gray-600">Click to upload or drag and drop</p>
                             <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB</p>
                           </>
@@ -452,9 +668,7 @@ const ProductEdit = () => {
                         multiple
                       />
                       <label htmlFor="otherImages" className="cursor-pointer flex flex-col items-center">
-                        <svg className="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
+                        <HiCloudUpload className="w-12 h-12 text-gray-400 mb-2" />
                         <p className="text-sm text-gray-600">Click to upload additional images</p>
                         <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 10MB each</p>
                       </label>
@@ -606,17 +820,12 @@ const ProductEdit = () => {
                 >
                   {submitting ? (
                     <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
+                      <HiRefresh className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
                       Updating...
                     </>
                   ) : (
                     <>
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                      </svg>
+                      <HiCheck className="w-5 h-5 mr-2" />
                       {hasChanges ? 'Update Product' : 'No Changes'}
                     </>
                   )}
@@ -682,6 +891,7 @@ const ProductEdit = () => {
             </div>
           </div>
         </form>
+      </div>
       </div>
     </div>
   );

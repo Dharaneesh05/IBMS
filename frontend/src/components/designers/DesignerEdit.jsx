@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../api/api';
+import { HiArrowLeft } from 'react-icons/hi';
 
 const DesignerEdit = () => {
   const { id } = useParams();
@@ -127,9 +128,7 @@ const DesignerEdit = () => {
               to={`/designers/${id}`} 
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
+              <HiArrowLeft className="w-4 h-4 mr-2" />
               Back to Designer
             </Link>
           </div>
@@ -335,7 +334,7 @@ const DesignerEdit = () => {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="px-6 py-3 text-sm font-medium text-white bg-[#0d9488] rounded-lg hover:bg-[#0f766e] focus:ring-2 focus:ring-[#0d9488] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-3 text-sm font-medium text-white bg-[#1a1d2e] dark:bg-teal-600 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {updating ? 'Updating...' : 'Update Designer'}
                 </button>

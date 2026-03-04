@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useDarkMode } from '../contexts/DarkModeContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useFilter } from '../contexts/FilterContext';
+import { HiX, HiChevronRight } from 'react-icons/hi';
 
 const SlidePanel = ({ isOpen, onClose, type, title }) => {
   return (
@@ -28,9 +29,7 @@ const SlidePanel = ({ isOpen, onClose, type, title }) => {
             onClick={onClose}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
-            <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <HiX className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </button>
         </div>
 
@@ -378,9 +377,7 @@ const SettingsContent = () => {
               <span className="text-sm text-gray-700 dark:text-gray-300">Language</span>
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-500 dark:text-gray-500">{settings.language}</span>
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                </svg>
+                <HiChevronRight className="w-4 h-4 text-gray-400" />
               </div>
             </div>
           </button>
@@ -390,9 +387,7 @@ const SettingsContent = () => {
               <span className="text-sm text-gray-700 dark:text-gray-300">Time Zone</span>
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-500 dark:text-gray-500">{settings.timeZone}</span>
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                </svg>
+                <HiChevronRight className="w-4 h-4 text-gray-400" />
               </div>
             </div>
           </button>
@@ -402,9 +397,7 @@ const SettingsContent = () => {
               <span className="text-sm text-gray-700 dark:text-gray-300">Currency</span>
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-500 dark:text-gray-500">{settings.currency}</span>
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                </svg>
+                <HiChevronRight className="w-4 h-4 text-gray-400" />
               </div>
             </div>
           </button>

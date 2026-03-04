@@ -39,18 +39,18 @@ export const SocketProvider = ({ children }) => {
     });
 
     socketInstance.on('connect', () => {
-      console.log('✅ Socket.IO connected');
+      console.log('Socket.IO connected');
       setConnected(true);
     });
 
     socketInstance.on('disconnect', () => {
-      console.log('❌ Socket.IO disconnected');
+      console.log('Socket.IO disconnected');
       setConnected(false);
     });
 
     // Listen for low stock alerts
     socketInstance.on('stock:low', (data) => {
-      console.log('📦 Low stock alert received:', data);
+      console.log('Low stock alert received:', data);
       addNotification({
         id: Date.now(),
         type: 'warning',
@@ -63,7 +63,7 @@ export const SocketProvider = ({ children }) => {
 
     // Listen for out of stock alerts (critical)
     socketInstance.on('stock:out', (data) => {
-      console.log('🚨 Out of stock alert received:', data);
+      console.log('Out of stock alert received:', data);
       addNotification({
         id: Date.now(),
         type: 'error',
@@ -76,7 +76,7 @@ export const SocketProvider = ({ children }) => {
 
     // Listen for critical stock alerts (< 3 days)
     socketInstance.on('stock:critical', (data) => {
-      console.log('⚠️ Critical stock alert received:', data);
+      console.log('Critical stock alert received:', data);
       addNotification({
         id: Date.now(),
         type: 'critical',
