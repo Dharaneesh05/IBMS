@@ -448,20 +448,20 @@ const SaleNew = () => {
                 </div>
 
                 {/* Item Section with Barcode Scanner & SKU Search */}
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-6">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+                    <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
                         <FiShoppingCart /> Invoice Items
                     </h2>
 
                     {/* BARCODE SCANNER - PRIMARY INPUT */}
-                    <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 rounded-lg border-2 border-blue-300 dark:border-blue-700">
-                        <div className="flex items-center gap-2 mb-3">
-                            <HiOutlineQrcode className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                            <label className="text-sm font-bold text-blue-900 dark:text-blue-100">
-                                BARCODE SCANNER - Scan Product Here
+                    <div className="mb-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-700">
+                        <div className="flex items-center gap-2 mb-2">
+                            <HiOutlineQrcode className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                            <label className="text-sm font-semibold text-teal-900 dark:text-teal-100">
+                                Barcode Scanner
                             </label>
                         </div>
-                        <div className="flex gap-3">
+                        <div className="flex gap-2">
                             <div className="relative flex-1">
                                 <input
                                     ref={scanInputRef}
@@ -469,11 +469,11 @@ const SaleNew = () => {
                                     value={scanInput}
                                     onChange={(e) => setScanInput(e.target.value.toUpperCase())}
                                     onKeyDown={handleBarcodeScan}
-                                    placeholder="Position cursor here and scan barcode..."
+                                    placeholder="Scan barcode or enter SKU..."
                                     autoFocus
-                                    className="w-full px-4 py-3 border-2 border-blue-400 dark:border-blue-600 rounded-lg 
-                                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-mono text-lg
-                                             focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-700 focus:outline-none
+                                    className="w-full px-3 py-2 border border-teal-300 dark:border-teal-600 rounded-lg 
+                                             bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-mono text-sm
+                                             focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-500 focus:border-teal-500 focus:outline-none
                                              placeholder:text-gray-400"
                                     disabled={scanning}
                                 />
@@ -488,48 +488,40 @@ const SaleNew = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowCameraScanner(true)}
-                                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 
-                                         text-white font-semibold rounded-lg shadow-md hover:shadow-lg 
+                                className="px-4 py-2 bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 
+                                         text-white font-medium rounded-lg shadow-sm hover:shadow-md 
                                          transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
-                                title="Scan using camera (mobile/webcam)"
+                                title="Scan using camera"
                             >
                                 <HiCamera className="w-5 h-5" />
                                 <span className="hidden sm:inline">Camera</span>
                             </button>
                         </div>
                         
-                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400 flex items-center gap-4">
-                            <span>Tip: Use physical scanner OR click Camera button for mobile/webcam scanning</span>
-                        </div>
-                        
                         {/* Scan Feedback Messages */}
                         {scanSuccess && (
-                            <div className="mt-2 p-2 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 rounded text-green-800 dark:text-green-200 text-sm font-medium">
+                            <div className="mt-2 p-2 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 rounded text-green-800 dark:text-green-200 text-xs font-medium">
                                 {scanSuccess}
                             </div>
                         )}
                         {scanError && (
-                            <div className="mt-2 p-2 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 rounded text-red-800 dark:text-red-200 text-sm font-medium">
+                            <div className="mt-2 p-2 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 rounded text-red-800 dark:text-red-200 text-xs font-medium">
                                 {scanError}
                             </div>
                         )}
-                        
-                        <p className="text-xs text-blue-700 dark:text-blue-300 mt-2 flex items-center gap-1">
-                            <strong>How to use:</strong> Click this field, scan barcode with your scanner, product will auto-add to invoice
-                        </p>
                     </div>
 
                     {/* DIVIDER */}
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-3">
                         <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">OR SEARCH MANUALLY</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">OR</span>
                         <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
                     </div>
 
                     {/* SKU Search - Manual Fallback */}
                     <div className="mb-4 relative">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Search Product by SKU / Name (Manual)
+                            Manual Search
                         </label>
                         <div className="relative">
                             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -537,9 +529,10 @@ const SaleNew = () => {
                                 type="text"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Type to search products..."
+                                placeholder="Search by SKU or name..."
                                 className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+                                         bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
+                                         focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
                             />
                         </div>
 
@@ -561,7 +554,7 @@ const SaleNew = () => {
                                                     Type: {product.type} | Stock: {product.quantity}
                                                 </div>
                                             </div>
-                                            <div className="text-lg font-semibold text-blue-600 dark:text-blue-400">
+                                            <div className="text-sm font-semibold text-teal-600 dark:text-teal-400">
                                                 ₹{product.price}
                                             </div>
                                         </div>
