@@ -271,6 +271,19 @@ const SaleNew = () => {
         try {
             setLoading(true);
 
+            // Validate data before sending
+            if (!formData.customerName || !formData.customerPhone) {
+                alert('Please fill in customer name and phone');
+                setLoading(false);
+                return;
+            }
+
+            if (items.length === 0) {
+                alert('Please add at least one product');
+                setLoading(false);
+                return;
+            }
+
             const saleData = {
                 ...formData,
                 items: items.map(item => ({
@@ -291,7 +304,7 @@ const SaleNew = () => {
                 status: 'confirmed'
             };
 
-            console.log('Submitting sale data:', saleData);
+            console.log('Submitting sale data:', JSON.stringify(saleData, null, 2));
 
             const response = await api.post('/sales', saleData);
             
@@ -301,9 +314,12 @@ const SaleNew = () => {
             navigate('/sales/invoices');
         } catch (error) {
             console.error('Error creating sale:', error);
-            console.error('Error response:', error.response?.data);
+            console.error('Error response:', JSON.stringify(error.response?.data, null, 2));
+            console.error('Error message:', error.message);
+            console.error('Error details:', JSON.stringify(error.response, null, 2));
             const errorMessage = error.response?.data?.message || error.message || 'Failed to create invoice';
-            alert(`Error: ${errorMessage}`);
+            const errorDetails = error.response?.data?.error || error.response?.data?.sqlError || '';
+            alert(`Error: ${errorMessage}\n${errorDetails}`);
         } finally {
             setLoading(false);
         }
