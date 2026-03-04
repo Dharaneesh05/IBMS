@@ -79,7 +79,7 @@ const PurchaseOrderList = () => {
             />
             <div className="relative z-10">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Purchase Orders</h1>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -88,14 +88,14 @@ const PurchaseOrderList = () => {
                 </div>
                 <Link 
                     to="/purchase-orders/new"
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                    className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors"
                 >
                     <FiPlus /> Create Purchase Order
                 </Link>
             </div>
 
             {/* Filters */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 mb-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="relative">
                         <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -145,22 +145,22 @@ const PurchaseOrderList = () => {
                     <table className="w-full">
                         <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                                     PO Number
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                                     Vendor
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                                     Date
                                 </th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                                     Total Amount
                                 </th>
-                                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                                     Status
                                 </th>
-                                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                <th className="px-4 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                                     Actions
                                 </th>
                             </tr>
@@ -175,7 +175,7 @@ const PurchaseOrderList = () => {
                             ) : (
                                 orders.map((order) => (
                                     <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        <td className="px-4 py-3 whitespace-nowrap">
                                             <div className="text-sm font-medium text-gray-900 dark:text-white">
                                                 {order.poNumber}
                                             </div>
@@ -185,7 +185,7 @@ const PurchaseOrderList = () => {
                                                 </div>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div className="text-sm font-medium text-gray-900 dark:text-white">
                                                 {order.Vendor?.companyName || 'N/A'}
                                             </div>
@@ -193,10 +193,10 @@ const PurchaseOrderList = () => {
                                                 {order.Vendor?.vendorCode}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                             {formatDate(order.orderDate)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                                        <td className="px-4 py-3 whitespace-nowrap text-right">
                                             <div className="text-sm font-semibold text-gray-900 dark:text-white">
                                                 ₹{parseFloat(order.totalAmount || 0).toFixed(2)}
                                             </div>
@@ -206,14 +206,14 @@ const PurchaseOrderList = () => {
                                                 </div>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                                        <td className="px-4 py-3 whitespace-nowrap text-center">
                                             {getStatusBadge(order.status)}
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-center">
+                                        <td className="px-4 py-3 whitespace-nowrap text-center">
                                             <div className="flex items-center justify-center gap-2">
                                                 <Link
                                                     to={`/purchase-orders/${order.id}`}
-                                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 flex items-center gap-1"
+                                                    className="text-teal-600 hover:text-teal-700 dark:text-teal-400 flex items-center gap-1"
                                                     title="View Details"
                                                 >
                                                     <FiEye /> View

@@ -110,21 +110,21 @@ const SaleList = () => {
             />
             <div className="relative z-10">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Sales Invoices</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">Manage your sales invoices</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Sales Invoices</h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage your sales invoices</p>
                 </div>
                 <button
                     onClick={() => navigate('/sales/invoices/new')}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
                 >
                     <FiPlus /> Create New Invoice
                 </button>
             </div>
 
             {/* Filters and Search */}
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 mb-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Search */}
                     <div className="relative">
@@ -173,7 +173,7 @@ const SaleList = () => {
             {/* Sales Table */}
             {loading ? (
                 <div className="text-center py-10">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
                 </div>
             ) : sales.length === 0 ? (
                 <div className="text-center py-10">
@@ -181,39 +181,38 @@ const SaleList = () => {
                     <p className="text-gray-600 dark:text-gray-400">No invoices found</p>
                 </div>
             ) : (
-                <>
-                    <div className="overflow-x-auto shadow-md rounded-lg">
+                <>                    <div className="overflow-x-auto shadow-sm rounded-lg">
                         <table className="w-full text-sm text-left text-gray-900 dark:text-gray-100">
                             <thead className="text-xs uppercase bg-gray-100 dark:bg-gray-700">
                                 <tr>
-                                    <th className="px-6 py-3">Invoice No</th>
-                                    <th className="px-6 py-3">Date</th>
-                                    <th className="px-6 py-3">Customer</th>
-                                    <th className="px-6 py-3">Items</th>
-                                    <th className="px-6 py-3">Amount</th>
-                                    <th className="px-6 py-3">Payment Status</th>
-                                    <th className="px-6 py-3">Status</th>
-                                    <th className="px-6 py-3">Actions</th>
+                                    <th className="px-4 py-2">Invoice No</th>
+                                    <th className="px-4 py-2">Date</th>
+                                    <th className="px-4 py-2">Customer</th>
+                                    <th className="px-4 py-2">Items</th>
+                                    <th className="px-4 py-2">Amount</th>
+                                    <th className="px-4 py-2">Payment Status</th>
+                                    <th className="px-4 py-2">Status</th>
+                                    <th className="px-4 py-2">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {sales.map((sale) => (
                                     <tr key={sale.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td className="px-6 py-4 font-medium">
+                                        <td className="px-4 py-3 font-medium">
                                             <Link
                                                 to={`/sales/invoices/${sale.id}`}
-                                                className="text-blue-600 hover:underline"
+                                                className="text-teal-600 hover:underline"
                                             >
                                                 {sale.invoiceNumber}
                                             </Link>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div className="flex items-center gap-1">
                                                 <FiCalendar className="text-gray-400" />
                                                 {formatDate(sale.saleDate)}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div>
                                                 <div className="font-medium">{sale.customerName}</div>
                                                 {sale.customerPhone && (
@@ -221,23 +220,23 @@ const SaleList = () => {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">{sale.items?.length || 0} items</td>
-                                        <td className="px-6 py-4 font-semibold">₹{parseFloat(sale.totalAmount).toFixed(2)}</td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">{sale.items?.length || 0} items</td>
+                                        <td className="px-4 py-3 font-semibold">₹{parseFloat(sale.totalAmount).toFixed(2)}</td>
+                                        <td className="px-4 py-3">
                                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPaymentStatusBadge(sale.paymentStatus)}`}>
                                                 {sale.paymentStatus}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(sale.status)}`}>
                                                 {sale.status}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={() => navigate(`/sales/invoices/${sale.id}`)}
-                                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                                                    className="text-teal-600 hover:text-teal-700 dark:text-teal-400"
                                                     title="View"
                                                 >
                                                     <FiEye />

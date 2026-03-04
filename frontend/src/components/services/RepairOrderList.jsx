@@ -136,11 +136,11 @@ const RepairOrderList = () => {
       />
       <div className="relative z-10">
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-3">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Repair Orders</h1>
-            <p className="text-gray-600 mt-1">Manage customer repair and service requests</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Repair Orders</h1>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage customer repair and service requests</p>
           </div>
           <Link
             to="/services/repair-orders/new"
@@ -152,7 +152,7 @@ const RepairOrderList = () => {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search */}
             <div className="relative">
@@ -162,7 +162,7 @@ const RepairOrderList = () => {
                 placeholder="Search orders, customers, products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
               {searchTerm && (
                 <button
@@ -180,7 +180,7 @@ const RepairOrderList = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
                 {statusOptions.map(status => (
                   <option key={status} value={status}>{status}</option>
@@ -192,20 +192,20 @@ const RepairOrderList = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4 mt-4">
         {statusOptions.filter(s => s !== 'All').map(status => {
           const count = repairOrders.filter(o => o.status === status).length;
           return (
-            <div key={status} className="bg-white rounded-lg shadow p-4">
-              <p className="text-sm text-gray-600 mb-1">{status}</p>
-              <p className="text-2xl font-bold text-gray-900">{count}</p>
+            <div key={status} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3">
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">{status}</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">{count}</p>
             </div>
           );
         })}
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
         {filteredOrders.length === 0 ? (
           <div className="text-center py-12">
             <HiClock className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -218,59 +218,59 @@ const RepairOrderList = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Order #
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Customer
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Product
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Issue
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Dates
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Charges
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{order.orderNumber}</div>
-                      <div className="text-xs text-gray-500">{formatDate(order.receivedDate)}</div>
+                  <tr key={order.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">{order.orderNumber}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{formatDate(order.receivedDate)}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-medium text-gray-900">{order.customerName}</div>
-                      <div className="text-xs text-gray-500">{order.customerPhone}</div>
+                    <td className="px-4 py-3">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">{order.customerName}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{order.customerPhone}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-900">{order.productName}</div>
+                    <td className="px-4 py-3">
+                      <div className="text-sm text-gray-900 dark:text-gray-100">{order.productName}</div>
                       {order.productSKU && (
-                        <div className="text-xs text-gray-500">SKU: {order.productSKU}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">SKU: {order.productSKU}</div>
                       )}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm text-gray-700 max-w-xs truncate">
+                    <td className="px-4 py-3">
+                      <div className="text-sm text-gray-700 dark:text-gray-300 max-w-xs truncate">
                         {order.issueDescription}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-xs text-gray-600">
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-xs text-gray-600 dark:text-gray-400">
                         <div className="flex items-center gap-1">
                           <span>Due:</span>
                           <span className={isOverdue(order.expectedDeliveryDate, order.status) ? 'text-red-600 font-medium' : ''}>
@@ -278,42 +278,42 @@ const RepairOrderList = () => {
                           </span>
                         </div>
                         {order.actualDeliveryDate && (
-                          <div className="text-green-600 mt-1">
+                          <div className="text-green-600 dark:text-green-400 mt-1">
                             Delivered: {formatDate(order.actualDeliveryDate)}
                           </div>
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order.status]}`}>
                         {order.status}
                       </span>
                       {isOverdue(order.expectedDeliveryDate, order.status) && (
-                        <div className="text-xs text-red-600 mt-1 font-medium">Overdue</div>
+                        <div className="text-xs text-red-600 dark:text-red-400 mt-1 font-medium">Overdue</div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 font-medium">
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm text-gray-900 dark:text-white font-medium">
                         ₹{parseFloat(order.repairCharges).toFixed(2)}
                       </div>
                       {parseFloat(order.balanceAmount) > 0 && (
-                        <div className="text-xs text-orange-600">
+                        <div className="text-xs text-orange-600 dark:text-orange-400">
                           Balance: ₹{parseFloat(order.balanceAmount).toFixed(2)}
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => navigate(`/services/repair-orders/${order.id}/edit`)}
-                          className="text-teal-600 hover:text-teal-900"
+                          className="text-teal-600 hover:text-teal-700 dark:text-teal-400"
                           title="Edit"
                         >
                           <HiPencil className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleDelete(order.id)}
-                          className="text-red-600 hover:text-red-900"
+                          className="text-red-600 hover:text-red-700 dark:text-red-400"
                           title="Delete"
                         >
                           <HiTrash className="w-5 h-5" />

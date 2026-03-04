@@ -99,21 +99,21 @@ const CustomerList = () => {
             />
             <div className="relative z-10">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Customers</h1>
-                    <p className="text-gray-600 dark:text-gray-400 mt-1">Manage your customer database</p>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Customers</h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Manage your customer database</p>
                 </div>
                 <button
                     onClick={() => navigate('/customers/new')}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
                 >
                     <FiPlus /> Add New Customer
                 </button>
             </div>
 
             {/* Filters and Search */}
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 mb-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Search */}
                     <div className="relative">
@@ -160,7 +160,7 @@ const CustomerList = () => {
             {/* Customers Table */}
             {loading ? (
                 <div className="text-center py-10">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
                 </div>
             ) : customers.length === 0 ? (
                 <div className="text-center py-10">
@@ -169,31 +169,31 @@ const CustomerList = () => {
                 </div>
             ) : (
                 <>
-                    <div className="overflow-x-auto shadow-md rounded-lg">
+                    <div className="overflow-x-auto shadow-sm rounded-lg">
                         <table className="w-full text-sm text-left text-gray-900 dark:text-gray-100">
                             <thead className="text-xs uppercase bg-gray-100 dark:bg-gray-700">
                                 <tr>
-                                    <th className="px-6 py-3">Customer Code</th>
-                                    <th className="px-6 py-3">Name</th>
-                                    <th className="px-6 py-3">Contact</th>
-                                    <th className="px-6 py-3">Type</th>
-                                    <th className="px-6 py-3">Status</th>
-                                    <th className="px-6 py-3">Total Orders</th>
-                                    <th className="px-6 py-3">Actions</th>
+                                    <th className="px-4 py-2">Customer Code</th>
+                                    <th className="px-4 py-2">Name</th>
+                                    <th className="px-4 py-2">Contact</th>
+                                    <th className="px-4 py-2">Type</th>
+                                    <th className="px-4 py-2">Status</th>
+                                    <th className="px-4 py-2">Total Orders</th>
+                                    <th className="px-4 py-2">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {customers.map((customer) => (
                                     <tr key={customer.id} className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td className="px-6 py-4 font-medium">
+                                        <td className="px-4 py-3 font-medium">
                                             <Link
                                                 to={`/customers/${customer.id}`}
-                                                className="text-blue-600 hover:underline"
+                                                className="text-teal-600 hover:underline"
                                             >
                                                 {customer.customerCode}
                                             </Link>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div>
                                                 <div className="font-medium">{customer.firstName} {customer.lastName}</div>
                                                 {customer.company && (
@@ -201,7 +201,7 @@ const CustomerList = () => {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div className="flex flex-col gap-1">
                                                 <div className="flex items-center gap-1 text-sm">
                                                     <FiPhone className="text-gray-400" />
@@ -215,27 +215,27 @@ const CustomerList = () => {
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getTypeBadgeClass(customer.customerType)}`}>
                                                 {customer.customerType}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeClass(customer.status)}`}>
                                                 {customer.status}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div className="flex items-center gap-1">
                                                 <FiDollarSign className="text-gray-400" />
                                                 {customer.sales?.length || 0} orders
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 py-3">
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={() => navigate(`/customers/${customer.id}/edit`)}
-                                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400"
+                                                    className="text-teal-600 hover:text-teal-700 dark:text-teal-400"
                                                     title="Edit"
                                                 >
                                                     <FiEdit2 />
