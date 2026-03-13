@@ -39,7 +39,7 @@ const connectDB = async () => {
     } catch (error) {
         console.error('❌ Unable to connect to MySQL database:', error.message);
         console.error('Error details:', error);
-        process.exit(1);
+        throw error;
     }
 };
 

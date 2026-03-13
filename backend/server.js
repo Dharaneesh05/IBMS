@@ -12,6 +12,8 @@ require('./models');
 
 // Initialize Express app
 const app = express();
+let dbConnected = false;
+let dbLastError = null;
 
 // Middleware
 app.use(cors());
@@ -32,7 +34,11 @@ app.use('/api/metal-rates', require('./routes/metalRatesRoutes'));
 
 // Health check route
 app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+    res.status(200).json({
+        status: 'ok',
+        database: dbConnected ? 'connected' : 'disconnected',
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Test route
@@ -70,16 +76,39 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST || '0.0.0.0';
 
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const connectDBWithRetry = async () => {
+    const retryDelayMs = 10000;
+
+    while (!dbConnected) {
+        try {
+            await connectDB();
+            dbConnected = true;
+            dbLastError = null;
+            console.log('✅ Database connection established');
+        } catch (error) {
+            dbLastError = error.message;
+            console.error(`❌ Database connection failed. Retrying in ${retryDelayMs / 1000}s...`);
+            await wait(retryDelayMs);
+        }
+    }
+};
+
 // Connect to MySQL and start server
 const startServer = async () => {
     try {
-        await connectDB();
-        
         const server = app.listen(PORT, HOST, () => {
             console.log(`✅ Server is running on ${HOST}:${PORT}`);
             console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`Database: MySQL`);
             console.log(`Health check: http://${HOST}:${PORT}/health`);
+        });
+
+        // Keep the API process alive and retry DB connection in the background.
+        // This prevents platform health checks from failing during DB cold starts.
+        connectDBWithRetry().catch((error) => {
+            console.error('Unexpected DB retry loop error:', error);
         });
 
         // Handle server errors
