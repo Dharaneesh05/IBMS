@@ -2,26 +2,20 @@
 
 A full-stack jewelry inventory and billing management system built with React and Node.js.
 
-## 🔐 Authentication System
+## Authentication System
 
 **NEW:** Complete authentication system with secure login and session management!
 
-**Default Admin Credentials:**
-```
-Email: admin@jewellery.com
-Password: admin123
-```
-
-⚠️ **IMPORTANT:** Change this password after first login!
+**IMPORTANT:** Change this password after first login!
 
 For setup instructions, see: [AUTHENTICATION_SETUP.md](AUTHENTICATION_SETUP.md)  
 For quick testing, see: [QUICK_START.md](QUICK_START.md)
 
 ## Features
 
-- **🔒 Secure Authentication** - JWT-based login with password hashing (NEW)
-- **👤 User Management** - Admin-controlled user accounts with roles (NEW)
-- **🛡️ Protected Routes** - All pages require authentication (NEW)
+- **Secure Authentication** - JWT-based login with password hashing (NEW)
+- **User Management** - Admin-controlled user accounts with roles (NEW)
+- **Protected Routes** - All pages require authentication (NEW)
 - **Product Management** - Track jewelry inventory with images, categories, and stock levels
 - **Designer Management** - Manage designer information and their products
 - **Real-time Notifications** - Live stock alerts and inventory monitoring via WebSocket
