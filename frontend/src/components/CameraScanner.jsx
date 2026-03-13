@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import { HiX, HiCamera } from 'react-icons/hi';
 
@@ -13,7 +13,7 @@ const CameraScanner = ({ onScan, onClose }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState(null);
 
-  const onScanSuccess = (decodedText, decodedResult) => {
+  const onScanSuccess = useCallback((decodedText) => {
     console.log("Scan result:", decodedText);
     
     // Stop scanner temporarily to prevent multiple scans
@@ -28,7 +28,7 @@ const CameraScanner = ({ onScan, onClose }) => {
       if (parsed.sku) {
         sku = parsed.sku;
       }
-    } catch (e) {
+    } catch {
       // Not JSON, use as-is (likely a barcode with SKU directly)
     }
     
@@ -39,15 +39,15 @@ const CameraScanner = ({ onScan, onClose }) => {
     setTimeout(() => {
       onClose();
     }, 500);
-  };
+  }, [onClose, onScan]);
 
-  const onScanFailure = (error) => {
+  const onScanFailure = useCallback((scanError) => {
     // Scanning failed, but this is normal - it happens every frame until a code is found
     // Only log actual errors, not "No QR code found"
-    if (error && !error.includes("NotFoundError") && !error.includes("NotFoundException")) {
-      console.warn("Scan error:", error);
+    if (scanError && !scanError.includes("NotFoundError") && !scanError.includes("NotFoundException")) {
+      console.warn("Scan error:", scanError);
     }
-  };
+  }, []);
 
   useEffect(() => {
     let html5QrCodeScanner = null;
@@ -94,7 +94,7 @@ const CameraScanner = ({ onScan, onClose }) => {
         });
       }
     };
-  }, []);
+  }, [onScanFailure, onScanSuccess]);
 
   const handleClose = () => {
     if (scannerRef.current) {
