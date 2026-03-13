@@ -18,8 +18,11 @@ exports.login = async (req, res) => {
             });
         }
 
+        // Normalize email to avoid login failures from accidental case/whitespace differences.
+        const normalizedEmail = String(email).trim().toLowerCase();
+
         // Find user by email
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ where: { email: normalizedEmail } });
 
         if (!user) {
             return res.status(401).json({

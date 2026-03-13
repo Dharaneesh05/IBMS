@@ -4,6 +4,11 @@ dotenv.config();
 const { sequelize, connectDB } = require('./config/db');
 const User = require('./models/User');
 
+const ADMIN_EMAIL = 'admin@jewellery.com';
+const ADMIN_PASSWORD = 'admin123';
+const ADMIN_ROLE = 'admin';
+const ADMIN_NAME = 'System Administrator';
+
 const setupAdminUser = async () => {
     try {
         console.log('🔧 Setting up admin user...');
@@ -13,29 +18,40 @@ const setupAdminUser = async () => {
 
         // Check if admin already exists
         const existingAdmin = await User.findOne({ 
-            where: { email: 'admin@jewellery.com' } 
+            where: { email: ADMIN_EMAIL } 
         });
 
         if (existingAdmin) {
-            console.log('✅ Admin user already exists');
-            console.log('Email: admin@jewellery.com');
+            await existingAdmin.update({
+                password: ADMIN_PASSWORD,
+                role: ADMIN_ROLE,
+                fullName: ADMIN_NAME,
+                isActive: true
+            });
+
+            console.log('✅ Admin user already existed. Credentials were reset.');
+            console.log('==========================================');
+            console.log(`Email: ${ADMIN_EMAIL}`);
+            console.log(`Password: ${ADMIN_PASSWORD}`);
+            console.log(`Role: ${ADMIN_ROLE}`);
+            console.log('==========================================');
             process.exit(0);
         }
 
         // Create admin user
         const admin = await User.create({
-            email: 'admin@jewellery.com',
-            password: 'admin123', // Will be hashed automatically by the model hook
-            role: 'admin',
-            fullName: 'System Administrator',
+            email: ADMIN_EMAIL,
+            password: ADMIN_PASSWORD, // Will be hashed automatically by the model hook
+            role: ADMIN_ROLE,
+            fullName: ADMIN_NAME,
             isActive: true
         });
 
         console.log('✅ Admin user created successfully!');
         console.log('==========================================');
-        console.log('Email: admin@jewellery.com');
-        console.log('Password: admin123');
-        console.log('Role: admin');
+        console.log(`Email: ${ADMIN_EMAIL}`);
+        console.log(`Password: ${ADMIN_PASSWORD}`);
+        console.log(`Role: ${ADMIN_ROLE}`);
         console.log('==========================================');
         console.log('⚠️  Please change the password after first login!');
 
