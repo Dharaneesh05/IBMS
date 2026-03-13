@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const { connectDB } = require('./config/db');
+const { ensureDefaultAdmin } = require('./utils/ensureDefaultAdmin');
 
 // Initialize models and relationships
 require('./models');
@@ -84,6 +85,7 @@ const connectDBWithRetry = async () => {
     while (!dbConnected) {
         try {
             await connectDB();
+            await ensureDefaultAdmin();
             dbConnected = true;
             dbLastError = null;
             console.log('✅ Database connection established');
