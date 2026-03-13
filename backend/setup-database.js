@@ -16,14 +16,14 @@ async function setupDatabase() {
 
     try {
         // Test connection
-        console.log('1️⃣  Testing MySQL connection...');
+        console.log('1️Testing MySQL connection...');
         await sequelize.authenticate();
-        console.log('   ✅ Connected to MySQL successfully!\n');
+        console.log('   Connected to MySQL successfully!\n');
 
         // Sync all models
-        console.log('2️⃣  Creating/Updating database tables...');
+        console.log('2️Creating/Updating database tables...');
         await sequelize.sync({ alter: true });
-        console.log('   ✅ All tables created/updated successfully!\n');
+        console.log('   All tables created/updated successfully!\n');
 
         // Show created tables
         console.log('3️⃣  Database Tables:');

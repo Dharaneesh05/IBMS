@@ -279,7 +279,7 @@ const DesignerList = () => {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-teal-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1F3A2E] mx-auto"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">Loading designers...</p>
         </div>
       </div>
@@ -339,7 +339,7 @@ const DesignerList = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search in All Items..."
-                    className="w-full pl-10 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
+                    className="w-full pl-10 pr-8 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent dark:bg-gray-700 dark:text-white text-sm"
                   />
                   {searchQuery && (
                     <button
@@ -408,7 +408,7 @@ const DesignerList = () => {
               {/* Add Designer Button */}
               <Link
                 to="/designers/new"
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#1F3A2E] rounded-lg hover:bg-[#243d32] transition-colors shadow-sm"
               >
                 <HiPlus className="w-5 h-5" />
                 Add Designer
@@ -424,7 +424,7 @@ const DesignerList = () => {
                 onClick={() => setViewMode('table')}
                 className={`flex items-center justify-center p-2 transition-colors ${
                   viewMode === 'table'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-[#1F3A2E] text-white'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
                 }`}
                 title="Table View"
@@ -435,7 +435,7 @@ const DesignerList = () => {
                 onClick={() => setViewMode('grid')}
                 className={`flex items-center justify-center p-2 transition-colors ${
                   viewMode === 'grid'
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-[#1F3A2E] text-white'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
                 }`}
                 title="Grid View"
@@ -450,7 +450,7 @@ const DesignerList = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent dark:bg-gray-700 dark:text-white"
               >
                 <option value="name">Company Name</option>
                 <option value="contact">Contact Person</option>
@@ -475,7 +475,7 @@ const DesignerList = () => {
       <div className="max-w-[1920px] mx-auto px-6 py-4">
         {/* Bulk Actions Bar */}
         {selectedItems.size > 0 && (
-          <div className="mb-4 bg-teal-600 text-white rounded-lg px-4 py-3 flex items-center justify-between shadow-sm">
+          <div className="mb-4 bg-[#1F3A2E] text-white rounded-lg px-4 py-3 flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-3">
               <span className="font-medium text-sm">{selectedItems.size} designer(s) selected</span>
             </div>
@@ -515,7 +515,7 @@ const DesignerList = () => {
                   </p>
                   <Link
                     to="/designers/new"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#1F3A2E] text-white font-medium rounded-lg hover:bg-[#243d32] transition-colors shadow-sm"
                   >
                     <HiPlus className="w-5 h-5" />
                     Add Your First Designer
@@ -558,7 +558,7 @@ const DesignerList = () => {
                 {/* With GSTIN */}
                 <div className="bg-gray-50 dark:bg-gray-900/30 rounded p-2 border border-gray-100 dark:border-gray-700">
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-400">GSTIN Registered</span>
-                  <p className="text-2xl font-bold text-teal-600 dark:text-teal-400">{stats.withGstin}</p>
+                  <p className="text-2xl font-bold text-[#1F3A2E] dark:text-teal-400">{stats.withGstin}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">With GSTIN registered</p>
                 </div>
 
@@ -618,7 +618,7 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
                   type="checkbox"
                   checked={selectAll}
                   onChange={onSelectAll}
-                  className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700"
+                  className="w-4 h-4 rounded border-gray-300 text-[#1F3A2E] focus:ring-[#1F3A2E] dark:border-gray-600 dark:bg-gray-700"
                 />
               </th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">
@@ -652,13 +652,13 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
                     type="checkbox"
                     checked={selectedItems.has(designer.id)}
                     onChange={() => onSelectItem(designer.id)}
-                    className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500 dark:border-gray-600 dark:bg-gray-700"
+                    className="w-4 h-4 rounded border-gray-300 text-[#1F3A2E] focus:ring-[#1F3A2E] dark:border-gray-600 dark:bg-gray-700"
                   />
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap">
                   <Link
                     to={`/designers/${designer.id}`}
-                    className="text-sm font-semibold text-gray-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                    className="text-sm font-semibold text-gray-900 dark:text-white hover:text-[#1F3A2E] dark:hover:text-teal-400 transition-colors"
                   >
                     {designer.companyName || designer.displayName || designer.name}
                   </Link>
@@ -672,7 +672,7 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
                 <td className="px-4 py-3 whitespace-nowrap">
                   <a
                     href={`mailto:${designer.email}`}
-                    className="text-sm text-teal-600 dark:text-teal-400 hover:underline"
+                    className="text-sm text-[#1F3A2E] dark:text-teal-400 hover:underline"
                   >
                     {designer.email}
                   </a>
@@ -690,7 +690,7 @@ const TableView = ({ designers, selectedItems, selectAll, onSelectAll, onSelectI
                   <div className="flex items-center justify-center gap-3">
                     <Link
                       to={`/designers/${designer.id}`}
-                      className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-medium text-sm transition-colors"
+                      className="text-[#1F3A2E] dark:text-teal-400 hover:text-[#1F3A2E] dark:hover:text-teal-300 font-medium text-sm transition-colors"
                     >
                       View
                     </Link>
@@ -738,7 +738,7 @@ const GridView = ({ designers }) => {
             <div className="absolute inset-0 bg-black/10"></div>
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <div className="flex items-center gap-3">
-                <div className="w-16 h-16 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center text-2xl font-bold text-teal-600">
+                <div className="w-16 h-16 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center text-2xl font-bold text-[#1F3A2E]">
                   {(designer.companyName || designer.name || 'U').charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -769,7 +769,7 @@ const GridView = ({ designers }) => {
               <HiMail className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-xs text-gray-500 dark:text-gray-400">Email</p>
-                <p className="text-sm font-medium text-teal-600 dark:text-teal-400 truncate">{designer.email}</p>
+                <p className="text-sm font-medium text-[#1F3A2E] dark:text-teal-400 truncate">{designer.email}</p>
               </div>
             </div>
 
@@ -797,7 +797,7 @@ const GridView = ({ designers }) => {
             <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 {getStatusBadge(designer.status)}
-                <HiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors" />
+                <HiChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#1F3A2E] dark:group-hover:text-teal-400 transition-colors" />
               </div>
             </div>
           </div>

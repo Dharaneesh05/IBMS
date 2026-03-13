@@ -80,7 +80,7 @@ const ProductShow = () => {
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-6 py-3">
           <nav className="flex items-center text-sm text-gray-600">
-            <Link to="/products" className="hover:text-[#0d9488] transition-colors">Products</Link>
+            <Link to="/products" className="hover:text-[#1F3A2E] transition-colors">Products</Link>
             <span className="mx-2 text-gray-400">›</span>
             <span className="text-gray-900 font-medium">{product.name}</span>
           </nav>
@@ -106,7 +106,7 @@ const ProductShow = () => {
             <div className="mt-3 space-y-2">
               <Link 
                 to={`/products/${id}/edit`}
-                className="w-full bg-[#1a1d2e] dark:bg-teal-600 text-white py-2.5 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity text-center block text-sm"
+                className="w-full bg-[#1a1d2e] dark:bg-[#1F3A2E] text-white py-2.5 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity text-center block text-sm"
               >
                 Edit Product
               </Link>
@@ -154,7 +154,7 @@ const ProductShow = () => {
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 text-center">
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">Selling Price</p>
-                <p className="text-lg font-bold text-teal-600 dark:text-teal-400">₹{product.price?.toLocaleString()}</p>
+                <p className="text-lg font-bold text-[#1F3A2E] dark:text-teal-400">₹{product.price?.toLocaleString()}</p>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 text-center">
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">Markup</p>
@@ -176,7 +176,7 @@ const ProductShow = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">Total Value</p>
-                  <p className="text-xl font-bold text-teal-600 dark:text-teal-400">₹{(product.price * product.quantity)?.toLocaleString()}</p>
+                  <p className="text-xl font-bold text-[#1F3A2E] dark:text-teal-400">₹{(product.price * product.quantity)?.toLocaleString()}</p>
                 </div>
               </div>
             </div>
@@ -187,7 +187,7 @@ const ProductShow = () => {
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Product Identification</h2>
                 <button
                   onClick={() => window.print()}
-                  className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs font-medium flex items-center gap-2"
+                  className="px-3 py-2 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] transition-colors text-xs font-medium flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -270,7 +270,7 @@ const ProductShow = () => {
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Designer Information</h2>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-full bg-[#0d9488] flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-[#1F3A2E] flex items-center justify-center">
                       <span className="text-lg font-bold text-white">
                         {product.designer.name.charAt(0).toUpperCase()}
                       </span>
@@ -278,7 +278,7 @@ const ProductShow = () => {
                     <div>
                       <Link 
                         to={`/designers/${product.designer.id}`}
-                        className="text-lg font-bold text-gray-900 hover:text-[#0d9488] transition-colors"
+                        className="text-lg font-bold text-gray-900 hover:text-[#1F3A2E] transition-colors"
                       >
                         {product.designer.name}
                       </Link>

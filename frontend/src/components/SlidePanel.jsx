@@ -72,7 +72,7 @@ const FilterContent = ({ onClose }) => {
         <select 
           value={filters.category}
           onChange={(e) => updateFilter('category', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
           <option value="all">All Categories</option>
           <option value="rings">Rings</option>
@@ -91,7 +91,7 @@ const FilterContent = ({ onClose }) => {
             placeholder="Min"
             value={filters.minPrice}
             onChange={(e) => updateFilter('minPrice', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
           <span className="text-gray-500 dark:text-gray-400">-</span>
           <input
@@ -99,7 +99,7 @@ const FilterContent = ({ onClose }) => {
             placeholder="Max"
             value={filters.maxPrice}
             onChange={(e) => updateFilter('maxPrice', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
           />
         </div>
       </div>
@@ -118,7 +118,7 @@ const FilterContent = ({ onClose }) => {
                 type="checkbox" 
                 checked={filters.stockStatus[status.key]}
                 onChange={() => updateStockStatus(status.key)}
-                className="rounded border-gray-300 dark:border-gray-600 text-[#0d9488] focus:ring-[#0d9488]" 
+                className="rounded border-gray-300 dark:border-gray-600 text-[#1F3A2E] focus:ring-[#1F3A2E]" 
               />
               <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{status.label}</span>
             </label>
@@ -133,7 +133,7 @@ const FilterContent = ({ onClose }) => {
           placeholder="Search designer"
           value={filters.designer}
           onChange={(e) => updateFilter('designer', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         />
       </div>
 
@@ -146,7 +146,7 @@ const FilterContent = ({ onClose }) => {
         </button>
         <button 
           onClick={handleApply}
-          className="flex-1 px-4 py-2 bg-[#1a1d2e] dark:bg-[#0d9488] text-white rounded-lg hover:bg-gray-900 dark:hover:bg-[#0a7a6f] transition-colors"
+          className="flex-1 px-4 py-2 bg-[#1a1d2e] dark:bg-[#1F3A2E] text-white rounded-lg hover:bg-gray-900 dark:hover:bg-[#0a7a6f] transition-colors"
         >
           Apply Filters
         </button>
@@ -295,7 +295,7 @@ const SettingsContent = () => {
                 checked={isDarkMode}
                 onChange={toggleDarkMode}
               />
-              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#1F3A2E]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1F3A2E]"></div>
             </label>
           </div>
 
@@ -308,7 +308,7 @@ const SettingsContent = () => {
                 checked={settings.compactView}
                 onChange={() => toggleSetting('compactView')}
               />
-              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#1F3A2E]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1F3A2E]"></div>
             </label>
           </div>
         </div>
@@ -330,7 +330,7 @@ const SettingsContent = () => {
                 checked={settings.emailNotifications}
                 onChange={() => toggleSetting('emailNotifications')}
               />
-              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#1F3A2E]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1F3A2E]"></div>
             </label>
           </div>
 
@@ -346,7 +346,7 @@ const SettingsContent = () => {
                 checked={settings.pushNotifications}
                 onChange={() => toggleSetting('pushNotifications')}
               />
-              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#1F3A2E]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1F3A2E]"></div>
             </label>
           </div>
 
@@ -362,7 +362,7 @@ const SettingsContent = () => {
                 checked={settings.lowStockAlerts}
                 onChange={() => toggleSetting('lowStockAlerts')}
               />
-              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#0d9488]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0d9488]"></div>
+              <div className="w-11 h-6 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#1F3A2E]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1F3A2E]"></div>
             </label>
           </div>
         </div>

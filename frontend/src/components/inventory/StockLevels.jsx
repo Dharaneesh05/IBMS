@@ -214,11 +214,11 @@ function StockLevels() {
               placeholder="Search by product name, ID, or type"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-64 px-3 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="w-64 px-3 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#1F3A2E]"
             />
             <button
               onClick={exportToCSV}
-              className="px-3 py-1.5 text-xs bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors"
+              className="px-3 py-1.5 text-xs bg-[#1F3A2E] text-white rounded hover:bg-[#243d32] transition-colors"
             >
               Export CSV
             </button>
@@ -233,7 +233,7 @@ function StockLevels() {
             onClick={() => handleCardClick('in-stock')}
             className={`bg-white dark:bg-gray-800 rounded border p-3 cursor-pointer transition-all ${
               filterByStatus === 'in-stock' 
-                ? 'border-teal-500 ring-2 ring-teal-500/20' 
+                ? 'border-[#1F3A2E] ring-2 ring-teal-500/20' 
                 : 'border-gray-200 dark:border-gray-700 hover:border-teal-400'
             }`}
           >
@@ -284,7 +284,7 @@ function StockLevels() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-3 py-1 text-xs rounded transition-colors ${
                   selectedCategory === category
-                    ? 'bg-teal-600 text-white font-medium'
+                    ? 'bg-[#1F3A2E] text-white font-medium'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
@@ -305,7 +305,7 @@ function StockLevels() {
                 <div className="text-xs mb-4">Start by adding jewellery items to track their stock levels and availability</div>
                 <Link
                   to="/products/new"
-                  className="inline-block px-4 py-2 text-xs bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors"
+                  className="inline-block px-4 py-2 text-xs bg-[#1F3A2E] text-white rounded hover:bg-[#243d32] transition-colors"
                 >
                   Add Product
                 </Link>
@@ -361,7 +361,7 @@ function StockLevels() {
                       <td className="px-3 py-2">
                         <Link
                           to={`/products/${product.id}`}
-                          className="text-xs font-medium text-teal-600 dark:text-teal-400 hover:underline"
+                          className="text-xs font-medium text-[#1F3A2E] dark:text-teal-400 hover:underline"
                         >
                           {product.name}
                         </Link>
@@ -385,7 +385,7 @@ function StockLevels() {
                             />
                             <button
                               onClick={() => handleAdjustStock(product.id)}
-                              className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                              className="text-xs text-[#1F3A2E] dark:text-teal-400 hover:underline"
                             >
                               Save
                             </button>
@@ -422,7 +422,7 @@ function StockLevels() {
                         <div className="flex items-center justify-end gap-2">
                           <Link
                             to={`/products/${product.id}`}
-                            className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                            className="text-xs text-[#1F3A2E] dark:text-teal-400 hover:underline"
                           >
                             View
                           </Link>

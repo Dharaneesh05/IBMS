@@ -118,7 +118,7 @@ const DesignerNew = () => {
                     value={formData.companyName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                     placeholder="Enter company name"
                   />
                 </div>
@@ -133,7 +133,7 @@ const DesignerNew = () => {
                     value={formData.displayName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                     placeholder="Enter display name"
                   />
                 </div>
@@ -150,7 +150,7 @@ const DesignerNew = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                     placeholder="Enter contact person name"
                   />
                 </div>
@@ -165,7 +165,7 @@ const DesignerNew = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -181,7 +181,7 @@ const DesignerNew = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -195,7 +195,7 @@ const DesignerNew = () => {
                     name="gstin"
                     value={formData.gstin}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                     placeholder="Enter GSTIN"
                   />
                 </div>
@@ -215,7 +215,7 @@ const DesignerNew = () => {
                       value={formData.address.street}
                       onChange={handleChange}
                       rows="2"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors resize-none"
                       placeholder="Enter street address"
                     />
                   </div>
@@ -230,7 +230,7 @@ const DesignerNew = () => {
                         name="address.city"
                         value={formData.address.city}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                         placeholder="Enter city"
                       />
                     </div>
@@ -244,7 +244,7 @@ const DesignerNew = () => {
                         name="address.state"
                         value={formData.address.state}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                         placeholder="Enter state"
                       />
                     </div>
@@ -258,7 +258,7 @@ const DesignerNew = () => {
                         name="address.pincode"
                         value={formData.address.pincode}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                         placeholder="Enter PIN code"
                       />
                     </div>
@@ -275,7 +275,7 @@ const DesignerNew = () => {
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
-                  className="w-full md:w-64 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0d9488] focus:border-transparent transition-colors"
+                  className="w-full md:w-64 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent transition-colors"
                 >
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
@@ -295,7 +295,7 @@ const DesignerNew = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-3 text-sm font-medium text-white bg-[#1a1d2e] dark:bg-teal-600 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-3 text-sm font-medium text-white bg-[#1a1d2e] dark:bg-[#1F3A2E] rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Creating...' : 'Create Designer'}
                 </button>

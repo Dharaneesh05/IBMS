@@ -505,7 +505,7 @@ const ProductEdit = () => {
                               alert('Failed to generate SKU');
                             }
                           }}
-                          className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium whitespace-nowrap"
+                          className="px-4 py-2 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] transition-colors text-sm font-medium whitespace-nowrap"
                         >
                           Generate
                         </button>

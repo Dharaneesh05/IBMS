@@ -91,7 +91,7 @@ const VendorList = () => {
                 </div>
                 <Link 
                     to="/vendors/new"
-                    className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="flex items-center gap-2 bg-[#1F3A2E] hover:bg-[#243d32] text-white px-4 py-2 rounded-lg transition-colors"
                 >
                     <FiPlus /> Add Vendor
                 </Link>
@@ -222,7 +222,7 @@ const VendorList = () => {
                                             <div className="flex items-center justify-center gap-2">
                                                 <Link
                                                     to={`/vendors/${vendor.id}`}
-                                                    className="text-teal-600 hover:text-teal-700 dark:text-teal-400"
+                                                    className="text-[#1F3A2E] hover:text-[#1F3A2E] dark:text-teal-400"
                                                     title="View"
                                                 >
                                                     <FiEye />

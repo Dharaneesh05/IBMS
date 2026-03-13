@@ -70,7 +70,7 @@ const DesignerShow = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#0d9488] mx-auto"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#1F3A2E] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading designer...</p>
         </div>
       </div>
@@ -135,7 +135,7 @@ const DesignerShow = () => {
               </Link>
               <Link 
                 to={`/designers/${id}/edit`} 
-                className="px-3 py-1.5 text-xs font-medium text-white bg-teal-600 rounded hover:bg-teal-700 transition-colors"
+                className="px-3 py-1.5 text-xs font-medium text-white bg-[#1F3A2E] rounded hover:bg-[#243d32] transition-colors"
               >
                 Edit Designer
               </Link>
@@ -156,7 +156,7 @@ const DesignerShow = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 text-xs font-medium transition-colors border-b-2 ${
                   activeTab === tab.id
-                    ? 'border-teal-600 text-teal-600 dark:text-teal-400'
+                    ? 'border-[#1F3A2E] text-[#1F3A2E] dark:text-teal-400'
                     : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-gray-300'
                 }`}
               >
@@ -193,7 +193,7 @@ const DesignerShow = () => {
                 <div className="p-3 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
                   <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-wide">CONTACT PERSONS</h3>
                   <div className="flex items-center gap-1.5">
-                    <button className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 text-xs">+</button>
+                    <button className="text-[#1F3A2E] dark:text-teal-400 hover:text-[#1F3A2E] dark:hover:text-teal-300 text-xs">+</button>
                     <button onClick={() => toggleSection('contactPersons')} className="text-gray-600 dark:text-gray-400 text-xs">
                       {expandedSections.contactPersons ? '▲' : '▼'}
                     </button>
@@ -209,7 +209,7 @@ const DesignerShow = () => {
                         <p className="text-xs font-semibold text-gray-900 dark:text-white truncate">{designer.name}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{designer.email}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">{designer.phone || 'No phone'}</p>
-                        <button className="mt-1 text-xs text-teal-600 dark:text-teal-400 hover:underline">Invite to Portal</button>
+                        <button className="mt-1 text-xs text-[#1F3A2E] dark:text-teal-400 hover:underline">Invite to Portal</button>
                       </div>
                     </div>
                   </div>
@@ -221,7 +221,7 @@ const DesignerShow = () => {
                 <div className="p-3 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
                   <h3 className="text-xs font-semibold text-gray-900 dark:text-white uppercase tracking-wide">BANK ACCOUNT DETAILS</h3>
                   <div className="flex items-center gap-1.5">
-                    <button className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 text-xs">+</button>
+                    <button className="text-[#1F3A2E] dark:text-teal-400 hover:text-[#1F3A2E] dark:hover:text-teal-300 text-xs">+</button>
                     <button onClick={() => toggleSection('bankAccount')} className="text-gray-600 dark:text-gray-400 text-xs">
                       {expandedSections.bankAccount ? '▲' : '▼'}
                     </button>
@@ -390,7 +390,7 @@ const DesignerShow = () => {
                           </div>
                         ) : (
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            No Billing Address - <button className="text-teal-600 dark:text-teal-400 hover:underline">New Address</button>
+                            No Billing Address - <button className="text-[#1F3A2E] dark:text-teal-400 hover:underline">New Address</button>
                           </p>
                         )}
                       </div>
@@ -399,7 +399,7 @@ const DesignerShow = () => {
                       <div>
                         <h4 className="text-xs font-semibold text-gray-900 dark:text-white mb-2">Shipping Address</h4>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          No Shipping Address - <button className="text-teal-600 dark:text-teal-400 hover:underline">New Address</button>
+                          No Shipping Address - <button className="text-[#1F3A2E] dark:text-teal-400 hover:underline">New Address</button>
                         </p>
                       </div>
                     </div>
@@ -434,7 +434,7 @@ const DesignerShow = () => {
                         <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Email Address</label>
                         <a 
                           href={`mailto:${designer.email}`}
-                          className="text-xs font-medium text-teal-600 dark:text-teal-400 hover:underline"
+                          className="text-xs font-medium text-[#1F3A2E] dark:text-teal-400 hover:underline"
                         >
                           {designer.email}
                         </a>
@@ -469,7 +469,7 @@ const DesignerShow = () => {
                       <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">No products by this designer yet.</p>
                       <Link 
                         to="/products/new" 
-                        className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition-colors"
+                        className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-[#1F3A2E] dark:text-teal-400 hover:text-[#1F3A2E] dark:hover:text-teal-300 transition-colors"
                       >
                         Add First Product
                       </Link>
@@ -493,7 +493,7 @@ const DesignerShow = () => {
                               <td className="px-3 py-2 whitespace-nowrap">
                                 <Link 
                                   to={`/products/${product.id}`}
-                                  className="text-xs font-medium text-gray-900 dark:text-white hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                                  className="text-xs font-medium text-gray-900 dark:text-white hover:text-[#1F3A2E] dark:hover:text-teal-400 transition-colors"
                                 >
                                   {product.name}
                                 </Link>
@@ -510,12 +510,12 @@ const DesignerShow = () => {
                                 <span className="text-xs font-medium text-gray-700 dark:text-gray-300">₹{product.cost?.toLocaleString()}</span>
                               </td>
                               <td className="px-3 py-2 whitespace-nowrap text-right">
-                                <span className="text-xs font-bold text-teal-600 dark:text-teal-400">₹{product.price?.toLocaleString()}</span>
+                                <span className="text-xs font-bold text-[#1F3A2E] dark:text-teal-400">₹{product.price?.toLocaleString()}</span>
                               </td>
                               <td className="px-3 py-2 whitespace-nowrap text-center">
                                 <Link 
                                   to={`/products/${product.id}/edit`}
-                                  className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-medium text-xs transition-colors"
+                                  className="text-[#1F3A2E] dark:text-teal-400 hover:text-[#1F3A2E] dark:hover:text-teal-300 font-medium text-xs transition-colors"
                                 >
                                   Edit
                                 </Link>

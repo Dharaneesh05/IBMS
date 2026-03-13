@@ -127,7 +127,7 @@ const RepairOrderNew = () => {
                     value={formData.customerName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="Enter customer name"
                   />
                 </div>
@@ -142,7 +142,7 @@ const RepairOrderNew = () => {
                     value={formData.customerPhone}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -156,7 +156,7 @@ const RepairOrderNew = () => {
                     name="customerEmail"
                     value={formData.customerEmail}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -179,7 +179,7 @@ const RepairOrderNew = () => {
                     value={formData.productName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="e.g., Gold Ring, Diamond Necklace"
                   />
                 </div>
@@ -193,7 +193,7 @@ const RepairOrderNew = () => {
                     name="productSKU"
                     value={formData.productSKU}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="e.g., RNG-22K-0001"
                   />
                 </div>
@@ -216,7 +216,7 @@ const RepairOrderNew = () => {
                     onChange={handleChange}
                     required
                     rows="4"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="Describe the issue or service required (e.g., Ring resizing, Stone replacement, Polishing)"
                   />
                 </div>
@@ -230,7 +230,7 @@ const RepairOrderNew = () => {
                     value={formData.repairNotes}
                     onChange={handleChange}
                     rows="3"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="Any additional notes or special instructions"
                   />
                 </div>
@@ -244,7 +244,7 @@ const RepairOrderNew = () => {
                     name="assignedTo"
                     value={formData.assignedTo}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="Staff member name"
                   />
                 </div>
@@ -267,7 +267,7 @@ const RepairOrderNew = () => {
                     value={formData.receivedDate}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                   />
                 </div>
                 
@@ -282,7 +282,7 @@ const RepairOrderNew = () => {
                     onChange={handleChange}
                     required
                     min={formData.receivedDate}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                   />
                 </div>
               </div>
@@ -305,7 +305,7 @@ const RepairOrderNew = () => {
                     onChange={handleChange}
                     step="0.01"
                     min="0"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="0.00"
                   />
                 </div>
@@ -322,7 +322,7 @@ const RepairOrderNew = () => {
                     step="0.01"
                     min="0"
                     max={formData.repairCharges || undefined}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#1F3A2E] dark:bg-gray-700 dark:text-white"
                     placeholder="0.00"
                   />
                 </div>
@@ -352,7 +352,7 @@ const RepairOrderNew = () => {
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+              className="px-5 py-2.5 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
             >
               <HiSave className="w-5 h-5" />
               <span>{loading ? 'Creating...' : 'Create Repair Order'}</span>

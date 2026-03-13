@@ -88,7 +88,7 @@ const PurchaseOrderList = () => {
                 </div>
                 <Link 
                     to="/purchase-orders/new"
-                    className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="flex items-center gap-2 bg-[#1F3A2E] hover:bg-[#243d32] text-white px-4 py-2 rounded-lg transition-colors"
                 >
                     <FiPlus /> Create Purchase Order
                 </Link>
@@ -213,7 +213,7 @@ const PurchaseOrderList = () => {
                                             <div className="flex items-center justify-center gap-2">
                                                 <Link
                                                     to={`/purchase-orders/${order.id}`}
-                                                    className="text-teal-600 hover:text-teal-700 dark:text-teal-400 flex items-center gap-1"
+                                                    className="text-[#1F3A2E] hover:text-[#1F3A2E] dark:text-teal-400 flex items-center gap-1"
                                                     title="View Details"
                                                 >
                                                     <FiEye /> View

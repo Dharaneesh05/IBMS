@@ -182,7 +182,7 @@ function LowStockAlerts() {
             </p>
             <Link
               to="/inventory/stock-levels"
-              className="inline-block mt-4 px-4 py-2 text-xs bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors"
+              className="inline-block mt-4 px-4 py-2 text-xs bg-[#1F3A2E] text-white rounded hover:bg-[#243d32] transition-colors"
             >
               View All Stock Levels
             </Link>
@@ -215,7 +215,7 @@ function LowStockAlerts() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => alert('This would open a bulk Purchase Order creation dialog for all low stock items.')}
-              className="px-3 py-1.5 text-xs bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors"
+              className="px-3 py-1.5 text-xs bg-[#1F3A2E] text-white rounded hover:bg-[#243d32] transition-colors"
             >
               Create Bulk PO
             </button>
@@ -313,7 +313,7 @@ function LowStockAlerts() {
                     <td className="px-3 py-2">
                       <Link
                         to={`/products/${product.id}`}
-                        className="text-xs font-medium text-teal-600 dark:text-teal-400 hover:underline"
+                        className="text-xs font-medium text-[#1F3A2E] dark:text-teal-400 hover:underline"
                       >
                         {product.name}
                       </Link>
@@ -346,7 +346,7 @@ function LowStockAlerts() {
                           />
                           <button
                             onClick={() => handleAdjustReorder(product.id)}
-                            className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                            className="text-xs text-[#1F3A2E] dark:text-teal-400 hover:underline"
                           >
                             Save
                           </button>
@@ -384,7 +384,7 @@ function LowStockAlerts() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleCreatePO(product)}
-                          className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                          className="text-xs text-[#1F3A2E] dark:text-teal-400 hover:underline"
                         >
                           Create Purchase Order
                         </button>
@@ -422,7 +422,7 @@ function LowStockAlerts() {
           </div>
           <Link
             to="/inventory/stock-levels"
-            className="text-teal-600 dark:text-teal-400 hover:underline"
+            className="text-[#1F3A2E] dark:text-teal-400 hover:underline"
           >
             View All Stock Levels →
           </Link>

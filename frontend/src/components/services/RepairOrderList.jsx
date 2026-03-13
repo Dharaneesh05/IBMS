@@ -103,7 +103,7 @@ const RepairOrderList = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1F3A2E] mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading repair orders...</p>
         </div>
       </div>
@@ -144,7 +144,7 @@ const RepairOrderList = () => {
           </div>
           <Link
             to="/services/repair-orders/new"
-            className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+            className="inline-flex items-center px-4 py-2 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] transition-colors"
           >
             <HiPlus className="w-5 h-5 mr-2" />
             New Repair Order
@@ -162,7 +162,7 @@ const RepairOrderList = () => {
                 placeholder="Search orders, customers, products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent"
               />
               {searchTerm && (
                 <button
@@ -180,7 +180,7 @@ const RepairOrderList = () => {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#1F3A2E] focus:border-transparent"
               >
                 {statusOptions.map(status => (
                   <option key={status} value={status}>{status}</option>
@@ -306,7 +306,7 @@ const RepairOrderList = () => {
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => navigate(`/services/repair-orders/${order.id}/edit`)}
-                          className="text-teal-600 hover:text-teal-700 dark:text-teal-400"
+                          className="text-[#1F3A2E] hover:text-[#1F3A2E] dark:text-teal-400"
                           title="Edit"
                         >
                           <HiPencil className="w-5 h-5" />

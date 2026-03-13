@@ -472,7 +472,7 @@ const SaleNew = () => {
                     {/* BARCODE SCANNER - PRIMARY INPUT */}
                     <div className="mb-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-700">
                         <div className="flex items-center gap-2 mb-2">
-                            <HiOutlineQrcode className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                            <HiOutlineQrcode className="w-5 h-5 text-[#1F3A2E] dark:text-teal-400" />
                             <label className="text-sm font-semibold text-teal-900 dark:text-teal-100">
                                 Barcode Scanner
                             </label>
@@ -487,9 +487,9 @@ const SaleNew = () => {
                                     onKeyDown={handleBarcodeScan}
                                     placeholder="Scan barcode or enter SKU..."
                                     autoFocus
-                                    className="w-full px-3 py-2 border border-teal-300 dark:border-teal-600 rounded-lg 
+                                    className="w-full px-3 py-2 border border-teal-300 dark:border-[#1F3A2E] rounded-lg 
                                              bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-mono text-sm
-                                             focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-500 focus:border-teal-500 focus:outline-none
+                                             focus:ring-2 focus:ring-[#1F3A2E] dark:focus:ring-[#1F3A2E] focus:border-[#1F3A2E] focus:outline-none
                                              placeholder:text-gray-400"
                                     disabled={scanning}
                                 />
@@ -504,7 +504,7 @@ const SaleNew = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowCameraScanner(true)}
-                                className="px-4 py-2 bg-teal-600 hover:bg-teal-700 dark:bg-teal-600 dark:hover:bg-teal-700 
+                                className="px-4 py-2 bg-[#1F3A2E] hover:bg-[#243d32] dark:bg-[#1F3A2E] dark:hover:bg-[#243d32] 
                                          text-white font-medium rounded-lg shadow-sm hover:shadow-md 
                                          transition-all duration-200 flex items-center gap-2 whitespace-nowrap"
                                 title="Scan using camera"
@@ -548,7 +548,7 @@ const SaleNew = () => {
                                 placeholder="Search by SKU or name..."
                                 className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
                                          bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100
-                                         focus:ring-2 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                                         focus:ring-2 focus:ring-[#1F3A2E] focus:border-[#1F3A2E] focus:outline-none"
                             />
                         </div>
 
@@ -570,7 +570,7 @@ const SaleNew = () => {
                                                     Type: {product.type} | Stock: {product.quantity}
                                                 </div>
                                             </div>
-                                            <div className="text-sm font-semibold text-teal-600 dark:text-teal-400">
+                                            <div className="text-sm font-semibold text-[#1F3A2E] dark:text-teal-400">
                                                 ₹{product.price}
                                             </div>
                                         </div>
@@ -757,8 +757,8 @@ const SaleNew = () => {
                     <button
                         type="submit"
                         disabled={loading || items.length === 0}
-                        className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg 
-                                 hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 px-6 py-2 bg-[#1F3A2E] text-white rounded-lg 
+                                 hover:bg-[#243d32] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <FiSave /> {loading ? 'Creating...' : 'Create Invoice'}
                     </button>

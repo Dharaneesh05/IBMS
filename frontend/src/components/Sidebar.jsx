@@ -123,26 +123,26 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
   }, [location.pathname]);
 
   const toggleSection = (sectionId) => {
-    setExpandedSections(prev => 
-      prev.includes(sectionId) 
+    setExpandedSections(prev =>
+      prev.includes(sectionId)
         ? prev.filter(id => id !== sectionId)
-        : [...prev, sectionId]
+        : [sectionId]  // Only one open at a time
     );
   };
 
 
 
   return (
-    <div className={`${isCollapsed ? 'w-20 overflow-visible' : 'w-56'} bg-[#1e2139] dark:bg-gray-900 text-white h-screen fixed left-0 top-0 transition-all duration-300 ease-in-out flex flex-col z-50 shadow-xl`}>
+    <div className={`${isCollapsed ? 'w-20 overflow-visible' : 'w-56'} bg-[#1F3A2E] dark:bg-gray-900 text-white h-screen fixed left-0 top-0 transition-all duration-300 ease-in-out flex flex-col z-50 shadow-xl`}>
       {/* Logo and Menu Icon Section */}
       <div className="p-3 border-b border-gray-700/30 dark:border-gray-700">
         <div className="flex items-center justify-between">
           {!isCollapsed ? (
             <>
-              <h1 className="text-base font-semibold text-center flex-1">IBMS</h1>
+              <h1 className="text-sm font-bold text-center flex-1 leading-tight" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic', letterSpacing: '0.2px' }}>Shanmuga<br/>Jewellers</h1>
               <button
                 onClick={() => setIsCollapsed(!isCollapsed)}
-                className="p-1.5 hover:bg-[#0d9488]/20 transition-colors rounded-md"
+                className="p-1.5 hover:bg-[#D4AF37]/20 transition-colors rounded-md"
                 title="Collapse Sidebar"
               >
                 <HiChevronLeft className="w-5 h-5" />
@@ -151,7 +151,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
           ) : (
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="flex items-center justify-center w-full p-1.5 hover:bg-[#0d9488]/20 transition-colors rounded-md"
+              className="flex items-center justify-center w-full p-1.5 hover:bg-[#D4AF37]/20 transition-colors rounded-md"
               title="Expand Sidebar"
             >
               <HiMenu className="w-6 h-6" />
@@ -161,20 +161,23 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className={`flex-1 py-3 ${isCollapsed ? 'overflow-visible' : 'overflow-y-auto'}`}>
+      <nav className={`flex-1 py-3 ${isCollapsed ? 'overflow-visible' : 'overflow-y-auto'} flex flex-col justify-between`}>
         <div className={isCollapsed ? '' : ''}>
-          <ul className={`space-y-0.5 ${isCollapsed ? 'px-1' : 'px-2'}`}>{menuStructure.map((item) => (
+          <ul className={`${isCollapsed ? 'space-y-0.5 px-1' : 'space-y-2 px-2'}`}>{menuStructure.map((item) => (
               <li key={item.id}>
                 {/* Single Menu Item (No Submenu) */}
                 {item.single ? (
                   <div className="relative group">
                     <Link
                       to={item.path}
-                      className={`flex ${isCollapsed ? 'flex-col items-center py-3' : 'flex-row items-center space-x-3 py-2.5'} px-3 transition-all duration-200 rounded-lg ${
+                      className={`flex ${isCollapsed ? 'flex-col items-center py-3' : 'flex-row items-center space-x-3 py-3'} px-4 transition-all duration-200 rounded-lg ${
                         isActive(item.path)
-                          ? 'bg-[#0d9488] text-white font-medium shadow-sm'
-                          : 'text-gray-400 hover:bg-[#0d9488] hover:text-white'
+                          ? 'text-white font-medium shadow-sm'
+                          : 'text-gray-300 hover:text-white'
                       }`}
+                      style={isActive(item.path) ? { background: '#D4AF37' } : {}}
+                      onMouseEnter={e => { if (!isActive(item.path)) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                      onMouseLeave={e => { if (!isActive(item.path)) e.currentTarget.style.background = ''; }}
                       title={isCollapsed ? item.name : ''}
                     >
                       <item.icon className="w-5 h-5 flex-shrink-0" />
@@ -191,11 +194,14 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                   <div className="relative group">
                     <button
                       onClick={() => toggleSection(item.id)}
-                      className={`w-full flex ${isCollapsed ? 'flex-col items-center py-3' : 'flex-row items-center justify-between py-2.5'} px-3 transition-all duration-200 rounded-lg ${
+                      className={`w-full flex ${isCollapsed ? 'flex-col items-center py-3' : 'flex-row items-center justify-between py-3'} px-4 transition-all duration-200 rounded-lg ${
                         isAnySubmenuActive(item.submenu)
-                          ? 'bg-[#0d9488] text-white font-medium shadow-sm'
-                          : 'text-gray-400 hover:bg-[#0d9488] hover:text-white'
+                          ? 'text-white font-medium shadow-sm'
+                          : 'text-gray-300 hover:text-white'
                       }`}
+                      style={isAnySubmenuActive(item.submenu) ? { background: '#D4AF37' } : {}}
+                      onMouseEnter={e => { if (!isAnySubmenuActive(item.submenu)) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+                      onMouseLeave={e => { if (!isAnySubmenuActive(item.submenu)) e.currentTarget.style.background = ''; }}
                       title={isCollapsed ? item.name : ''}
                     >
                       <div className={`flex ${isCollapsed ? 'flex-col items-center' : 'flex-row items-center space-x-3'}`}>
@@ -218,7 +224,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                     {/* Hover Popup for Collapsed Sidebar */}
                     {isCollapsed && (
                       <div className="absolute left-full top-0 ml-1 hidden group-hover:block z-[999]">
-                        <div className="bg-[#2a2d42] dark:bg-gray-800 rounded-lg shadow-xl py-2.5 px-0 min-w-[240px] border border-gray-700/30 dark:border-gray-600">
+                        <div className="bg-[#162d22] dark:bg-gray-800 rounded-lg shadow-xl py-2.5 px-0 min-w-[240px] border border-[#D4AF37]/30 dark:border-gray-600">
                           <div className="text-[10px] font-bold text-gray-400 mb-2 px-3 uppercase tracking-wider">
                             {item.name}
                           </div>
@@ -227,10 +233,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                               <li key={idx} className="relative group/item">
                                 <Link
                                   to={subItem.path}
+                                  style={isActive(subItem.path) ? { background: '#D4AF37' } : {}}
                                   className={`flex items-center justify-between px-3 py-2.5 text-sm transition-colors duration-150 ${
                                     isActive(subItem.path)
-                                      ? 'bg-[#0d9488] text-white font-medium'
-                                      : 'text-gray-300 hover:bg-[#0d9488] hover:text-white'
+                                      ? 'text-white font-medium'
+                                      : 'text-gray-300 hover:text-white'
                                   }`}
                                 >
                                   <span className="text-[13px]">{subItem.name}</span>
@@ -264,10 +271,11 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
                             <li key={idx} className="relative group/subitem">
                               <Link
                                 to={subItem.path}
-                                className={`flex items-center justify-between px-4 py-2 text-sm transition-all duration-150 rounded-md ${
+                                style={isActive(subItem.path) ? { background: '#D4AF37' } : {}}
+                              className={`flex items-center justify-between px-4 py-2.5 text-sm transition-all duration-150 rounded-md ${
                                   isActive(subItem.path)
-                                    ? 'bg-[#0d9488] text-white font-medium'
-                                    : 'text-gray-400 hover:bg-[#0d9488] hover:text-white'
+                                    ? 'text-white font-medium'
+                                    : 'text-gray-400 hover:text-white'
                                 }`}
                               >
                                 <span>{subItem.name}</span>
@@ -296,6 +304,17 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Bottom Brand Footer - pinned to bottom of nav */}
+        <div className={`mt-4 pt-3 border-t border-[#D4AF37]/20 ${isCollapsed ? 'px-1 pb-3' : 'px-3 pb-3'}`}>
+          {!isCollapsed ? (
+            <p className="text-[10px] text-gray-500 text-center tracking-wide">
+              Shanmuga Jewellers &copy; 2025
+            </p>
+          ) : (
+            <p className="text-[10px] text-gray-500 text-center font-bold">SJ</p>
+          )}
         </div>
       </nav>
 

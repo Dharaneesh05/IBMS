@@ -220,7 +220,7 @@ const ProductListGrid = () => {
                   <div className="mb-4">
                     <div className="flex items-baseline justify-between mb-1">
                       <span className="text-xs text-gray-500">Selling Price</span>
-                      <span className="text-lg font-bold text-[#0d9488]">₹{product.price?.toLocaleString()}</span>
+                      <span className="text-lg font-bold text-[#1F3A2E]">₹{product.price?.toLocaleString()}</span>
                     </div>
                     <div className="flex items-baseline justify-between">
                       <span className="text-xs text-gray-500">Cost Price</span>

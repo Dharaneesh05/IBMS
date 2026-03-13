@@ -5,6 +5,7 @@ import { ActivityProvider } from './contexts/ActivityContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { FilterProvider } from './contexts/FilterContext';
 import { SocketProvider } from './contexts/SocketContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 // Components
 import Sidebar from './components/Sidebar';
@@ -12,6 +13,8 @@ import TopBar from './components/TopBar';
 import SlidePanel from './components/SlidePanel';
 import Dashboard from './components/Dashboard';
 import ComingSoon from './components/ComingSoon';
+import Login from './components/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 import ProductList from './components/products/ProductList';
 import ProductShow from './components/products/ProductShow';
 import ProductNew from './components/products/ProductNew';
@@ -57,112 +60,124 @@ function App() {
         <ActivityProvider>
           <FilterProvider>
             <SocketProvider>
-              <Router
-                future={{
-                  v7_startTransition: true,
-                  v7_relativeSplatPath: true
-                }}
-              >
-        <div className="App flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
-        {/* Real-time Stock Notifications */}
-        <StockNotifications />
-        
-        {/* Connection Status Indicator */}
-        <ConnectionStatus />
-        
-        {/* Sidebar */}
-        <Sidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
-        
-        {/* Main Content */}
-        <div className={`flex-1 flex flex-col ${isSidebarCollapsed ? 'ml-20' : 'ml-56'} overflow-hidden transition-all duration-300`}>
-          {/* Top Bar */}
-          <TopBar
-            onFilterClick={() => openSlidePanel('filter', 'Filters')}
-            onNotificationClick={() => openSlidePanel('notification', 'Notifications')}
-            onMailClick={() => openSlidePanel('mail', 'Messages')}
-            onSettingsClick={() => openSlidePanel('settings', 'Settings')}
-          />
-          
-          {/* Page Content */}
-          <main className="flex-1 overflow-y-auto">
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/alerts" element={<SystemAlerts />} />
-              
-              {/* Product/Items Routes */}
-              <Route path="/products" element={<ProductList />} />
-              <Route path="/products/new" element={<ProductNew />} />
-              <Route path="/products/:id" element={<ProductShow />} />
-              <Route path="/products/:id/edit" element={<ProductEdit />} />
-              <Route path="/products/type/:type" element={<ProductType />} />
-              
-              {/* Inventory Routes */}
-              <Route path="/inventory/stock-levels" element={<StockLevels />} />
-              <Route path="/inventory/low-stock" element={<LowStockAlerts />} />
-              <Route path="/inventory/adjustments" element={<ComingSoon title="Inventory Adjustments" description="Track and manage inventory adjustments" />} />
-              <Route path="/inventory/adjustments/new" element={<ComingSoon title="New Adjustment" description="Create a new inventory adjustment" />} />
-              <Route path="/inventory/overview" element={<ComingSoon title="Stock Overview" description="View complete stock status across all locations" />} />
-              <Route path="/inventory/packages" element={<ComingSoon title="Packages" description="Manage product packages and bundles" />} />
-              <Route path="/inventory/shipments" element={<ComingSoon title="Shipments" description="Track shipment status and delivery" />} />
-              
-              {/* Customer Routes */}
-              <Route path="/customers" element={<CustomerList />} />
-              <Route path="/customers/new" element={<ComingSoon title="New Customer" description="Add a new customer" />} />
-              <Route path="/customers/:id" element={<ComingSoon title="Customer Details" description="View customer information" />} />
-              <Route path="/customers/:id/edit" element={<ComingSoon title="Edit Customer" description="Update customer information" />} />
-              
-              {/* Sales Routes */}
-              <Route path="/sales/invoices" element={<SaleList />} />
-              <Route path="/sales/invoices/new" element={<SaleNew />} />
-              <Route path="/sales/invoices/:id" element={<SaleShow />} />
-              <Route path="/designers" element={<DesignerList />} />
-              <Route path="/designers/new" element={<DesignerNew />} />
-              <Route path="/designers/:id" element={<DesignerShow />} />
-              <Route path="/designers/:id/edit" element={<DesignerEdit />} />
-              <Route path="/sales/orders" element={<ComingSoon title="Sales Orders" description="Manage customer sales orders" />} />
-              <Route path="/sales/orders/new" element={<ComingSoon title="Create Sales Order" description="Create a new sales order" />} />
-              <Route path="/sales/payments" element={<ComingSoon title="Payments Received" description="Track customer payments" />} />
-              <Route path="/sales/returns" element={<ComingSoon title="Sales Returns" description="Process customer returns and refunds" />} />
-              
-              {/* Purchases Routes */}
-              <Route path="/vendors" element={<VendorList />} />
-              <Route path="/vendors/new" element={<VendorNew />} />
-              <Route path="/vendors/:id" element={<ComingSoon title="Vendor Details" description="View vendor information" />} />
-              <Route path="/vendors/:id/edit" element={<ComingSoon title="Edit Vendor" description="Update vendor information" />} />
-              <Route path="/purchase-orders" element={<PurchaseOrderList />} />
-              <Route path="/purchase-orders/new" element={<ComingSoon title="Create Purchase Order" description="Create a new purchase order" />} />
-              <Route path="/purchase-orders/:id" element={<PurchaseOrderShow />} />
-              <Route path="/purchases/bills" element={<ComingSoon title="Bills" description="Manage vendor bills and payments" />} />
-              
-              {/* Services Routes - Phase 2 */}
-              <Route path="/services/repair-orders" element={<RepairOrderList />} />
-              <Route path="/services/repair-orders/new" element={<RepairOrderNew />} />
-              <Route path="/services/repair-orders/:id/edit" element={<RepairOrderEdit />} />
-              
-              {/* Reports & Documents */}
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/documents" element={<ComingSoon title="Documents" description="Store and manage business documents" />} />
-              
-              {/* Settings & Help */}
-              <Route path="/settings" element={<ComingSoon title="Settings" description="System configuration options coming soon" />} />
-              <Route path="/help" element={<ComingSoon title="Help Center" description="Documentation and support coming soon" />} />
-              <Route path="/shipment" element={<ComingSoon title="Shipment Management" description="Track and manage shipments coming soon" />} />
-              <Route path="/store" element={<ComingSoon title="Store Management" description="Manage store locations and inventory coming soon" />} />
-              <Route path="/privacy" element={<ComingSoon title="Privacy Settings" description="Privacy and security settings coming soon" />} />
-            </Routes>
-          </main>
-        </div>
+              <AuthProvider>
+                <Router
+                  future={{
+                    v7_startTransition: true,
+                    v7_relativeSplatPath: true
+                  }}
+                >
+                  <Routes>
+                    {/* Public Route */}
+                    <Route path="/login" element={<Login />} />
+                    
+                    {/* Protected Routes */}
+                    <Route path="/*" element={
+                      <ProtectedRoute>
+                        <div className="App flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+                          {/* Real-time Stock Notifications */}
+                          <StockNotifications />
+                          
+                          {/* Connection Status Indicator */}
+                          <ConnectionStatus />
+                          
+                          {/* Sidebar */}
+                          <Sidebar isCollapsed={isSidebarCollapsed} setIsCollapsed={setIsSidebarCollapsed} />
+                          
+                          {/* Main Content */}
+                          <div className={`flex-1 flex flex-col ${isSidebarCollapsed ? 'ml-20' : 'ml-56'} overflow-hidden transition-all duration-300`}>
+                            {/* Top Bar */}
+                            <TopBar
+                              onFilterClick={() => openSlidePanel('filter', 'Filters')}
+                              onNotificationClick={() => openSlidePanel('notification', 'Notifications')}
+                              onMailClick={() => openSlidePanel('mail', 'Messages')}
+                              onSettingsClick={() => openSlidePanel('settings', 'Settings')}
+                            />
+                            
+                            {/* Page Content */}
+                            <main className="flex-1 overflow-y-auto">
+                              <Routes>
+                                <Route path="/" element={<Navigate to="/dashboard" />} />
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/alerts" element={<SystemAlerts />} />
+                                
+                                {/* Product/Items Routes */}
+                                <Route path="/products" element={<ProductList />} />
+                                <Route path="/products/new" element={<ProductNew />} />
+                                <Route path="/products/:id" element={<ProductShow />} />
+                                <Route path="/products/:id/edit" element={<ProductEdit />} />
+                                <Route path="/products/type/:type" element={<ProductType />} />
+                                
+                                {/* Inventory Routes */}
+                                <Route path="/inventory/stock-levels" element={<StockLevels />} />
+                                <Route path="/inventory/low-stock" element={<LowStockAlerts />} />
+                                <Route path="/inventory/adjustments" element={<ComingSoon title="Inventory Adjustments" description="Track and manage inventory adjustments" />} />
+                                <Route path="/inventory/adjustments/new" element={<ComingSoon title="New Adjustment" description="Create a new inventory adjustment" />} />
+                                <Route path="/inventory/overview" element={<ComingSoon title="Stock Overview" description="View complete stock status across all locations" />} />
+                                <Route path="/inventory/packages" element={<ComingSoon title="Packages" description="Manage product packages and bundles" />} />
+                                <Route path="/inventory/shipments" element={<ComingSoon title="Shipments" description="Track shipment status and delivery" />} />
+                                
+                                {/* Customer Routes */}
+                                <Route path="/customers" element={<CustomerList />} />
+                                <Route path="/customers/new" element={<ComingSoon title="New Customer" description="Add a new customer" />} />
+                                <Route path="/customers/:id" element={<ComingSoon title="Customer Details" description="View customer information" />} />
+                                <Route path="/customers/:id/edit" element={<ComingSoon title="Edit Customer" description="Update customer information" />} />
+                                
+                                {/* Sales Routes */}
+                                <Route path="/sales/invoices" element={<SaleList />} />
+                                <Route path="/sales/invoices/new" element={<SaleNew />} />
+                                <Route path="/sales/invoices/:id" element={<SaleShow />} />
+                                <Route path="/designers" element={<DesignerList />} />
+                                <Route path="/designers/new" element={<DesignerNew />} />
+                                <Route path="/designers/:id" element={<DesignerShow />} />
+                                <Route path="/designers/:id/edit" element={<DesignerEdit />} />
+                                <Route path="/sales/orders" element={<ComingSoon title="Sales Orders" description="Manage customer sales orders" />} />
+                                <Route path="/sales/orders/new" element={<ComingSoon title="Create Sales Order" description="Create a new sales order" />} />
+                                <Route path="/sales/payments" element={<ComingSoon title="Payments Received" description="Track customer payments" />} />
+                                <Route path="/sales/returns" element={<ComingSoon title="Sales Returns" description="Process customer returns and refunds" />} />
+                                
+                                {/* Purchases Routes */}
+                                <Route path="/vendors" element={<VendorList />} />
+                                <Route path="/vendors/new" element={<VendorNew />} />
+                                <Route path="/vendors/:id" element={<ComingSoon title="Vendor Details" description="View vendor information" />} />
+                                <Route path="/vendors/:id/edit" element={<ComingSoon title="Edit Vendor" description="Update vendor information" />} />
+                                <Route path="/purchase-orders" element={<PurchaseOrderList />} />
+                                <Route path="/purchase-orders/new" element={<ComingSoon title="Create Purchase Order" description="Create a new purchase order" />} />
+                                <Route path="/purchase-orders/:id" element={<PurchaseOrderShow />} />
+                                <Route path="/purchases/bills" element={<ComingSoon title="Bills" description="Manage vendor bills and payments" />} />
+                                
+                                {/* Services Routes - Phase 2 */}
+                                <Route path="/services/repair-orders" element={<RepairOrderList />} />
+                                <Route path="/services/repair-orders/new" element={<RepairOrderNew />} />
+                                <Route path="/services/repair-orders/:id/edit" element={<RepairOrderEdit />} />
+                                
+                                {/* Reports & Documents */}
+                                <Route path="/reports" element={<Reports />} />
+                                <Route path="/documents" element={<ComingSoon title="Documents" description="Store and manage business documents" />} />
+                                
+                                {/* Settings & Help */}
+                                <Route path="/settings" element={<ComingSoon title="Settings" description="System configuration options coming soon" />} />
+                                <Route path="/help" element={<ComingSoon title="Help Center" description="Documentation and support coming soon" />} />
+                                <Route path="/shipment" element={<ComingSoon title="Shipment Management" description="Track and manage shipments coming soon" />} />
+                                <Route path="/store" element={<ComingSoon title="Store Management" description="Manage store locations and inventory coming soon" />} />
+                                <Route path="/privacy" element={<ComingSoon title="Privacy Settings" description="Privacy and security settings coming soon" />} />
+                              </Routes>
+                            </main>
+                          </div>
 
-        {/* Slide Panel */}
-        <SlidePanel
-          isOpen={slidePanel.isOpen}
-          onClose={closeSlidePanel}
-          type={slidePanel.type}
-          title={slidePanel.title}
-        />
-      </div>
-              </Router>
+                          {/* Slide Panel */}
+                          <SlidePanel
+                            isOpen={slidePanel.isOpen}
+                            onClose={closeSlidePanel}
+                            type={slidePanel.type}
+                            title={slidePanel.title}
+                          />
+                        </div>
+                      </ProtectedRoute>
+                    } />
+                  </Routes>
+                </Router>
+              </AuthProvider>
             </SocketProvider>
           </FilterProvider>
         </ActivityProvider>

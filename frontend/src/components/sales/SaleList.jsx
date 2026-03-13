@@ -117,7 +117,7 @@ const SaleList = () => {
                 </div>
                 <button
                     onClick={() => navigate('/sales/invoices/new')}
-                    className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] transition-colors"
                 >
                     <FiPlus /> Create New Invoice
                 </button>
@@ -173,7 +173,7 @@ const SaleList = () => {
             {/* Sales Table */}
             {loading ? (
                 <div className="text-center py-10">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600"></div>
+                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#1F3A2E]"></div>
                 </div>
             ) : sales.length === 0 ? (
                 <div className="text-center py-10">
@@ -201,7 +201,7 @@ const SaleList = () => {
                                         <td className="px-4 py-3 font-medium">
                                             <Link
                                                 to={`/sales/invoices/${sale.id}`}
-                                                className="text-teal-600 hover:underline"
+                                                className="text-[#1F3A2E] hover:underline"
                                             >
                                                 {sale.invoiceNumber}
                                             </Link>
@@ -236,7 +236,7 @@ const SaleList = () => {
                                             <div className="flex items-center gap-2">
                                                 <button
                                                     onClick={() => navigate(`/sales/invoices/${sale.id}`)}
-                                                    className="text-teal-600 hover:text-teal-700 dark:text-teal-400"
+                                                    className="text-[#1F3A2E] hover:text-[#1F3A2E] dark:text-teal-400"
                                                     title="View"
                                                 >
                                                     <FiEye />
@@ -270,7 +270,7 @@ const SaleList = () => {
                                 >
                                     Previous
                                 </button>
-                                <span className="px-4 py-2 bg-blue-600 text-white rounded-lg">
+                                <span className="px-4 py-2 bg-[#1F3A2E] text-white rounded-lg">
                                     {pagination.page}
                                 </span>
                                 <button

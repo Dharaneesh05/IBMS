@@ -1,4 +1,5 @@
 const { sequelize } = require('../config/db');
+const User = require('./User');
 const Designer = require('./Designer');
 const Product = require('./Product');
 const Customer = require('./Customer');
@@ -148,6 +149,7 @@ StockMovement.belongsTo(Product, {
 // Export all models and sequelize instance
 module.exports = {
     sequelize,
+    User,
     Designer,
     Product,
     Customer,

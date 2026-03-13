@@ -77,7 +77,7 @@ const StockNotifications = () => {
                     {notification.productId && (
                       <Link
                         to={`/products/${notification.productId}`}
-                        className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                        className="text-xs text-[#1F3A2E] dark:text-teal-400 hover:underline"
                       >
                         View Item
                       </Link>

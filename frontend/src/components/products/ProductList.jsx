@@ -341,7 +341,7 @@ const ProductList = () => {
                 <div className="absolute inset-y-0 left-0 flex items-center">
                   <button
                     onClick={() => setSearchScopeOpen(!searchScopeOpen)}
-                    className="flex items-center gap-1 pl-3 pr-2 h-full text-teal-600 hover:text-teal-700 border-r border-gray-300 transition-colors"
+                    className="flex items-center gap-1 pl-3 pr-2 h-full text-[#1F3A2E] hover:text-[#1F3A2E] border-r border-gray-300 transition-colors"
                   >
                     <HiSearch className="w-4 h-4" />
                     <HiChevronDown className="w-3 h-3" />
@@ -353,7 +353,7 @@ const ProductList = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={`Search in ${searchScope === 'all' ? 'All Items' : searchScope}...`}
-                  className="w-full pl-14 pr-10 py-2.5 border border-gray-200 rounded-lg text-sm shadow-sm hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all bg-gray-50 focus:bg-white"
+                  className="w-full pl-14 pr-10 py-2.5 border border-gray-200 rounded-lg text-sm shadow-sm hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#1F3A2E] focus:border-[#1F3A2E] transition-all bg-gray-50 focus:bg-white"
                 />
                 
                 {searchQuery && (
@@ -438,7 +438,7 @@ const ProductList = () => {
                           htmlFor="csv-upload"
                           className="w-full cursor-pointer text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-teal-50 transition-colors rounded-md mx-1 block"
                         >
-                          <span className="font-semibold text-teal-600">Import Items</span>
+                          <span className="font-semibold text-[#1F3A2E]">Import Items</span>
                           <p className="text-xs text-gray-500 mt-0.5">Upload CSV file</p>
                         </label>
                       </label>
@@ -489,7 +489,7 @@ const ProductList = () => {
                 {/* Add Product Button */}
                 <Link 
                   to="/products/new" 
-                  className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 transition-all text-sm font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] transition-all text-sm font-semibold shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
                   <HiPlus className="w-4 h-4" />
                   Add Product
@@ -509,7 +509,7 @@ const ProductList = () => {
                       onClick={() => setViewMode('table')}
                       className={`p-2.5 rounded-l-lg transition-all ${
                         viewMode === 'table'
-                          ? 'bg-teal-600 text-white shadow-inner'
+                          ? 'bg-[#1F3A2E] text-white shadow-inner'
                           : 'bg-white text-gray-600 hover:bg-gray-50'
                       }`}
                       title="Table View"
@@ -520,7 +520,7 @@ const ProductList = () => {
                       onClick={() => setViewMode('grid')}
                       className={`p-2.5 rounded-r-lg transition-all border-l border-gray-200 ${
                         viewMode === 'grid'
-                          ? 'bg-teal-600 text-white shadow-inner'
+                          ? 'bg-[#1F3A2E] text-white shadow-inner'
                           : 'bg-white text-gray-600 hover:bg-gray-50'
                       }`}
                       title="Grid View"
@@ -537,7 +537,7 @@ const ProductList = () => {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-3 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white shadow-sm hover:border-gray-300 transition-all"
+                    className="px-3 py-2 border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-[#1F3A2E] focus:border-[#1F3A2E] bg-white shadow-sm hover:border-gray-300 transition-all"
                   >
                 <option value="name">Name</option>
                 <option value="type">Type</option>
@@ -565,11 +565,11 @@ const ProductList = () => {
               <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-3">
                 <button className="bg-white border border-gray-200 rounded-xl p-4 hover:border-teal-300 hover:shadow-md transition-all text-left group">
                   <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Active Designs</p>
-                  <p className="text-2xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">{calculateTotals(filteredAndSortedProducts).totalProducts}</p>
+                  <p className="text-2xl font-bold text-gray-900 group-hover:text-[#1F3A2E] transition-colors">{calculateTotals(filteredAndSortedProducts).totalProducts}</p>
                 </button>
                 <button className="bg-white border border-gray-200 rounded-xl p-4 hover:border-teal-300 hover:shadow-md transition-all text-left group">
                   <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Total Pieces</p>
-                  <p className="text-2xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">{calculateTotals(filteredAndSortedProducts).totalQuantity.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-gray-900 group-hover:text-[#1F3A2E] transition-colors">{calculateTotals(filteredAndSortedProducts).totalQuantity.toLocaleString()}</p>
                 </button>
                 <button className="bg-white border border-gray-200 rounded-xl p-4 hover:border-emerald-300 hover:shadow-md transition-all text-left group">
                   <p className="text-xs text-gray-500 mb-1 font-semibold uppercase tracking-wide">Stock Value</p>
@@ -586,7 +586,7 @@ const ProductList = () => {
                 <h3 className="text-sm font-bold text-gray-800 mb-3 uppercase tracking-wide">Quick Insights</h3>
                 <div className="space-y-2.5">
                   <div className="flex items-start gap-2">
-                    <div className="w-1 h-1 rounded-full bg-teal-500 mt-1.5"></div>
+                    <div className="w-1 h-1 rounded-full bg-[#1F3A2E] mt-1.5"></div>
                     <p className="text-xs text-slate-700 leading-relaxed">
                       <span className="font-medium">Top category:</span> {types.length > 0 && products.filter(p => p.type === types[0]).length > 0 ? types[0] : 'N/A'}
                     </p>
@@ -663,7 +663,7 @@ const ProductList = () => {
                        type="checkbox"
                         checked={selectAll}
                         onChange={handleSelectAll}
-                        className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500 focus:ring-2"
+                        className="w-4 h-4 text-[#1F3A2E] bg-gray-100 border-gray-300 rounded focus:ring-[#1F3A2E] focus:ring-2"
                       />
                     </th>
                     <th className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider px-6 py-4">
@@ -698,7 +698,7 @@ const ProductList = () => {
                           type="checkbox"
                           checked={selectedItems.has(product.id)}
                           onChange={() => handleSelectItem(product.id)}
-                          className="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-500 focus:ring-2"
+                          className="w-4 h-4 text-[#1F3A2E] bg-gray-100 border-gray-300 rounded focus:ring-[#1F3A2E] focus:ring-2"
                         />
                       </td>
                       <td className="px-6 py-4">
@@ -706,7 +706,7 @@ const ProductList = () => {
                           to={`/products/${product.id}`}
                           className="block group"
                         >
-                          <div className="text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">
+                          <div className="text-sm font-semibold text-gray-900 group-hover:text-[#1F3A2E] transition-colors">
                             {product.name}
                           </div>
                           <div className="text-xs text-gray-500 mt-0.5">
@@ -717,7 +717,7 @@ const ProductList = () => {
                       <td className="whitespace-nowrap px-6 py-4">
                         <Link 
                           to={`/designers/${product.designer?.id}`}
-                          className="text-sm text-gray-600 hover:text-teal-600 transition-colors"
+                          className="text-sm text-gray-600 hover:text-[#1F3A2E] transition-colors"
                         >
                           {product.designer?.name || 'N/A'}
                         </Link>
@@ -734,7 +734,7 @@ const ProductList = () => {
                       <td className="whitespace-nowrap text-center px-6 py-4">
                         <Link 
                           to={`/products/${product.id}/edit`}
-                          className="text-teal-600 hover:text-teal-700 font-medium transition-colors text-sm"
+                          className="text-[#1F3A2E] hover:text-[#1F3A2E] font-medium transition-colors text-sm"
                           title="Edit product"
                         >
                           Edit
@@ -773,7 +773,7 @@ const ProductList = () => {
                 <div className="p-5">
                   {/* Product Name */}
                   <Link to={`/products/${product.id}`}>
-                    <h3 className="text-base font-bold text-gray-900 mb-1.5 hover:text-teal-600 transition-colors line-clamp-2 min-h-[2.5rem]">
+                    <h3 className="text-base font-bold text-gray-900 mb-1.5 hover:text-[#1F3A2E] transition-colors line-clamp-2 min-h-[2.5rem]">
                       {product.name}
                     </h3>
                   </Link>
@@ -819,7 +819,7 @@ const ProductList = () => {
                   <div className="flex gap-2">
                     <Link 
                       to={`/products/${product.id}`}
-                      className="flex-1 text-center py-2.5 px-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-all text-xs font-semibold shadow-sm hover:shadow"
+                      className="flex-1 text-center py-2.5 px-3 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] transition-all text-xs font-semibold shadow-sm hover:shadow"
                     >
                       View
                     </Link>

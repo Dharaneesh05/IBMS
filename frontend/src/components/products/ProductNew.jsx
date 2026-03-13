@@ -261,7 +261,7 @@ const ProductNew = () => {
           <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
             <h3 className="text-xl font-bold text-gray-900 mb-2">No Designers Found</h3>
             <p className="text-gray-600 mb-6">You need to add at least one active designer before creating products</p>
-            <Link to="/designers/new" className="inline-block px-6 py-2 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors">
+            <Link to="/designers/new" className="inline-block px-6 py-2 bg-[#1F3A2E] text-white font-medium rounded-lg hover:bg-[#243d32] transition-colors">
               Add Your First Designer
             </Link>
           </div>
@@ -416,7 +416,7 @@ const ProductNew = () => {
                             value="yes"
                             checked={formData.hallmarkCertified === 'yes'}
                             onChange={handleChange}
-                            className="w-4 h-4 text-teal-600 focus:ring-teal-500"
+                            className="w-4 h-4 text-[#1F3A2E] focus:ring-[#1F3A2E]"
                           />
                           <span className="ml-2 text-sm text-gray-700">Yes</span>
                         </label>
@@ -427,7 +427,7 @@ const ProductNew = () => {
                             value="no"
                             checked={formData.hallmarkCertified === 'no'}
                             onChange={handleChange}
-                            className="w-4 h-4 text-teal-600 focus:ring-teal-500"
+                            className="w-4 h-4 text-[#1F3A2E] focus:ring-[#1F3A2E]"
                           />
                           <span className="ml-2 text-sm text-gray-700">No</span>
                         </label>
@@ -504,7 +504,7 @@ const ProductNew = () => {
                         readOnly
                         placeholder="Auto-calculated"
                       />
-                      <p className="text-xs text-teal-600 mt-1">Auto-calculated</p>
+                      <p className="text-xs text-[#1F3A2E] mt-1">Auto-calculated</p>
                     </div>
                   </div>
 
@@ -616,7 +616,7 @@ const ProductNew = () => {
                               alert('Failed to generate SKU');
                             }
                           }}
-                          className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium whitespace-nowrap"
+                          className="px-4 py-2 bg-[#1F3A2E] text-white rounded-lg hover:bg-[#243d32] transition-colors text-sm font-medium whitespace-nowrap"
                         >
                           Generate SKU
                         </button>
@@ -904,7 +904,7 @@ const ProductNew = () => {
                           className="input-field text-sm bg-gray-50"
                           readOnly
                         />
-                        <p className="text-xs text-teal-600 mt-1">Auto-calculated</p>
+                        <p className="text-xs text-[#1F3A2E] mt-1">Auto-calculated</p>
                       </div>
                     </div>
 
@@ -985,7 +985,7 @@ const ProductNew = () => {
                           className="input-field text-sm bg-yellow-50 font-bold text-green-700"
                           readOnly
                         />
-                        <p className="text-xs text-teal-600 mt-1">Auto-calculated with GST</p>
+                        <p className="text-xs text-[#1F3A2E] mt-1">Auto-calculated with GST</p>
                       </div>
                     </div>
 
@@ -1072,7 +1072,7 @@ const ProductNew = () => {
                 <div className="flex items-center gap-3">
                   <button 
                     type="submit" 
-                    className="flex-1 px-6 py-2.5 bg-teal-600 text-white font-bold rounded-lg hover:bg-teal-700 transition-colors text-sm"
+                    className="flex-1 px-6 py-2.5 bg-[#1F3A2E] text-white font-bold rounded-lg hover:bg-[#243d32] transition-colors text-sm"
                     disabled={loading}
                   >
                     {loading ? 'Creating...' : 'Create Product'}

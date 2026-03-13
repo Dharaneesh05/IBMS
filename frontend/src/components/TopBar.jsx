@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../api/api';
 import { 
   HiSearch, 
@@ -9,21 +10,22 @@ import {
   HiMail,
   HiBell,
   HiFilter,
-  HiChevronRight
+  HiLogout,
+  HiUser,
+  HiChevronDown
 } from 'react-icons/hi';
 import { 
-  MdInventory,
-  MdTrendingUp,
-  MdTrendingDown
+  MdInventory
 } from 'react-icons/md';
-import { GiGoldBar } from 'react-icons/gi';
 
 const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsClick }) => {
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState({ products: [], designers: [] });
   const [showResults, setShowResults] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [showActivityPanel, setShowActivityPanel] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const [recentActivities, setRecentActivities] = useState([]);
   const [showAllActivities, setShowAllActivities] = useState(false);
   const [metalRates, setMetalRates] = useState({
@@ -38,6 +40,7 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
   });
   const searchRef = useRef(null);
   const activityRef = useRef(null);
+  const userMenuRef = useRef(null);
   const navigate = useNavigate();
 
   // Fetch recent activities from API
@@ -104,10 +107,19 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
       if (activityRef.current && !activityRef.current.contains(event.target)) {
         setShowActivityPanel(false);
       }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Logout handler
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
 
   // Search function with debounce
   useEffect(() => {
@@ -181,7 +193,7 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => searchQuery && setShowResults(true)}
-                  className="w-full pl-9 pr-9 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0d9488] focus:border-transparent dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+                  className="w-full pl-9 pr-9 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm" style={{ '--tw-ring-color': '#1F3A2E' }} onFocus={e => e.target.style.boxShadow = '0 0 0 2px #1F3A2E'} onBlur={e => e.target.style.boxShadow = ''}
                 />
                 {searchQuery && (
                   <button
@@ -200,7 +212,7 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-600 max-h-96 overflow-y-auto z-50">
                     {isSearching ? (
                       <div className="p-4 text-center">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#0d9488] mx-auto"></div>
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#1F3A2E] mx-auto"></div>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Searching...</p>
                       </div>
                     ) : totalResults === 0 ? (
@@ -222,7 +234,7 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
                                 onClick={() => handleResultClick('product', product.id)}
                                 className="w-full px-4 py-3 hover:bg-gray-50 transition-colors text-left flex items-center space-x-3"
                               >
-                                <div className="w-10 h-10 bg-[#0d9488] flex items-center justify-center flex-shrink-0">
+                                <div className="w-10 h-10 bg-[#1F3A2E] flex items-center justify-center flex-shrink-0">
                                   <MdInventory className="w-5 h-5 text-gray-900 dark:text-white" />
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -370,7 +382,7 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
                           <div className="mt-4">
                             <button 
                               onClick={() => setShowAllActivities(!showAllActivities)}
-                              className="w-full text-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium py-1"
+                              style={{color: '#1F3A2E'}}
                             >
                               {showAllActivities ? 'Show Less' : `Show More (${recentActivities.length - 3} more)`}
                             </button>
@@ -421,6 +433,63 @@ const TopBar = ({ onFilterClick, onNotificationClick, onMailClick, onSettingsCli
               <HiBell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </button>
+
+            {/* User Profile Dropdown */}
+            <div className="relative ml-2" ref={userMenuRef}>
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="flex items-center space-x-2 p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-lg"
+                title="User Menu"
+              >
+                <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{background: '#1F3A2E'}}>
+                  <span className="text-sm font-semibold text-white">
+                    {user?.fullName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'A'}
+                  </span>
+                </div>
+                <HiChevronDown className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              </button>
+
+              {/* User Dropdown Menu */}
+              {showUserMenu && (
+                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-600 z-50">
+                  {/* User Info */}
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                      {user?.fullName || 'Administrator'}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      {user?.email}
+                    </p>
+                    <div className="mt-2">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                        {user?.role || 'Admin'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Menu Items */}
+                  <div className="py-2">
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        navigate('/settings');
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
+                    >
+                      <HiUser className="w-4 h-4" />
+                      <span>Profile Settings</span>
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-2"
+                    >
+                      <HiLogout className="w-4 h-4" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
